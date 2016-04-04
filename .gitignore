@@ -1,0 +1,11 @@
+/vendor
+/node_modules
+/resources/assets/bower_components
+/resources/access_token.json
+/resources/client_secret.json
+.env
+.vagrant
+.idea
+composer.lock
+Homestead.yaml
+Vagrantfile

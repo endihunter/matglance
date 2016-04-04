@@ -5,12 +5,15 @@ app.directive('cardBox', function () {
             'title': "@"
         },
         'transclude': {
-            'actions': '?cardBoxActions',
-            'body': '?cardBoxBody'
+            'actions': 'cardBoxActions',
+            'body': 'cardBoxBody'
         },
         'link': function (scope) {
             scope.editable = false;
 
+            /**
+             * Toggle box's preferences
+             */
             scope.switchEditableMode = function () {
                 scope.editable = ! scope.editable;
             }

@@ -29,8 +29,27 @@ app.API_PREFIX = '/api/v1';
 app.controller('CalendarController', ['$scope', function ($scope) {
     
 }]);
-app.controller('GmailController', ['$scope', function ($scope) {
+app.controller('GmailController', ['$scope', 'GmailService', function ($scope, GmailService) {
+    $scope.filter = {
+        'labelIds': [],
+        'q': '',
+        'includeSpamTrash': false,
+        'maxResults': 5
+    };
 
+    $scope.messages = [];
+
+    GmailService.fetchMessages($scope.filter)
+        .then(function (messages) {
+            $scope.messages = messages;
+        })
+        .catch(function () {
+            console.error(arguments);
+        });
+
+    $scope.readMessage = function (id) {
+        alert('Coming soon.');
+    }
 }]);
 app.controller('QuoteController', ['$scope', '$http', function ($scope, $http) {
     $scope.quote = {
@@ -132,5 +151,17 @@ app.directive('cardBox', ['$timeout', function ($timeout) {
         },
         'templateUrl': '/assets/templates/card-box.html'
     };
+}]);
+app.factory('GmailService', ['$http', function ($http) {
+    var factory = {};
+
+    factory.fetchMessages = function (filter) {
+        return $http.get(app.API_PREFIX + '/gmail/messages', filter)
+            .then(function (response) {
+                return response.data.data;
+            });
+    };
+
+    return factory;
 }]);
 //# sourceMappingURL=app.js.map

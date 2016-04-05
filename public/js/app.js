@@ -40,19 +40,27 @@ app.controller('WeatherController', ['$scope', '$timeout', function ($scope, $ti
         location: ''
     };
 
+    $scope.error = null;
+
+    /**
+     * Save module preferences
+     * @returns {boolean}
+     */
     $scope.savePreferences = function () {
         console.log('saving weather prefs', $scope.data);
 
         return false;
     };
 
+    /**
+     * Detect geolocation
+     */
     $timeout(function () {
         function getLocation() {
             if (navigator.geolocation) {
-                console.log('geolocation', navigator.geolocation);
                 navigator.geolocation.getCurrentPosition(setPosition);
             } else {
-                x.innerHTML = "Geolocation is not supported by this browser.";
+                $scope.error = "Geolocation is not supported by this browser.";
             }
         }
 
@@ -76,11 +84,20 @@ app.directive('cardBox', function () {
         },
         'transclude': {
             'actions': '?cardBoxActions',
-            'body': '?cardBoxBody'
+            'body': 'cardBoxBody'
         },
-        'link': function (scope) {
+        'link': function (scope, element) {
             scope.editable = false;
 
+            /**
+             * toggle the actions button if no actions content provided
+             * @type {boolean}
+             */
+            scope.hasActions = !! element.find('.dropdown-menu > div[0]').children.length;
+
+            /**
+             * Toggle box's preferences
+             */
             scope.switchEditableMode = function () {
                 scope.editable = ! scope.editable;
             }

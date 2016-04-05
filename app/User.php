@@ -29,11 +29,25 @@ class User extends Authenticatable
         'token' => 'json'
     ];
 
+    /**
+     * Fetch the user by Google+ ID
+     *
+     * @param $query
+     * @param $id
+     * @return mixed
+     */
     public function scopeGPlusMember($query, $id)
     {
         return $query->where('google_id', $id);
     }
 
+    /**
+     * Create new member based on Google+ [/me] info
+     *
+     * @param Google_Service_Plus_Person $gPlusUser
+     * @param null $token
+     * @return static
+     */
     static public function fromGPlusUser(Google_Service_Plus_Person $gPlusUser, $token = null)
     {
         if (! $user = static::GPlusMember($gPlusUser->getId())->first()) {
@@ -49,6 +63,12 @@ class User extends Authenticatable
         return $user;
     }
 
+    /**
+     * Refresh `refresh_token` required for Server-Server calls
+     *
+     * @param $token
+     * @return $this
+     */
     public function refreshToken($token)
     {
         $this->token = array_merge($this->token, [

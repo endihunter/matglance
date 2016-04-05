@@ -1,7 +1,5 @@
 <div ng-controller="QuoteController">
     <card-box title="{{ trans('quote.title') }}" ng-init="quote={{ json_encode($quote) }}">
-        <card-box-actions></card-box-actions>
-
         <card-box-body>
             <div class="text-muted">
                 @{{ quote.quote }}

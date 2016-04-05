@@ -5,4 +5,8 @@
   padding: 20px;
   width: 300px !important; }
 
+.dashboard-card {
+  display: inline-block;
+  height: 200px; }
+
 /*# sourceMappingURL=helpers.css.map */

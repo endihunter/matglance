@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="text" required class="form-control" placeholder="Location" ng-model="data.location" />
+                    <input type="text" required class="form-control" placeholder="Location" ng-model="data.location"/>
                 </div>
                 <div class="divider"></div>
                 <div class="form-group">
@@ -29,7 +29,7 @@
         <card-box-body>
             Panel content
             <div>
-                @{{ data.location.lat }} x @{{ data.location.lng }}
+                @{{ data.location }}
             </div>
         </card-box-body>
     </card-box>

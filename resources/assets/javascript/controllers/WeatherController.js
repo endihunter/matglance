@@ -31,10 +31,10 @@ app.controller('WeatherController', ['$scope', '$timeout', function ($scope, $ti
 
         function setPosition(position) {
             angular.safeApply($scope, function ($scope) {
-                $scope.data.location = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
+                $scope.data.location = [
+                    position.coords.latitude,
+                    position.coords.longitude
+                ].join(' x ');
             });
         }
 

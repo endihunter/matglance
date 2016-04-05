@@ -4,6 +4,12 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "type": "project",
+    "repositories": [
+        {
+            "type": "git",
+            "url": "git@gitlab.top.md:terranet/restable.git"
+        }
+    ],
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
@@ -11,7 +17,8 @@
         "adminarchitect/localizer": "^1.0",
         "adminarchitect/options": "^1.0",
         "google/apiclient": "^1.1",
-        "raven/raven": "^0.13.0"
+        "raven/raven": "^0.13.0",
+        "terranet/restable": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -19,7 +26,8 @@
         "phpunit/phpunit": "~4.0",
         "symfony/css-selector": "2.8.*|3.0.*",
         "symfony/dom-crawler": "2.8.*|3.0.*",
-        "laravel/homestead": "^3.0"
+        "laravel/homestead": "^3.0",
+        "barryvdh/laravel-ide-helper": "^2.1"
     },
     "autoload": {
         "classmap": [

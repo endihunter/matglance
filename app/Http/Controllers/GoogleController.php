@@ -32,7 +32,6 @@ class GoogleController extends Controller
             $client->authenticate(
                 $request->get('code')
             );
-
             $plus = new Google_Service_Plus($client);
 
             auth()->login(
@@ -45,7 +44,7 @@ class GoogleController extends Controller
 
             return redirect()->route('dashboard');
         } catch (\Exception $e) {
-            return back()->withErrors(['request-user' => $e->getMessage()]);
+            return redirect()->back()->withErrors([trans('auth.unable_to_fetch')]);
         }
     }
 

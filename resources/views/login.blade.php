@@ -12,6 +12,11 @@
         <h5 class="text-muted m-t-0 font-600">{{ config('app.name') }}</h5>
     </div>
     <div class="m-t-40 card-box">
+        @if ($errors->any())
+            @foreach($errors->all() as $error)
+                <div class="alert alert-danger">{{ $error }}</div>
+            @endforeach
+        @endif
         <div class="text-center">
             <?php
             $action = ($name = Cookie::get('ymag_name')) ? 'auth.sign_in' : 'auth.sign_up';
@@ -22,6 +27,7 @@
             @endif
         </div>
         <div class="panel-body">
+
             <div class="form-group text-center">
                 <br />
                 <a href="{{ url('auth/google') }}" class="btn btn-danger">

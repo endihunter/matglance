@@ -57,6 +57,16 @@ Route::group(['middleware' => ['web']], function () {
             'as' => 'api.quotes.random',
             'uses' => 'Api\QuotesController@random'
         ]);
+
+        Route::get('gmail/labels', [
+            'as' => 'api.gmail.labels',
+            'uses' => 'Api\GmailController@labels'
+        ]);
+
+        Route::get('gmail/messages', [
+            'as' => 'api.gmail.messages',
+            'uses' => 'Api\GmailController@messages'
+        ]);
     });
 
     Route::get('/test', function () {

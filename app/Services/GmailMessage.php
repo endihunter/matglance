@@ -2,10 +2,15 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use Google_Service_Gmail_Message;
 
 class GmailMessage
 {
+    const BODY_PLAIN = 'plain';
+
+    const BODY_HTML = 'html';
+
     /**
      * @var Google_Service_Gmail_Message
      */
@@ -18,6 +23,13 @@ class GmailMessage
         $this->message = $message;
     }
 
+    /**
+     * Retrieve header value.
+     *
+     * @param null $key
+     * @return mixed
+     * @throws \Exception
+     */
     public function header($key = null)
     {
         $headers = $this->fetchHeaders();
@@ -33,14 +45,35 @@ class GmailMessage
         return $this->headers[$key];
     }
 
-    public function body($type = 'plain')
+    public function from()
+    {
+        $from = $this->header('From');
+
+        preg_match('~^([^\<]+)\s+\<([^\>]+)\>$~si', $from, $matches);
+
+        $matches = array_slice($matches, 1);
+
+        $matches = array_map(function ($item) {
+            return trim($item, '"\'');
+        }, $matches);
+
+        return array_reverse($matches);
+    }
+
+    /**
+     * Fetch the message body.
+     *
+     * @param string $type
+     * @return mixed
+     */
+    public function body($type = self::BODY_PLAIN)
     {
         $parts = $this->message->getPayload()->getParts();
 
         if (empty($parts)) {
             $body = $this->message->getPayload()->getBody()->getData();
         } else {
-            $key = (int) ('html' == $type);
+            $key = (int) (static::BODY_HTML == $type);
 
             $body = $parts[$key]->getBody();
             $body = $body->getData();
@@ -49,6 +82,18 @@ class GmailMessage
         $body = strtr($body, '-_', '+/');
 
         return base64_decode($body);
+    }
+
+    /**
+     * Get the message sent time.
+     *
+     * @return string
+     */
+    public function relativeTime()
+    {
+        return Carbon::createFromTimestamp(
+            $this->message->getInternalDate() / 1000
+        )->diffForHumans();
     }
 
     public function __call($method, $args)
@@ -62,6 +107,8 @@ class GmailMessage
     }
 
     /**
+     * Fetch all headers
+     *
      * @return mixed
      */
     protected function fetchHeaders()

@@ -1,8 +1,7 @@
 /vendor
 /node_modules
-/resources/assets/bower_components
-/resources/access_token.json
-/resources/client_secret.json
+#/resources/access_token.json
+#/resources/client_secret.json
 .env
 .vagrant
 .idea
@@ -15,3 +14,8 @@ Vagrantfile
 /public/css/*.css
 /public/js/*.js
 /public/build/rev-manifest.json
+
+# ide-helper
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php

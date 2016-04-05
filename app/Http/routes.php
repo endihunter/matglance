@@ -26,9 +26,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/', [
         'as' => 'dashboard',
         'middleware' => 'auth',
-        'uses' => function () {
-            return view('dashboard');
-        },
+        'uses' => 'DashboardController@index',
     ]);
 
     Route::get('/login', function () {
@@ -36,7 +34,6 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::get('logout', 'GoogleController@logout');
-
 
     Route::group([
         'middleware' => 'guest',
@@ -50,6 +47,15 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('callback', [
             'as' => 'google.request-user',
             'uses' => 'GoogleController@requestUser',
+        ]);
+    });
+
+    Route::group([
+        'prefix' => 'api/v1'
+    ], function () {
+        Route::get('quotes/random', [
+            'as' => 'api.quotes.random',
+            'uses' => 'Api\QuotesController@random'
         ]);
     });
 

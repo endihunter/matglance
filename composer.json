@@ -13,11 +13,7 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
-        "laravel/socialite": "^2.0",
-        "adminarchitect/localizer": "^1.0",
-        "adminarchitect/options": "^1.0",
         "google/apiclient": "^1.1",
-        "raven/raven": "^0.13.0",
         "terranet/restable": "dev-master"
     },
     "require-dev": {

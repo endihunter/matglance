@@ -1,19 +1,20 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        Quote
+<div ng-controller="QuoteController">
+    <card-box title="{{ trans('quote.title') }}" ng-init="quote={{ json_encode($quote) }}">
+        <card-box-actions></card-box-actions>
 
-        <div class="pull-right">
-            <button type="button" class="btn btn-sm default" aria-label="Settings">
-                <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+        <card-box-body>
+            <div class="text-muted">
+                @{{ quote.quote }}
+                &nbsp;-&nbsp;
+                <span class="label label-info">@{{ quote.author }}</span>
+            </div>
+            <hr>
+            <button ng-disabled="loading" class="btn btn-default" ng-click="fetchRandom()">
+                <i class="zmdi zmdi-refresh-sync"></i>
+                &nbsp;
+                {{ trans('quote.btn.more') }}
             </button>
-        </div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="panel-body">
-        <p>
-            Quote of the day
-        </p>
 
-        <button class="btn btn-sm">+ More</button>
-    </div>
+        </card-box-body>
+    </card-box>
 </div>

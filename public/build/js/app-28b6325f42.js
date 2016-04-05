@@ -26,6 +26,26 @@ app.run(['$rootScope', function ($rootScope) {
 
 app.API_PREFIX = '/api/v1';
 
+app.controller('QuoteController', ['$scope', '$http', function ($scope, $http) {
+    $scope.quote = {
+        id: null,
+        quote: '',
+        author: ''
+    };
+
+    $scope.loading = false;
+
+    /**
+     * Fetch random quote
+     */
+    $scope.fetchRandom = function () {
+        $scope.loading = true;
+        $http.get(app.API_PREFIX + '/quotes/random').then(function (response) {
+            $scope.quote = angular.extend($scope.quote, response.data.data);
+            $scope.loading = false;
+        });
+    }
+}]);
 app.controller('RssController', ['$scope', '$timeout', function ($scope, $timeout) {
     $scope.savePreferences = function () {
         console.log('saving rss prefs', $scope.data);
@@ -76,7 +96,7 @@ app.controller('WeatherController', ['$scope', '$timeout', function ($scope, $ti
         getLocation();
     });
 }]);
-app.directive('cardBox', function () {
+app.directive('cardBox', ['$timeout', function ($timeout) {
     return {
         'restrict': "E",
         'scope': {
@@ -93,16 +113,18 @@ app.directive('cardBox', function () {
              * toggle the actions button if no actions content provided
              * @type {boolean}
              */
-            scope.hasActions = !! element.find('.dropdown-menu > div[0]').children.length;
+            $timeout(function () {
+                scope.hasActions = !!element.find('card-box-actions').text().length;
+            });
 
             /**
              * Toggle box's preferences
              */
             scope.switchEditableMode = function () {
-                scope.editable = ! scope.editable;
+                scope.editable = !scope.editable;
             }
         },
         'templateUrl': '/assets/templates/card-box.html'
     };
-});
+}]);
 //# sourceMappingURL=app.js.map

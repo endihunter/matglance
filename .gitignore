@@ -9,3 +9,8 @@
 composer.lock
 Homestead.yaml
 Vagrantfile
+
+# versioned assets
+*.map
+/public/css/*.css
+/public/js/*.js

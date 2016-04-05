@@ -1,13 +1,13 @@
 <div class="card-box">
     <div class="dropdown pull-right" ng-class="{'open': editable}">
-        <a ng-if="hasActions" href="#" class="dropdown-toggle card-drop" ng-click="switchEditableMode()">
+        <a ng-if="hasActions" ng-click="switchEditableMode()" class="dropdown-toggle card-drop" >
             <i class="zmdi zmdi-settings"></i>
         </a>
 
         <div class="dropdown-menu dropdown-menu-right">
-            <div ng-transclude="actions"></div>
+            <div ng-transclude="actions" class="box-actions"></div>
         </div>
     </div>
     <h4 class="header-title m-t-0 m-b-30">{{ title }}</h4>
-    <div ng-transclude="body"></div>
+    <div ng-transclude="body" class="dashboard-card"></div>
 </div>

@@ -11,9 +11,6 @@
 |
 */
 
-use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\RavenHandler;
-
 $app = new Illuminate\Foundation\Application(
     realpath(__DIR__.'/../')
 );
@@ -43,38 +40,6 @@ $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     App\Exceptions\Handler::class
 );
-
-$app->configureMonologUsing(function ($monolog) {
-    $client = new Raven_Client('http://822c516798774948a7378813fcd1b518:cc423b12b2004cedb702941ff71d753c@sentry.myterranet.com/2');
-
-    $handler = new RavenHandler($client);
-    $handler->setFormatter(new LineFormatter("%message% %context% %extra%\n"));
-
-    $monolog->pushHandler($handler);
-
-    $monolog->pushProcessor(function ($record) {
-        // Add the authenticated user
-        if ($user = Auth::user()) {
-            $record['context']['user'] = array_merge($user->toArray(), [
-                'ip_address' => Request::getClientIp(),
-            ]);
-        } else {
-            $record['context']['user'] = [
-                'ip_address' => Request::getClientIp(),
-            ];
-        }
-
-        // Add various tags
-        //$record['context']['tags'] = ['key' => 'value'];
-
-        // Add various generic context
-        //$record['extra']['key'] = 'value';
-
-        return $record;
-    });
-
-    return $monolog;
-});
 
 /*
 |--------------------------------------------------------------------------

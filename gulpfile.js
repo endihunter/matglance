@@ -12,6 +12,8 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
+    mix.sass('helpers.scss');
+    
     mix.scripts([
         'angular/angular.min.js',
         'angular-local-storage/dist/angular-local-storage.min.js'
@@ -26,6 +28,7 @@ elixir(function(mix) {
     ], 'public/js/app.js', 'resources/assets/javascript');
 
     mix.version([
+        'css/helpers.css',
         'js/app.js'
     ])
 });

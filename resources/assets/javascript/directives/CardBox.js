@@ -1,4 +1,4 @@
-app.directive('cardBox', function () {
+app.directive('cardBox', ['$timeout', function ($timeout) {
     return {
         'restrict': "E",
         'scope': {
@@ -15,15 +15,17 @@ app.directive('cardBox', function () {
              * toggle the actions button if no actions content provided
              * @type {boolean}
              */
-            scope.hasActions = !! element.find('.dropdown-menu > div[0]').children.length;
+            $timeout(function () {
+                scope.hasActions = !!element.find('card-box-actions').text().length;
+            });
 
             /**
              * Toggle box's preferences
              */
             scope.switchEditableMode = function () {
-                scope.editable = ! scope.editable;
+                scope.editable = !scope.editable;
             }
         },
         'templateUrl': '/assets/templates/card-box.html'
     };
-});
+}]);

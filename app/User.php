@@ -13,7 +13,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'token', 'google_id', 'avatar',
+        'name', 'email', 'url', 'password', 'token', 'google_id', 'avatar',
     ];
 
     /**
@@ -26,7 +26,7 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
-        'token' => 'json'
+        'token' => 'json',
     ];
 
     /**
@@ -50,11 +50,12 @@ class User extends Authenticatable
      */
     static public function fromGPlusUser(Google_Service_Plus_Person $gPlusUser, $token = null)
     {
-        if (! $user = static::GPlusMember($gPlusUser->getId())->first()) {
+        if (!$user = static::GPlusMember($gPlusUser->getId())->first()) {
             $user = static::create([
                 'google_id' => $gPlusUser->getId(),
                 'name' => $gPlusUser->getDisplayName(),
                 'email' => $gPlusUser->getEmails()[0]->getValue(),
+                'url' => $gPlusUser->getUrl() ?: null,
                 'avatar' => $gPlusUser->getImage()->getUrl(),
                 'token' => json_decode($token, true),
             ]);
@@ -72,7 +73,7 @@ class User extends Authenticatable
     public function refreshToken($token)
     {
         $this->token = array_merge($this->token, [
-            'refresh_token' => $token
+            'refresh_token' => $token,
         ]);
         $this->save();
 

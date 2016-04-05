@@ -1,6 +1,7 @@
 @extends('app')
 
 @section('content')
+    <div class="ng-cloak">
         <div class="row">
             <div class="col-lg-6">
                 @include('dashboard.weather')
@@ -26,5 +27,6 @@
 
             </div>
         </div>
+    </div>
 
 @endsection

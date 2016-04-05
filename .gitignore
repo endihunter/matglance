@@ -14,3 +14,4 @@ Vagrantfile
 *.map
 /public/css/*.css
 /public/js/*.js
+/public/build/rev-manifest.json

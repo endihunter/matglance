@@ -13,7 +13,6 @@ Vagrantfile
 *.map
 /public/css/*.css
 /public/js/*.js
-/public/build/rev-manifest.json
 
 # ide-helper
 _ide_helper.php

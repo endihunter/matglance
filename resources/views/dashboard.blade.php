@@ -3,10 +3,10 @@
 @section('content')
     <div class="ng-cloak">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-md-6">
                 @include('dashboard.weather')
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-md-6">
                 @include('dashboard.rss')
             </div>
         </div>

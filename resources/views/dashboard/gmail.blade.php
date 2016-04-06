@@ -69,22 +69,24 @@
                 <div class="clearfix"></div>
             </div>
 
-            <ul class="list-group" ng-if="! message">
-                <li class="g-message-list-item list-group-item" ng-repeat="message in messages">
-                    <a ng-click="readMessage(message.id)">
-                        <small class="label label-default pull-right">@{{ message.date }}</small>
+            <div ng-if="! message" style="overflow: hidden">
+                <ul class="list-group">
+                    <li class="g-message-list-item list-group-item" ng-repeat="message in messages">
+                        <a ng-click="readMessage(message.id)">
+                            <small class="label label-default pull-right">@{{ message.date }}</small>
                         <span class="msg-from pull-left">
                             @{{ message.from[1] || message.from[0] }}
                         </span>
-                        <div class="clearfix"></div>
+                            <div class="clearfix"></div>
                         <span class="msg-subject text-dark" ng-class="{'font-bold': isUnRead(message)}">
                             @{{ message.subject }}
                         </span><br/>
-                        <small class="msg-snippet text-muted" ng-bind-html="message.snippet"></small>
-                        <div class="clearfix"></div>
-                    </a>
-                </li>
-            </ul>
+                            <small class="msg-snippet text-muted" ng-bind-html="message.snippet"></small>
+                            <div class="clearfix"></div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
             <div class="clearfix"></div>
         </card-box-body>

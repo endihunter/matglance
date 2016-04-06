@@ -72,7 +72,7 @@
                     <a ng-click="readMessage(message.id)">
                         <small class="label label-default pull-right">@{{ message.date }}</small>
                         <span class="msg-from pull-left">
-                            @{{ message.from[0] }} - @{{ message.id }}
+                            @{{ message.from[0] }}
                         </span>
                         <div class="clearfix"></div>
                         <span class="msg-subject text-dark" ng-class="{'font-bold': isUnRead(message)}">

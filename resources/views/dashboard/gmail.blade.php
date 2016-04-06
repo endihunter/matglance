@@ -2,7 +2,7 @@
     <card-box title="{{ trans('gmail.title') }}">
         <card-box-actions>
             <div class="form-group">
-                <h5>{{ trans('gmail.settings.title') }}</h5>
+                <h5>{{ trans('gmail.settings') }}</h5>
             </div>
             <form ng-submit="fetchMessages()" novalidate name="form" class="form-horizontal">
                 <div ng-show="!searchMode">
@@ -33,8 +33,8 @@
                 </div>
                 <div class="divider"></div>
                 <div class="form-group">
-                    <button class="btn btn-primary" ng-disabled="loading" type="submit">{{ trans('gmail.btn_search') }}</button>
-                    <button class="btn btn-default" type="button" ng-click="$parent.switchEditableMode(toggleSearchMode)">Cancel</button>
+                    <button class="btn btn-primary" ng-disabled="loading" type="submit">{{ trans('buttons.search') }}</button>
+                    <button class="btn btn-default" type="button" ng-click="$parent.switchEditableMode(toggleSearchMode)">{{ trans('buttons.cancel') }}</button>
                 </div>
             </form>
         </card-box-actions>
@@ -43,11 +43,11 @@
             <div ng-if="message">
                 <a ng-click="backToList()" class="btn btn-default">
                     <i class="zmdi zmdi-long-arrow-return"></i>
-                    {{ trans('gmail.btn_back') }}
+                    {{ trans('buttons.back') }}
                 </a>
                 <a ng-href="https://mail.google.com/mail/u/0/#inbox/@{{ message.id }}" target="_blank" class="btn btn-link">
                     <i class="class zmdi zmdi-swap"></i>
-                    {{ trans('gmail.btn_gmail') }}
+                    {{ trans('buttons.view_in_gmail') }}
                 </a>
                 <br /><br />
 

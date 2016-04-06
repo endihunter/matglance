@@ -2,7 +2,5 @@
 
 return [
     'title' => 'Calendar',
-    'settings' => [
-        'title' => 'Settings'
-    ]
+    'settings' => 'Settings'
 ];

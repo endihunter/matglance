@@ -2,13 +2,7 @@
 
 return [
     'title' => 'GMail',
-    'settings' => [
-        'title' => 'Settings',
-    ],
-    'btn_search' => 'Search',
-    'btn_cancel' => 'Cancel',
-    'btn_back' => 'Back',
-    'btn_gmail' => 'View in GMail',
+    'settings' => 'Settings',
     'search' => '',
     'from' => 'From:',
     'to' => 'To:',

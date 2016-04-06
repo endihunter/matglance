@@ -10,7 +10,7 @@
             <button ng-disabled="loading" class="btn btn-info btn-sm" ng-click="fetchRandom()">
                 <i class="zmdi zmdi-refresh-sync"></i>
                 &nbsp;
-                {{ trans('quote.btn.more') }}
+                {{ trans('buttons.more') }}
             </button>
         </card-box-body>
     </card-box>

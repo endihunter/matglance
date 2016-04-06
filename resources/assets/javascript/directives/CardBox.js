@@ -22,8 +22,12 @@ app.directive('cardBox', ['$timeout', function ($timeout) {
             /**
              * Toggle box's preferences
              */
-            scope.switchEditableMode = function () {
+            scope.switchEditableMode = function (callback) {
                 scope.editable = !scope.editable;
+
+                if (callback) {
+                    callback();
+                }
             }
         },
         'templateUrl': '/assets/templates/card-box.html'

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Services\Gmail;
-use App\Transformers\GmailLabelTransformer;
+use App\Repositories\GMailRepository;
 use App\Transformers\GmailMessageTransformer;
 use Illuminate\Http\Request;
 
@@ -13,30 +12,51 @@ use Restable;
 
 class GmailController extends Controller
 {
-    public function labels()
+    /**
+     * @var GMailRepository
+     */
+    private $gMailRepository;
+
+    public function __construct(GMailRepository $gMailRepository)
     {
-        $me = auth()->user();
-
-        $gmail = Gmail::of($me->email);
-
-        $labels = $gmail->labels();
-
-        return Restable::listing($labels, new GmailLabelTransformer);
+        $this->gMailRepository = $gMailRepository;
     }
 
-    public function messages(Request $request)
+    public function lists(Request $request)
     {
         $me = auth()->user();
 
-        $gmail = Gmail::of($me->email);
-
-        $messages = $gmail
-            ->labeledAs($request->get('labelIds', []))
-            ->match($request->get('q', null))
-            ->withSpamTrash((bool) $request->get('includeSpamTrash', false))
-            ->take((int) $request->get('maxResults', 5))
-            ->messages();
+        $messages = $this->gMailRepository->lists(
+            $me->email,
+            $request
+        );
 
         return Restable::listing($messages, new GmailMessageTransformer);
+    }
+
+    public function get($messageId)
+    {
+        $me = auth()->user();
+
+        $message = $this->gMailRepository->get(
+            $me->email,
+            $messageId
+        );
+
+        return Restable::single($message, new GmailMessageTransformer);
+    }
+
+    public function touch($messageId)
+    {
+        $me = auth()->user();
+
+        $response = $this->gMailRepository->touch(
+            $me->email,
+            $messageId
+        );
+
+        return Restable::single($response, function () {
+            return func_get_args();
+        });
     }
 }

@@ -5,6 +5,7 @@ namespace App\Services;
 use Google_Service_Gmail;
 use Google_Service_Gmail_Label;
 use Google_Service_Gmail_Message;
+use Google_Service_Gmail_ModifyMessageRequest;
 
 class Gmail
 {
@@ -141,7 +142,7 @@ class Gmail
     {
         $labels = $this->client->users_labels->listUsersLabels($this->email)->getLabels();
 
-        if (! is_null($type) && in_array($type, [static::LABEL_SYSTEM, static::LABEL_USER])) {
+        if (!is_null($type) && in_array($type, [static::LABEL_SYSTEM, static::LABEL_USER])) {
             $labels = array_filter($labels, function (Google_Service_Gmail_Label $label) use ($type) {
                 return $label->getType() == $type;
             });
@@ -196,5 +197,17 @@ class Gmail
         );
 
         return new GmailMessage($message);
+    }
+
+    public function touch($messageId)
+    {
+        $modifyRequest = new Google_Service_Gmail_ModifyMessageRequest;
+        $modifyRequest->setRemoveLabelIds(['UNREAD']);
+        
+        return $this->client->users_messages->modify(
+            $this->email,
+            $messageId,
+            $modifyRequest
+        );
     }
 }

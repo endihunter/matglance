@@ -7,6 +7,10 @@ use League\Fractal\TransformerAbstract;
 
 class GmailMessageTransformer extends TransformerAbstract
 {
+    protected $availableIncludes = [
+        'body',
+    ];
+
     public function transform(GmailMessage $message)
     {
         return [
@@ -15,7 +19,17 @@ class GmailMessageTransformer extends TransformerAbstract
             'subject' => $message->header('Subject'),
             'from' => $message->from(),
             'labels' => $message->getLabelIds(),
-            'date' => $message->relativeTime()
+            'date' => $message->relativeTime(),
         ];
+    }
+
+    public function includeBody(GmailMessage $message)
+    {
+        return $this->item($message, function ($message) {
+            return [
+                //'html' => $message->body(GmailMessage::BODY_HTML),
+                'plain' => $message->body(GmailMessage::BODY_PLAIN),
+            ];
+        });
     }
 }

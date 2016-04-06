@@ -38,7 +38,7 @@ class GmailMessage
             return $headers;
         }
 
-        if (! array_has($this->headers, $key)) {
+        if (!array_has($this->headers, $key)) {
             throw new \Exception('No value found for header: ' . $key);
         }
 
@@ -81,7 +81,13 @@ class GmailMessage
 
         $body = strtr($body, '-_', '+/');
 
-        return base64_decode($body);
+        $body = base64_decode($body);
+
+        if (static::BODY_HTML == $type) {
+            $body = nl2br($body);
+        }
+
+        return $body;
     }
 
     /**
@@ -94,6 +100,11 @@ class GmailMessage
         return Carbon::createFromTimestamp(
             $this->message->getInternalDate() / 1000
         )->diffForHumans();
+    }
+
+    public function explore()
+    {
+        return get_class_methods($this->message);
     }
 
     public function __call($method, $args)
@@ -114,7 +125,7 @@ class GmailMessage
     protected function fetchHeaders()
     {
         if (empty ($this->headers)) {
-            foreach($this->message->getPayload()->getHeaders() as $header) {
+            foreach ($this->message->getPayload()->getHeaders() as $header) {
                 $this->headers[$header->getName()] = $header->getValue();
             }
         }

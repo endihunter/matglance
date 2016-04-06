@@ -65,7 +65,17 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('gmail/messages', [
             'as' => 'api.gmail.messages',
-            'uses' => 'Api\GmailController@messages'
+            'uses' => 'Api\GmailController@lists'
+        ]);
+
+        Route::get('gmail/messages/{id}', [
+            'as' => 'api.gmail.message',
+            'uses' => 'Api\GmailController@get'
+        ]);
+
+        Route::get('gmail/messages/{id}/touch', [
+            'as' => 'api.gmail.message.touch',
+            'uses' => 'Api\GmailController@touch'
         ]);
     });
 

@@ -26,7 +26,7 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
-        'token' => 'json',
+        'token' => 'array',
     ];
 
     /**
@@ -61,19 +61,30 @@ class User extends Authenticatable
             ]);
         }
 
+        if (! is_null($token)) {
+            $userToken = (array) $user->token;
+            $token = (array) json_decode($token, true);
+
+            if (! empty($diff = array_diff($userToken, $token))) {
+                $user->token = array_merge($userToken, $diff);
+
+                $user->save();
+            }
+        }
+
         return $user;
     }
 
     /**
      * Refresh `refresh_token` required for Server-Server calls
      *
-     * @param $token
+     * @param $refreshToken
      * @return $this
      */
-    public function refreshToken($token)
+    public function refreshToken($refreshToken)
     {
-        $this->token = array_merge($this->token, [
-            'refresh_token' => $token,
+        $this->token = array_merge((array) $this->token, [
+            'refresh_token' => $refreshToken,
         ]);
         $this->save();
 

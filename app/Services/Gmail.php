@@ -199,11 +199,17 @@ class Gmail
         return new GmailMessage($message);
     }
 
+    /**
+     * Add/Remove message labels.
+     *
+     * @param $messageId
+     * @return Google_Service_Gmail_Message
+     */
     public function touch($messageId)
     {
         $modifyRequest = new Google_Service_Gmail_ModifyMessageRequest;
         $modifyRequest->setRemoveLabelIds(['UNREAD']);
-        
+
         return $this->client->users_messages->modify(
             $this->email,
             $messageId,

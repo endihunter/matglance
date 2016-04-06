@@ -16,6 +16,7 @@ elixir(function(mix) {
     
     mix.scripts([
         'angular/angular.min.js',
+        'angular-sanitize/angular-sanitize.min.js',
         'angular-local-storage/dist/angular-local-storage.min.js'
     ], 'public/js/vendor.js', 'node_modules');
 

@@ -156,8 +156,10 @@ app.controller('QuoteController', ['$scope', '$http', function ($scope, $http) {
     $scope.fetchRandom = function () {
         $scope.loading = true;
         $http.get(app.API_PREFIX + '/quotes/random').then(function (response) {
-            $scope.quote = angular.extend($scope.quote, response.data.data);
-            $scope.loading = false;
+            angular.safeApply($scope, function ($scope) {
+                $scope.quote = angular.extend($scope.quote, response.data.data);
+                $scope.loading = false;
+            });
         });
     }
 }]);

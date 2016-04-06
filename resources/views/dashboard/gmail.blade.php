@@ -40,7 +40,7 @@
         </card-box-actions>
         <card-box-body>
 
-            <div ng-if="message" class="g-message-block">
+            <div ng-if="message">
                 <a ng-click="backToList()" class="btn btn-default">
                     <i class="zmdi zmdi-long-arrow-return"></i>
                     {{ trans('gmail.btn_back') }}
@@ -61,7 +61,9 @@
                         <td>@{{ message.subject }}</td>
                     </tr>
                     <tr>
-                        <td colspan="2" ng-bind-html="message.body.plain"></td>
+                        <td colspan="2">
+                            <iframe id="msg-iframe" height="0" width="100%" ng-src="@{{ fullMessageUrl(message.id) }}" frameborder="0" scrolling="0"></iframe>
+                        </td>
                     </tr>
                 </table>
                 <div class="clearfix"></div>

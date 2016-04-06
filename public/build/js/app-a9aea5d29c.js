@@ -29,7 +29,7 @@ app.API_PREFIX = '/api/v1';
 app.controller('CalendarController', ['$scope', function ($scope) {
     
 }]);
-app.controller('GmailController', ['$scope', 'GmailService', function ($scope, GmailService) {
+app.controller('GmailController', ['$scope', 'GmailService', '$sce', function ($scope, GmailService, $sce) {
     $scope.searchMode = false;
 
     $scope.message = null;
@@ -93,6 +93,10 @@ app.controller('GmailController', ['$scope', 'GmailService', function ($scope, G
     $scope.isUnRead = function (message) {
         return message.hasOwnProperty('labels')
             && (-1 < message.labels.indexOf('UNREAD'));
+    };
+
+    $scope.fullMessageUrl = function (messageId) {
+        return $sce.trustAsResourceUrl('/gmail/messages/' + messageId + '/body');
     };
 
     $scope.toggleSearchMode = function () {

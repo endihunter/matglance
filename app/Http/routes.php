@@ -22,6 +22,8 @@
 |
 */
 
+use App\Repositories\GMailRepository;
+
 Route::group(['middleware' => ['web']], function () {
     Route::get('/', [
         'as' => 'dashboard',
@@ -78,6 +80,17 @@ Route::group(['middleware' => ['web']], function () {
             'uses' => 'Api\GmailController@touch'
         ]);
     });
+
+    Route::get('/gmail/messages/{id}/body', [
+        'middleware' => 'auth',
+        'uses' => function ($messageId, GMailRepository $repo) {
+            $me = auth()->user();
+
+            return view('iframe', [
+                'body' => $repo->get($me->email, $messageId)->body(\App\Services\GmailMessage::BODY_HTML)
+            ]);
+        }
+    ]);
 
     Route::get('/test', function () {
         $client = app('google.client');

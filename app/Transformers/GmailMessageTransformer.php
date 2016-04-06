@@ -27,8 +27,8 @@ class GmailMessageTransformer extends TransformerAbstract
     {
         return $this->item($message, function ($message) {
             return [
-                //'html' => $message->body(GmailMessage::BODY_HTML),
-                'plain' => $message->body(GmailMessage::BODY_PLAIN),
+                'contents' => $message->body(GmailMessage::BODY_HTML),
+                //'plain' => $message->body(GmailMessage::BODY_PLAIN),
             ];
         });
     }

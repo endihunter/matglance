@@ -83,10 +83,6 @@ class GmailMessage
 
         $body = base64_decode($body);
 
-        if (static::BODY_HTML == $type) {
-            $body = nl2br($body);
-        }
-
         return $body;
     }
 

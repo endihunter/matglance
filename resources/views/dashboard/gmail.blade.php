@@ -4,13 +4,13 @@
             <ul class="list-group">
                 <li class="list-group-item" ng-repeat="message in messages">
                     <small class="label label-default pull-right">@{{ message.date }}</small>
-                    <a ng-click="readMessage(message.id)" class="msg-from pull-left">
+                    <span class="msg-from pull-left">
                         @{{ message.from[0] }}
-                    </a>
+                    </span>
                     <div class="clearfix"></div>
-                    <span class="msg-subject text-dark">
+                    <a ng-click="readMessage(message.id)" class="msg-subject text-dark">
                         @{{ message.subject }}
-                    </span><br />
+                    </a><br />
                     <small class="msg-snippet text-muted">
                         @{{ message.snippet }}
                     </small>

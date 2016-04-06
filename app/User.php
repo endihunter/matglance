@@ -65,11 +65,15 @@ class User extends Authenticatable
             $userToken = (array) $user->token;
             $token = (array) json_decode($token, true);
 
-            if (! empty($diff = array_diff($userToken, $token))) {
-                $user->token = array_merge($userToken, $diff);
-
-                $user->save();
+            foreach ($userToken as $key => $value) {
+                if (array_has($token, $key) && $token[$key] !== $value) {
+                    $userToken[$key] = $token[$key];
+                }
             }
+
+            $user->fill([
+                'token' => $userToken
+            ])->save();
         }
 
         return $user;

@@ -1,0 +1,20 @@
+{
+  "name": "morning_glance",
+  "description": "",
+  "main": "",
+  "authors": [
+    "endi <endi1982@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/rainbowriders/your_morning_at_a_glance",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "skycons": "*"
+  }
+}

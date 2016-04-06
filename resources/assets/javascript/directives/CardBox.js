@@ -1,4 +1,4 @@
-app.directive('cardBox', ['$timeout', function ($timeout) {
+app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootScope) {
     return {
         'restrict': "E",
         'scope': {
@@ -25,10 +25,8 @@ app.directive('cardBox', ['$timeout', function ($timeout) {
             scope.switchEditableMode = function (callback) {
                 scope.editable = !scope.editable;
 
-                if (callback) {
-                    callback();
-                }
-            }
+                if (callback) {}
+            };
         },
         'templateUrl': '/assets/templates/card-box.html'
     };

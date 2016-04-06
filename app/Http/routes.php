@@ -53,31 +53,36 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::group([
-        'prefix' => 'api/v1'
+        'prefix' => 'api/v1',
     ], function () {
         Route::get('quotes/random', [
             'as' => 'api.quotes.random',
-            'uses' => 'Api\QuotesController@random'
+            'uses' => 'Api\QuotesController@random',
         ]);
 
         Route::get('gmail/labels', [
             'as' => 'api.gmail.labels',
-            'uses' => 'Api\GmailController@labels'
+            'uses' => 'Api\GmailController@labels',
         ]);
 
         Route::get('gmail/messages', [
             'as' => 'api.gmail.messages',
-            'uses' => 'Api\GmailController@lists'
+            'uses' => 'Api\GmailController@lists',
         ]);
 
         Route::get('gmail/messages/{id}', [
             'as' => 'api.gmail.message',
-            'uses' => 'Api\GmailController@get'
+            'uses' => 'Api\GmailController@get',
         ]);
 
         Route::get('gmail/messages/{id}/touch', [
             'as' => 'api.gmail.message.touch',
-            'uses' => 'Api\GmailController@touch'
+            'uses' => 'Api\GmailController@touch',
+        ]);
+
+        Route::get('weather/get', [
+            'as' => 'api.weather.proxy',
+            'uses' => 'Api\WeatherController@get',
         ]);
     });
 
@@ -87,9 +92,9 @@ Route::group(['middleware' => ['web']], function () {
             $me = auth()->user();
 
             return view('iframe', [
-                'body' => $repo->get($me->email, $messageId)->body(\App\Services\GmailMessage::BODY_HTML)
+                'body' => $repo->get($me->email, $messageId)->body(\App\Services\GmailMessage::BODY_HTML),
             ]);
-        }
+        },
     ]);
 
     Route::get('/test', function () {
@@ -103,11 +108,11 @@ Route::group(['middleware' => ['web']], function () {
 
         $gmail = \App\Services\Gmail::of('endi1982@gmail.com')->take(10)->withSpamTrash(false);
 
-        $messages = array_map(function($message) {
+        $messages = array_map(function ($message) {
             return [
                 'id' => $message->getId(),
                 'subject' => $message->header('Subject'),
-                'body' => $message->body()
+                'body' => $message->body(),
             ];
         }, $gmail->messages());
 

@@ -18,7 +18,12 @@ angular.isOnline = function isOnline()
 
     return isOnline;
 };
-var app = angular.module('app', ['ngSanitize']);
+var app = angular.module('app', ['ngSanitize', 'LocalStorageModule']);
+
+app.config(['localStorageServiceProvider', function (localStorageServiceProvider) {
+    localStorageServiceProvider.setPrefix('ymag_');
+    localStorageServiceProvider.setStorageCookie(1, '/');
+}]);
 
 app.run(['$rootScope', function ($rootScope) {
     
@@ -172,50 +177,61 @@ app.controller('RssController', ['$scope', '$timeout', function ($scope, $timeou
         return false;
     };
 }]);
-app.controller('WeatherController', ['$scope', '$timeout', function ($scope, $timeout) {
+app.controller('WeatherController', [
+    '$scope', '$timeout', 'WeatherService', 'GeoService', 'localStorageService', '$rootScope',
+    function ($scope, $timeout, WeatherService, GeoService, localStorageService, $rootScope) {
+        $scope.filter = {
+            units: 'si'
+        };
 
-    $scope.data = {
-        units: 'celsius',
-        location: ''
-    };
+        $scope.weather = {};
 
-    $scope.error = null;
-
-    /**
-     * Save module preferences
-     * @returns {boolean}
-     */
-    $scope.savePreferences = function () {
-        console.log('saving weather prefs', $scope.data);
-
-        return false;
-    };
-
-    /**
-     * Detect geolocation
-     */
-    $timeout(function () {
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(setPosition);
-            } else {
-                $scope.error = "Geolocation is not supported by this browser.";
-            }
+        var weather;
+        if (weather = localStorageService.get('weather')) {
+            $scope.weather = JSON.parse(weather);
         }
 
-        function setPosition(position) {
-            angular.safeApply($scope, function ($scope) {
-                $scope.data.location = [
-                    position.coords.latitude,
-                    position.coords.longitude
-                ].join(' x ');
+        WeatherService.when('location.changed', function () {
+            WeatherService.get().then(function (results) {
+                localStorageService.set('weather', JSON.stringify(results));
+
+                $scope.weather = results;
             });
+        });
+
+        var location;
+        if (!(location = localStorageService.get('geolocation'))) {
+            GeoService.locate().then(function (GeoService) {
+                localStorageService.set('geolocation', [
+                    GeoService.getLatitude(),
+                    GeoService.getLongitude()
+                ].join(","));
+
+                $scope.$emit('location.changed');
+            });
+        } else {
+            var coords = location.split(',');
+            GeoService.setLocation(coords[0], coords[1]);
+            $scope.$emit('location.changed');
         }
 
-        getLocation();
-    });
-}]);
-app.directive('cardBox', ['$timeout', function ($timeout) {
+        /**
+         * Save module preferences
+         * @returns {boolean}
+         */
+        $scope.savePreferences = function () {
+            WeatherService.setUnits($scope.filter.units);
+
+            $scope.$emit('location.changed');
+
+            return false;
+        };
+
+        $scope.timezoneToCity = function (timezone) {
+            return timezone.split('/').join("<br />");
+        }
+    }]);
+app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootScope) {
     return {
         'restrict': "E",
         'scope': {
@@ -242,13 +258,81 @@ app.directive('cardBox', ['$timeout', function ($timeout) {
             scope.switchEditableMode = function (callback) {
                 scope.editable = !scope.editable;
 
-                if (callback) {
-                    callback();
-                }
-            }
+                if (callback) {}
+            };
         },
         'templateUrl': '/assets/templates/card-box.html'
     };
+}]);
+app.directive('skycon', function () {
+    return {
+        restrict: "E",
+        replace: true,
+        scope: {
+            icon: "@"
+        },
+        link: function (scope, element, attribs) {
+            scope.size = attribs.size || 128;
+
+            var initIcon = function () {
+                var skycons = new Skycons({'color': 'grey'});
+
+                // you can add a canvas by it's ID...
+                var draw = attribs.icon.replace('-', '_').toUpperCase();
+                skycons.add(document.getElementById('skycon'), Skycons[draw]);
+
+                // start animation!
+                skycons.play();
+            };
+            initIcon();
+        },
+        template: '<canvas id="skycon"></canvas>'
+    };
+});
+app.factory('GeoService', ['$q', function ($q) {
+    var factory = {
+        lat: null,
+        lng: null
+    };
+
+    factory.setLocation = function (lat, lng) {
+        factory.lat = parseFloat(lat);
+        factory.lng = parseFloat(lng);
+
+        return factory;
+    };
+
+    factory.getLatitude = function () {
+        return this.lat;
+    };
+
+    factory.getLongitude = function () {
+        return this.lng;
+    };
+
+    /**
+     * Locate the client by asking Navigator.GeoLocation.
+     */
+    factory.locate = function () {
+        var defer = $q.defer();
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                factory.setLocation(
+                    position.coords.latitude,
+                    position.coords.longitude
+                );
+
+                defer.resolve(factory);
+            });
+        } else {
+            defer.reject('Geolocation is not supported.');
+        }
+
+        return defer.promise;
+    };
+
+    return factory;
 }]);
 app.factory('GmailService', ['$http', '$httpParamSerializer', function ($http, $httpParamSerializer) {
     var factory = {};
@@ -291,4 +375,48 @@ app.factory('GmailService', ['$http', '$httpParamSerializer', function ($http, $
 
     return factory;
 }]);
+app.factory("WeatherService", ['$http', '$rootScope', 'GeoService', '$httpParamSerializer',
+    function ($http, $rootScope, GeoService, $httpParamSerializer) {
+        var factory = {
+            units: 'si'
+        };
+
+        factory.setUnits = function (units) {
+            factory.units = units;
+
+            return factory;
+        };
+
+        /**
+         * Listen for an event.
+         *
+         * @param event
+         * @param callback
+         */
+        factory.when = function (event, callback) {
+            $rootScope.$on(event, callback);
+
+            return factory;
+        };
+
+        factory.get = function () {
+            var coords = [
+                GeoService.getLatitude(),
+                GeoService.getLongitude()
+            ].join(",");
+
+            var args = {
+                coords: coords,
+                units: factory.units
+            };
+
+            return $http
+                .get(app.API_PREFIX + '/weather/get/?' + $httpParamSerializer(args))
+                .then(function (response) {
+                    return response.data;
+                });
+        };
+
+        return factory;
+    }]);
 //# sourceMappingURL=app.js.map

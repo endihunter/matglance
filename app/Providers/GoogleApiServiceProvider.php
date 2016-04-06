@@ -23,14 +23,16 @@ class GoogleApiServiceProvider extends ServiceProvider
             $client->setAuthConfigFile(resource_path('client_secret.json'));
 
             $client->setAccessType('offline');
-            //$client->setApprovalPrompt('force');
+            
+            // @todo: Remove this statement on production
+            $client->setApprovalPrompt('force');
 
             if ($user = auth()->check()) {
                 $user = auth()->user();
                 $token = $user->token;
 
                 $client->setAccessToken(json_encode($token));
-                
+
                 // Refresh the token if it's expired.
                 if ($client->isAccessTokenExpired()) {
                     $client->refreshToken(

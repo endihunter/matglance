@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 
 class GMailRepository
 {
-    protected $cacheCollectionFor = 0;
+    protected $cacheCollectionFor = 1;
+    
     protected $cacheMessageFor = 24 * 60;
 
     /**
@@ -21,9 +22,7 @@ class GMailRepository
     {
         $cacheKey = $this->collectionCacheKey($userId, $request);
 
-        Cache::forget($cacheKey);
-
-        return Cache::remember($cacheKey, $this->cacheCollectionFor, function () use ($userId, $request) {
+        return Cache::remember($cacheKey, $this->cacheCollectionFor(), function () use ($userId, $request) {
             return $this->fetchRemoteMessages($userId, $request);
         });
     }
@@ -33,7 +32,7 @@ class GMailRepository
         $cacheKey = "{$userId}_{$messageId}_message";
         $cacheKey = md5($cacheKey);
 
-        return Cache::remember($cacheKey, $this->cacheMessageFor, function () use ($userId, $messageId) {
+        return Cache::remember($cacheKey, $this->cacheMessageFor(), function () use ($userId, $messageId) {
             return $this->fetchSingleMessage($userId, $messageId);
         });
     }
@@ -89,5 +88,23 @@ class GMailRepository
             . "messages";
 
         return md5($cacheKey);
+    }
+
+    protected function cacheMessageFor()
+    {
+        return ($this->localEnv() ? 0 : $this->cacheMessageFor);
+    }
+
+    protected function cacheCollectionFor()
+    {
+        return ($this->localEnv() ? 0 : $this->cacheCollectionFor);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function localEnv()
+    {
+        return 'local' == app()->environment();
     }
 }

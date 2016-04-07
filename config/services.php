@@ -48,6 +48,10 @@ return [
         ]
     ],
 
+    'geocode' => [
+        'api_key' => env('GEOCODE_KEY', 'AIzaSyD3qcJmYvBZWMCm_HWyu4q_dvl8ARcShXc')
+    ],
+
     'forecast' => [
         'api_key' => env('FORECAST_KEY', '29245780e15e42e8b48f2f358f898afe')
     ]

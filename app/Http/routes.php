@@ -60,30 +60,44 @@ Route::group(['middleware' => ['web']], function () {
             'uses' => 'Api\QuotesController@random',
         ]);
 
-        Route::get('gmail/labels', [
-            'as' => 'api.gmail.labels',
-            'uses' => 'Api\GmailController@labels',
-        ]);
+        Route::group(['prefix' => 'gmail'], function () {
+            Route::get('labels', [
+                'as' => 'api.gmail.labels',
+                'uses' => 'Api\GmailController@labels',
+            ]);
 
-        Route::get('gmail/messages', [
-            'as' => 'api.gmail.messages',
-            'uses' => 'Api\GmailController@lists',
-        ]);
+            Route::get('messages', [
+                'as' => 'api.gmail.messages',
+                'uses' => 'Api\GmailController@lists',
+            ]);
 
-        Route::get('gmail/messages/{id}', [
-            'as' => 'api.gmail.message',
-            'uses' => 'Api\GmailController@get',
-        ]);
+            Route::get('messages/{id}', [
+                'as' => 'api.gmail.message',
+                'uses' => 'Api\GmailController@get',
+            ]);
 
-        Route::get('gmail/messages/{id}/touch', [
-            'as' => 'api.gmail.message.touch',
-            'uses' => 'Api\GmailController@touch',
-        ]);
+            Route::get('messages/{id}/touch', [
+                'as' => 'api.gmail.message.touch',
+                'uses' => 'Api\GmailController@touch',
+            ]);
+        });
 
         Route::get('weather/get', [
             'as' => 'api.weather.proxy',
             'uses' => 'Api\WeatherController@get',
         ]);
+
+        Route::group(['prefix' => 'geo'], function () {
+            Route::get('code', [
+                'as' => 'api.geo.code',
+                'uses' => 'Api\GeoController@code'
+            ]);
+
+            Route::get('lookup', [
+                'as' => 'api.geo.lookup',
+                'uses' => 'Api\GeoController@lookup'
+            ]);
+        });
     });
 
     Route::get('/gmail/messages/{id}/body', [

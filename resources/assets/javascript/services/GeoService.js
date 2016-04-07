@@ -1,4 +1,4 @@
-app.factory('GeoService', ['$q', function ($q) {
+app.factory('GeoService', ['$q', '$http', function ($q, $http) {
     var factory = {
         lat: null,
         lng: null
@@ -19,10 +19,17 @@ app.factory('GeoService', ['$q', function ($q) {
         return this.lng;
     };
 
+    factory.lookup = function (lat, lng) {
+        return $http.get(app.API_PREFIX + '/geo/lookup?latlng=' + [lat, lng].join(','))
+            .then(function (response) {
+                return response.data.results[0];
+            });
+    };
+
     /**
      * Locate the client by asking Navigator.GeoLocation.
      */
-    factory.locate = function () {
+    factory.geolocate = function () {
         var defer = $q.defer();
 
         if (navigator.geolocation) {
@@ -39,6 +46,13 @@ app.factory('GeoService', ['$q', function ($q) {
         }
 
         return defer.promise;
+    };
+
+    factory.geodecode = function (location) {
+        return $http.get(app.API_PREFIX + '/geo/code?loc=' + location)
+            .then(function (response) {
+                return response.data.results[0];
+            });
     };
 
     return factory;

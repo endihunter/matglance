@@ -4,7 +4,7 @@
             <div class="form-group">
                 <h5>{{ trans('weather.settings') }}</h5>
             </div>
-            <form ng-submit="savePreferences();$parent.switchEditableMode()" novalidate name="form">
+            <form ng-submit="savePreferences();" novalidate name="form">
                 <div class="form-group text-left">
                     <p class="text-muted font-13 m-b-15 m-t-20">{{ trans('weather.units') }}</p>
                     <div class="radio radio-info radio-inline">
@@ -55,7 +55,7 @@
                     </ul>
                 </div>
                 <div class="col-lg-7 col-md-7 col-sm-6 text-left">
-                    <skycon icon="@{{ weather.currently.icon }}" width="128" height="128"></skycon>
+                    <skycon ng-if="weather.currently.icon" icon="@{{ weather.currently.icon }}" width="128" height="128"></skycon>
 
                     <h1 class="text-primary">@{{ weather.currently.temperature }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</h1>
                 </div>

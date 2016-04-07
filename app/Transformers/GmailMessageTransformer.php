@@ -26,10 +26,7 @@ class GmailMessageTransformer extends TransformerAbstract
     public function includeBody(GmailMessage $message)
     {
         return $this->item($message, function ($message) {
-            return [
-                'contents' => $message->body(GmailMessage::BODY_HTML),
-                //'plain' => $message->body(GmailMessage::BODY_PLAIN),
-            ];
+            return $message->body();
         });
     }
 }

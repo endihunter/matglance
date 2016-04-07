@@ -63,25 +63,36 @@ class GmailMessage
     /**
      * Fetch the message body.
      *
-     * @param string $type
+     * @param $message
      * @return mixed
      */
-    public function body($type = self::BODY_PLAIN)
+    public function body($message = null)
     {
-        $parts = $this->message->getPayload()->getParts();
-
-        if (empty($parts)) {
-            $body = $this->message->getPayload()->getBody()->getData();
-        } else {
-            $key = (int) (static::BODY_HTML == $type);
-
-            $body = $parts[$key]->getBody();
-            $body = $body->getData();
+        if (null === $message) {
+            $message = $this->message->getPayload();
         }
 
-        $body = strtr($body, '-_', '+/');
+        if (empty($parts = $message->getParts())) {
+            $body = $message->getBody()->getData();
 
-        $body = base64_decode($body);
+            $body = strtr($body, '-_', '+/');
+            $body = base64_decode($body);
+
+            $type = $message->getMimeType();
+            if (in_array($type, ['text/plain', 'text/html'])) {
+                $type = $this->messageType($type);
+
+                return [$type => $body];
+            }
+        } else {
+            $body = [];
+            foreach ($parts as $message) {
+                $type = $message->getMimeType();
+                if (in_array($type, ['text/plain', 'text/html'])) {
+                    $body += $this->body($message);
+                }
+            }
+        }
 
         return $body;
     }
@@ -127,5 +138,17 @@ class GmailMessage
         }
 
         return $this->headers;
+    }
+
+    /**
+     * @param $type
+     * @return mixed
+     */
+    protected function messageType($type)
+    {
+        $mime = explode('/', $type);
+        $type = array_pop($mime);
+
+        return $type;
     }
 }

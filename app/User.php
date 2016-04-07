@@ -4,6 +4,7 @@ namespace App;
 
 use Google_Service_Plus_Person;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Terranet\Localizer\Models\Language;
 
 class User extends Authenticatable
 {
@@ -93,5 +94,27 @@ class User extends Authenticatable
         $this->save();
 
         return $this;
+    }
+
+    /**
+     * Retrieve user's preffered language.
+     *
+     * @return mixed
+     */
+    public function lang()
+    {
+        $langId = $this->preferences->lang_id;
+            
+        return Language::find($langId) ? : Language::default()->first();
+    }
+
+    /**
+     * Preferences relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function preferences()
+    {
+        return $this->hasOne(Preference::class);
     }
 }

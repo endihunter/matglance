@@ -11,8 +11,19 @@ class QuotesRepository
      *
      * @return mixed
      */
-    public function random()
+    public function random($langId = null)
     {
-        return Quote::all()->random(1);
+        $builder = new Quote;
+
+        if (! $langId && auth()->check()) {
+            $me = auth()->user();
+            $langId = $me->lang()->id;
+        }
+
+        if ($langId) {
+            $builder = $builder->forLang($langId);
+        }
+
+        return $builder->get()->random(1);
     }
 }

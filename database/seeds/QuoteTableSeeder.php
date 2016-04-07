@@ -43,6 +43,7 @@ class QuoteTableSeeder extends Seeder
                 $author = array_shift($parts);
 
                 Quote::create([
+                    'lang_id' => 1,
                     'quote' => trim($quote),
                     'author' => trim($author, '., ')
                 ]);

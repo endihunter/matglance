@@ -14,7 +14,8 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "google/apiclient": "^1.1",
-        "terranet/restable": "dev-master"
+        "terranet/restable": "dev-master",
+        "adminarchitect/localizer": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

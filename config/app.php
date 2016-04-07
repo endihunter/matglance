@@ -163,7 +163,7 @@ return [
         Terranet\Restable\RestableServiceProvider::class,
 
 //        Terranet\Options\ServiceProvider::class,
-//        Terranet\Localizer\ServiceProvider::class,
+        Terranet\Localizer\ServiceProvider::class,
     ],
 
     /*

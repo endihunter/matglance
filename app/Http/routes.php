@@ -91,34 +91,11 @@ Route::group(['middleware' => ['web']], function () {
         'uses' => function ($messageId, GMailRepository $repo) {
             $me = auth()->user();
 
+            $body = $repo->get($me->email, $messageId)->body();
+
             return view('iframe', [
-                'body' => $repo->get($me->email, $messageId)->body(\App\Services\GmailMessage::BODY_HTML),
+                'body' => array_get($body, 'html', array_get($body, 'plain')),
             ]);
         },
     ]);
-
-    Route::get('/test', function () {
-        $client = app('google.client');
-
-        $calendar = app('google.calendars');
-
-        dd($calendar->calendarList->get('endi1982@gmail.com'));
-        dd($events = $calendar->events->listEvents('endi1982@gmail.com'));
-
-
-        $gmail = \App\Services\Gmail::of('endi1982@gmail.com')->take(10)->withSpamTrash(false);
-
-        $messages = array_map(function ($message) {
-            return [
-                'id' => $message->getId(),
-                'subject' => $message->header('Subject'),
-                'body' => $message->body(),
-            ];
-        }, $gmail->messages());
-
-        dd($messages);
-
-        return $client;
-    });
-
 });

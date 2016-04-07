@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 
 class GMailRepository
 {
-    protected $cacheCollectionFor = 1;
-    
     protected $cacheMessageFor = 24 * 60;
 
     /**
@@ -20,11 +18,7 @@ class GMailRepository
      */
     public function lists($userId, Request $request)
     {
-        $cacheKey = $this->collectionCacheKey($userId, $request);
-
-        return Cache::remember($cacheKey, $this->cacheCollectionFor(), function () use ($userId, $request) {
-            return $this->fetchRemoteMessages($userId, $request);
-        });
+        return $this->fetchRemoteMessages($userId, $request);
     }
 
     public function get($userId, $messageId)
@@ -57,7 +51,7 @@ class GMailRepository
 
         return $gMail
             ->match($request->get('q', null))
-            ->withSpamTrash((bool) $request->get('includeSpamTrash', false))
+            ->withSpamTrash('true' == $request->get('includeSpamTrash'))
             ->take((int) $request->get('maxResults', 5))
             ->messages();
     }
@@ -76,28 +70,9 @@ class GMailRepository
         return $gMail->get($messageId);
     }
 
-    /**
-     * @param $userId
-     * @param Request $request
-     * @return string
-     */
-    protected function collectionCacheKey($userId, Request $request)
-    {
-        $cacheKey = "{$userId}_"
-            . join("_", $request->all()) . "_"
-            . "messages";
-
-        return md5($cacheKey);
-    }
-
     protected function cacheMessageFor()
     {
         return ($this->localEnv() ? 0 : $this->cacheMessageFor);
-    }
-
-    protected function cacheCollectionFor()
-    {
-        return ($this->localEnv() ? 0 : $this->cacheCollectionFor);
     }
 
     /**

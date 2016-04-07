@@ -39,7 +39,6 @@
             </form>
         </card-box-actions>
         <card-box-body>
-
             <div ng-if="message">
                 <a ng-click="backToList()" class="btn btn-default">
                     <i class="zmdi zmdi-long-arrow-return"></i>
@@ -70,6 +69,8 @@
             </div>
 
             <div ng-if="! message" style="overflow: hidden">
+                <div ng-if="loading">{{ trans('gmail.loading') }}</div>
+
                 <ul class="list-group">
                     <li class="g-message-list-item list-group-item" ng-repeat="message in messages">
                         <a ng-click="readMessage(message.id)">

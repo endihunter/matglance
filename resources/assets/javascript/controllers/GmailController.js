@@ -12,6 +12,10 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', function ($
         'includeSpamTrash': false
     };
 
+    $scope.$watch('filter', function () {
+        console.log($scope.filter);
+    },true);
+
     $scope.messages = [];
 
     $scope.query = '';
@@ -38,12 +42,15 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', function ($
         $scope.loading = true;
 
         var args = {
-            'includeSpamTrash': !!$scope.includeSpamTrash,
+            'includeSpamTrash': !!$scope.filter.includeSpamTrash,
             'q': buildQuery()
         };
 
         GmailService.fetchMessages(args)
             .then(function (messages) {
+                // restore listing view
+                $scope.message = null;
+
                 angular.safeApply($scope, function ($scope) {
                     $scope.messages = messages;
 

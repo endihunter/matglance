@@ -288,7 +288,7 @@ app.directive('skycon', function () {
                 var skycons = new Skycons({'color': 'grey'});
 
                 // you can add a canvas by it's ID...
-                var draw = attribs.icon.replace('-', '_').toUpperCase();
+                var draw = attribs.icon.split('-').join('_').toUpperCase();
                 skycons.add(document.getElementById('skycon'), Skycons[draw]);
 
                 // start animation!

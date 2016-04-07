@@ -43,8 +43,8 @@ class QuoteTableSeeder extends Seeder
                 $author = array_shift($parts);
 
                 Quote::create([
-                    'quote' => $quote,
-                    'author' => $author
+                    'quote' => trim($quote),
+                    'author' => trim($author, '., ')
                 ]);
 
                 $total++;

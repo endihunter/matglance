@@ -12,10 +12,6 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', function ($
         'includeSpamTrash': false
     };
 
-    $scope.$watch('filter', function () {
-        console.log($scope.filter);
-    },true);
-
     $scope.messages = [];
 
     $scope.query = '';

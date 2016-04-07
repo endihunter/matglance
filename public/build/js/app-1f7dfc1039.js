@@ -178,13 +178,16 @@ app.controller('RssController', ['$scope', '$timeout', function ($scope, $timeou
     };
 }]);
 app.controller('WeatherController', [
-    '$scope', '$timeout', 'WeatherService', 'GeoService', 'localStorageService', '$rootScope',
-    function ($scope, $timeout, WeatherService, GeoService, localStorageService, $rootScope) {
+    '$scope', '$timeout', 'WeatherService', 'GeoService', 'localStorageService',
+    function ($scope, $timeout, WeatherService, GeoService, localStorageService) {
         $scope.filter = {
-            units: 'si'
+            units: 'si',
+            location: ''
         };
 
         $scope.weather = {};
+
+        $scope.loading = false;
 
         var weather;
         if (weather = localStorageService.get('weather')) {
@@ -192,10 +195,12 @@ app.controller('WeatherController', [
         }
 
         WeatherService.when('location.changed', function () {
-            WeatherService.get().then(function (results) {
+            $scope.loading = true;
+            WeatherService.get({units: $scope.filter.units}).then(function (results) {
                 localStorageService.set('weather', JSON.stringify(results));
 
                 $scope.weather = results;
+                $scope.loading = false;
             });
         });
 
@@ -220,9 +225,14 @@ app.controller('WeatherController', [
          * @returns {boolean}
          */
         $scope.savePreferences = function () {
-            WeatherService.setUnits($scope.filter.units);
-
-            $scope.$emit('location.changed');
+            $scope.loading = true;
+            if ($scope.filter.location.length) {
+                GeoService.geodecode($scope.filter.location).then(function () {
+                    $scope.loading = false;
+                });
+            } else {
+                $scope.$emit('location.changed');
+            }
 
             return false;
         };
@@ -377,15 +387,7 @@ app.factory('GmailService', ['$http', '$httpParamSerializer', function ($http, $
 }]);
 app.factory("WeatherService", ['$http', '$rootScope', 'GeoService', '$httpParamSerializer',
     function ($http, $rootScope, GeoService, $httpParamSerializer) {
-        var factory = {
-            units: 'si'
-        };
-
-        factory.setUnits = function (units) {
-            factory.units = units;
-
-            return factory;
-        };
+        var factory = {};
 
         /**
          * Listen for an event.
@@ -399,16 +401,16 @@ app.factory("WeatherService", ['$http', '$rootScope', 'GeoService', '$httpParamS
             return factory;
         };
 
-        factory.get = function () {
+        factory.get = function (params) {
             var coords = [
                 GeoService.getLatitude(),
                 GeoService.getLongitude()
             ].join(",");
 
-            var args = {
+            var args = angular.extend({
                 coords: coords,
-                units: factory.units
-            };
+                units: 'si'
+            }, params || {});
 
             return $http
                 .get(app.API_PREFIX + '/weather/get/?' + $httpParamSerializer(args))

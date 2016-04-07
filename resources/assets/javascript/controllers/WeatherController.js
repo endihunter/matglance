@@ -1,11 +1,14 @@
 app.controller('WeatherController', [
-    '$scope', '$timeout', 'WeatherService', 'GeoService', 'localStorageService', '$rootScope',
-    function ($scope, $timeout, WeatherService, GeoService, localStorageService, $rootScope) {
+    '$scope', '$timeout', 'WeatherService', 'GeoService', 'localStorageService',
+    function ($scope, $timeout, WeatherService, GeoService, localStorageService) {
         $scope.filter = {
-            units: 'si'
+            units: 'si',
+            location: ''
         };
 
         $scope.weather = {};
+
+        $scope.loading = false;
 
         var weather;
         if (weather = localStorageService.get('weather')) {
@@ -13,10 +16,12 @@ app.controller('WeatherController', [
         }
 
         WeatherService.when('location.changed', function () {
-            WeatherService.get().then(function (results) {
+            $scope.loading = true;
+            WeatherService.get({units: $scope.filter.units}).then(function (results) {
                 localStorageService.set('weather', JSON.stringify(results));
 
                 $scope.weather = results;
+                $scope.loading = false;
             });
         });
 
@@ -41,9 +46,14 @@ app.controller('WeatherController', [
          * @returns {boolean}
          */
         $scope.savePreferences = function () {
-            WeatherService.setUnits($scope.filter.units);
-
-            $scope.$emit('location.changed');
+            $scope.loading = true;
+            if ($scope.filter.location.length) {
+                GeoService.geodecode($scope.filter.location).then(function () {
+                    $scope.loading = false;
+                });
+            } else {
+                $scope.$emit('location.changed');
+            }
 
             return false;
         };

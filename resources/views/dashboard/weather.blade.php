@@ -21,7 +21,7 @@
                 </div>
                 <div class="divider"></div>
                 <div class="form-group">
-                    <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid">{{ trans('buttons.save') }}</button>
+                    <button class="btn btn-primary" type="submit" ng-disabled="loading">{{ trans('buttons.save') }}</button>
                     <button class="btn btn-default" type="button" ng-click="$parent.switchEditableMode()">{{ trans('buttons.cancel') }}</button>
                 </div>
             </form>
@@ -38,7 +38,7 @@
                             <span class="label label-info">@{{ weather.currently.time }}</span>
                         </li>
                         <li>
-                            {{ trans('weather.wind') }}: @{{ weather.currently.windSpeed }}m/s
+                            {{ trans('weather.wind') }}: @{{ weather.currently.windSpeed }} @{{ (filter.units == 'us' ? 'm/h' : 'm/s') }}
                         </li>
                         <li>
                             {{ trans('weather.precip_probability') }}: @{{ weather.currently.precipProbability }}%

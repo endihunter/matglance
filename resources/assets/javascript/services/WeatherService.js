@@ -1,14 +1,6 @@
 app.factory("WeatherService", ['$http', '$rootScope', 'GeoService', '$httpParamSerializer',
     function ($http, $rootScope, GeoService, $httpParamSerializer) {
-        var factory = {
-            units: 'si'
-        };
-
-        factory.setUnits = function (units) {
-            factory.units = units;
-
-            return factory;
-        };
+        var factory = {};
 
         /**
          * Listen for an event.
@@ -22,16 +14,16 @@ app.factory("WeatherService", ['$http', '$rootScope', 'GeoService', '$httpParamS
             return factory;
         };
 
-        factory.get = function () {
+        factory.get = function (params) {
             var coords = [
                 GeoService.getLatitude(),
                 GeoService.getLongitude()
             ].join(",");
 
-            var args = {
+            var args = angular.extend({
                 coords: coords,
-                units: factory.units
-            };
+                units: 'si'
+            }, params || {});
 
             return $http
                 .get(app.API_PREFIX + '/weather/get/?' + $httpParamSerializer(args))

@@ -1,16 +1,19 @@
 app.controller('WeatherController', [
     '$scope', '$timeout', 'WeatherService', 'GeoService', 'localStorageService',
     function ($scope, $timeout, WeatherService, GeoService, localStorageService) {
-        $scope.filter = {
+        var cachedFilter = localStorageService.get('weather_filter');
+        $scope.filter = angular.extend({
             units: 'si',
-            location: ''
-        };
+            location: ""
+        }, cachedFilter ? JSON.parse(cachedFilter) : {});
 
         $scope.filterChanged = false;
 
         $scope.$watch('filter', function (n1, n2) {
             if (n1 === n2) return false;
             $scope.filterChanged = true;
+
+            localStorageService.set('weather_filter', JSON.stringify($scope.filter));
         }, true);
 
         $scope.weather = {};
@@ -63,10 +66,10 @@ app.controller('WeatherController', [
             var location = JSON.parse(location);
             var coords = location.location;
             $scope.filter.location = location.address;
+
             GeoService.setLocation(coords.lat, coords.lng);
             $scope.$emit('location.changed');
         }
-
 
         /**
          * Save module preferences

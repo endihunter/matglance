@@ -19,6 +19,8 @@ app.directive('skycon', function () {
                 //skycons.play();
             };
             initIcon();
+
+            attribs.$observe('icon', initIcon);
         },
         template: '<canvas id="skycon"></canvas>'
     };

@@ -105,7 +105,7 @@ class User extends Authenticatable
     {
         $langId = $this->preferences->lang_id;
             
-        return Language::find($langId) ? : Language::default()->first();
+        return Language::find($langId) ? : Language::where('is_default', 1)->first();
     }
 
     /**

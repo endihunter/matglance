@@ -18,9 +18,7 @@
         for (var i in links) {
             var link = links[i];
             link.onclick = function () {
-                if (confirm('{{ trans('gmail.open_external_url') }}')) {
-                    window.parent.location = this.href;
-                }
+                window.open(this.href, '_blank');
                 return false;
             }
         }

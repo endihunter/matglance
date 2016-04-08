@@ -15,10 +15,10 @@ elixir(function(mix) {
     mix.sass('helpers.scss');
     
     mix.scripts([
-        'node_modules/angular/angular.min.js',
-        'node_modules/angular-sanitize/angular-sanitize.min.js',
-        'node_modules/angular-local-storage/dist/angular-local-storage.min.js',
-        'node_modules/underscore/underscore-min.js',
+        'node_modules/angular/angular.js',
+        'node_modules/angular-sanitize/angular-sanitize.js',
+        'node_modules/angular-local-storage/dist/angular-local-storage.js',
+        'node_modules/underscore/underscore.js',
         'bower_components/skycons/skycons.js',
     ], 'public/js/vendor.js', './');
 

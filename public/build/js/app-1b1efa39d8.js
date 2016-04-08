@@ -293,6 +293,7 @@ app.controller('WeatherController', [
         };
 
         $scope.timezoneToCity = function (timezone) {
+            if (! timezone) return '';
             return timezone.split('/').pop().split('_').join(' ');
         }
     }]);

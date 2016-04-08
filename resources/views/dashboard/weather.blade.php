@@ -27,7 +27,7 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div class="row" ng-show="weather && weather.timezone">
+            <div class="row" ng-if="weather && weather.timezone">
                 <div class="col-lg-5 col-md-5 col-sm-6">
                     <ul class="list-unstyled">
                         <li>

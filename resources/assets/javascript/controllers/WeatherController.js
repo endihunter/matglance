@@ -2,26 +2,25 @@ app.controller('WeatherController', [
     '$scope', '$timeout', 'WeatherService', 'GeoService', 'localStorageService',
     function ($scope, $timeout, WeatherService, GeoService, localStorageService) {
         var cachedFilter = localStorageService.get('weather_filter');
+        var filterChanged = false, weather, location;
+
         $scope.filter = angular.extend({
             units: 'si',
             location: ""
         }, cachedFilter ? JSON.parse(cachedFilter) : {});
 
-        $scope.filterChanged = false;
-
-        $scope.$watch('filter', function (n1, n2) {
-            if (n1 === n2) return false;
-            $scope.filterChanged = true;
-
-            localStorageService.set('weather_filter', JSON.stringify($scope.filter));
-        }, true);
-
         $scope.weather = {};
 
         $scope.loading = false;
 
+        $scope.$watch('filter', function (n1, n2) {
+            if (n1 === n2) return false;
+            filterChanged = true;
+
+            localStorageService.set('weather_filter', JSON.stringify($scope.filter));
+        }, true);
+
         // fetch last weather data from cache
-        var weather;
         if (weather = localStorageService.get('weather')) {
             $scope.weather = JSON.parse(weather);
         }
@@ -35,19 +34,21 @@ app.controller('WeatherController', [
 
         // when location or units did change => fetch new weather and set to cache
         $scope.$on('location.changed', function () {
+            $scope.weather = null;
             WeatherService.get(currentLocation(), {units: $scope.filter.units}).then(function (results) {
                 $scope.weather = results;
                 localStorageService.set('weather', JSON.stringify(results));
             });
         });
 
-        var location;
         if (!(location = localStorageService.get('location'))) {
             GeoService.geolocate().then(function (GeoService) {
                 var location = {
                     lat: GeoService.getLatitude(),
                     lng: GeoService.getLongitude()
                 };
+
+                console.log(location);
 
                 GeoService.lookup(location.lat, location.lng).then(function (result) {
                     var address = result.formatted_address;
@@ -76,13 +77,13 @@ app.controller('WeatherController', [
          * @returns {boolean}
          */
         $scope.savePreferences = function () {
-            if (! $scope.filterChanged) return false;
+            if (! filterChanged) return false;
 
             $scope.loading = true;
 
-            if ($scope.filterChanged && $scope.filter.location.length) {
-                $scope.filterChanged = false;
-                GeoService.geodecode($scope.filter.location).then(function (result) {
+            if (filterChanged && $scope.filter.location.length) {
+                filterChanged = false;
+                GeoService.geocode($scope.filter.location).then(function (result) {
                     if (result && result.hasOwnProperty('geometry')) {
                         var address = $scope.filter.location = result.formatted_address;
                         var location = result.geometry.location;
@@ -110,6 +111,6 @@ app.controller('WeatherController', [
         };
 
         $scope.timezoneToCity = function (timezone) {
-            return timezone.split('/').join("<br />");
+            return timezone.split('/').pop().split('_').join(' ');
         }
     }]);

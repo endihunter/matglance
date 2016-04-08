@@ -27,14 +27,15 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div class="row">
+            <div class="row" ng-show="weather && weather.timezone">
                 <div class="col-lg-5 col-md-5 col-sm-6">
                     <ul class="list-unstyled">
                         <li>
-                            <h3 class="text-primary">@{{ weather.currently.summary }}</h3>
+                            <h2 class="text-primary">@{{ weather.currently.summary }}</h2>
                             <div class="clearfix"></div>
                         </li>
                         <li>
+                            <h4 class="text-muted">@{{ timezoneToCity(weather.timezone) }}</h4>
                             <span class="label label-info">@{{ weather.currently.time }}</span>
                         </li>
                         <li>

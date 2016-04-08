@@ -25,8 +25,20 @@ app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootSco
             scope.switchEditableMode = function (callback) {
                 scope.editable = !scope.editable;
 
-                if (callback) {}
+                if (callback) {
+                    callback();
+                }
             };
+
+            function close() {
+                angular.safeApply(scope, function (scope) {
+                    scope.editable = false;
+                });
+            }
+
+            scope.close = close;
+
+            $rootScope.$on('cardbox.close', close);
         },
         'templateUrl': '/assets/templates/card-box.html'
     };

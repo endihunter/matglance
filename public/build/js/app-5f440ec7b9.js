@@ -26,7 +26,11 @@ app.config(['localStorageServiceProvider', function (localStorageServiceProvider
 }]);
 
 app.run(['$rootScope', function ($rootScope) {
-    
+    window.onclick = function (event) {
+        if (0 == $(event.target).closest('div.card-actions.dropdown.open').length) {
+            $rootScope.$broadcast('cardbox.close');
+        }        
+    }
 }]);
 
 app.API_PREFIX = '/api/v1';
@@ -385,8 +389,20 @@ app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootSco
             scope.switchEditableMode = function (callback) {
                 scope.editable = !scope.editable;
 
-                if (callback) {}
+                if (callback) {
+                    callback();
+                }
             };
+
+            function close() {
+                angular.safeApply(scope, function (scope) {
+                    scope.editable = false;
+                });
+            }
+
+            scope.close = close;
+
+            $rootScope.$on('cardbox.close', close);
         },
         'templateUrl': '/assets/templates/card-box.html'
     };

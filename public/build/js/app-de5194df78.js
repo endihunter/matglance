@@ -378,7 +378,7 @@ app.directive('skycon', function () {
                 skycons.add(document.getElementById('skycon'), Skycons[draw]);
 
                 // start animation!
-                //skycons.play();
+                skycons.play();
             };
             initIcon();
 

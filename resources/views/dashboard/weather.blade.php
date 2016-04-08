@@ -64,7 +64,7 @@
                 <div class="col-lg-7 col-md-7 col-sm-6 text-left">
                     <skycon ng-if="weather.currently.icon" icon="@{{ weather.currently.icon }}" width="128" height="128"></skycon>
 
-                    <h1 class="text-primary">@{{ weather.currently.temperature }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</h1>
+                    <h1 class="text-primary">@{{ weather.currently.temperature }} @{{ (weather.units == 'us' ? '&deg;F' : "&deg;C") }}</h1>
                 </div>
             </div>
         </card-box-body>

@@ -38,125 +38,141 @@ app.API_PREFIX = '/api/v1';
 app.controller('CalendarController', ['$scope', function ($scope) {
     
 }]);
-app.controller('GmailController', ['$scope', 'GmailService', '$sce', function ($scope, GmailService, $sce) {
-    $scope.searchMode = false;
+app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStorageService',
+    function ($scope, GmailService, $sce, localStorageService) {
+        $scope.searchMode = false;
 
-    $scope.message = null;
+        $scope.message = null;
 
-    $scope.loading = false;
+        $scope.loading = false;
 
-    $scope.filter = {
-        'from': '',
-        'to': '',
-        'subject': '',
-        'includeSpamTrash': false
-    };
-
-    $scope.messages = [];
-
-    $scope.query = '';
-
-    function buildQuery() {
-        $scope.query = '';
-
-        var q = [];
-        angular.forEach(['from', 'to', 'subject'], function (field, index, values) {
-            var value = $scope.filter[field];
-
-            if (value.length) {
-                q.push(field + ': (' + value + ')');
-            }
-        });
-
-        $scope.query = q.join(" ").trim();
-
-        return $scope.query;
-    }
-
-
-    $scope.fetchMessages = function () {
-        $scope.loading = true;
-
-        var args = {
-            'includeSpamTrash': !!$scope.filter.includeSpamTrash,
-            'q': buildQuery()
+        var emptyFilter = function () {
+            return {
+                'from': '',
+                'to': '',
+                'subject': '',
+                'includeSpamTrash': false
+            };
         };
 
-        GmailService.fetchMessages(args)
-            .then(function (messages) {
-                // restore listing view
-                $scope.message = null;
-
-                angular.safeApply($scope, function ($scope) {
-                    $scope.messages = messages;
-
-                    $scope.loading = false;
-                });
-            })
-            .catch(function () {
-                console.error(arguments);
-                $scope.loading = false;
-            });
-    };
-
-    // fetch messages on page ready
-    $scope.fetchMessages();
-
-    $scope.isUnRead = function (message) {
-        return message.hasOwnProperty('labels')
-            && (-1 < message.labels.indexOf('UNREAD'));
-    };
-
-    $scope.fullMessageUrl = function (messageId) {
-        return $sce.trustAsResourceUrl('/gmail/messages/' + messageId + '/body');
-    };
-
-    $scope.toggleSearchMode = function () {
-        $scope.searchMode = !$scope.searchMode;
-
-        if (!$scope.searchMode) {
-            $scope.switchEditableMode();
+        var savedFilter;
+        if (! (savedFilter = localStorageService.get('gmail'))) {
+            savedFilter = JSON.stringify(emptyFilter());
+            localStorageService.set('gmail', savedFilter);
         }
-    };
 
-    $scope.backToList = function () {
-        $scope.message = null;
-    };
+        $scope.filter = JSON.parse(savedFilter);
 
-    $scope.readMessage = function (messageId) {
-        $scope.loading = true;
+        $scope.messages = [];
 
-        GmailService.get(messageId)
-            .then(function (message) {
-                angular.safeApply($scope, function ($scope) {
-                    $scope.message = message;
+        $scope.query = buildQuery();
+
+        function buildQuery() {
+            $scope.query = '';
+
+            var q = [];
+            angular.forEach(['from', 'to', 'subject'], function (field, index, values) {
+                var value = $scope.filter[field];
+
+                if (value.length) {
+                    q.push(field + ': (' + value + ')');
+                }
+            });
+
+            $scope.query = q.join(" ").trim();
+
+            return $scope.query;
+        }
+
+        $scope.fetchMessages = function () {
+            $scope.loading = true;
+
+            // save filter
+            localStorageService.set('gmail', savedFilter = JSON.stringify($scope.filter));
+
+            var args = {
+                'includeSpamTrash': !!$scope.filter.includeSpamTrash,
+                'q': buildQuery()
+            };
+
+            GmailService.fetchMessages(args)
+                .then(function (messages) {
+                    // restore listing view
+                    $scope.message = null;
+
+                    angular.safeApply($scope, function ($scope) {
+                        $scope.messages = messages;
+
+                        $scope.loading = false;
+                    });
+                })
+                .catch(function () {
+                    $scope.loading = false;
+                });
+        };
+
+        // fetch messages on page ready
+        $scope.fetchMessages();
+
+        $scope.isUnRead = function (message) {
+            return message.hasOwnProperty('labels')
+                && (-1 < message.labels.indexOf('UNREAD'));
+        };
+
+        $scope.fullMessageUrl = function (messageId) {
+            return $sce.trustAsResourceUrl('/gmail/messages/' + messageId + '/body');
+        };
+
+        $scope.toggleSearchMode = function (flag, callback) {
+            if (!flag) {
+                $scope.filter = JSON.parse(savedFilter);
+            }
+
+            $scope.searchMode = !!flag;
+
+            if (callback) {
+                callback();
+            }
+        };
+
+        $scope.backToList = function () {
+            $scope.message = null;
+        };
+
+        $scope.readMessage = function (messageId) {
+            $scope.loading = true;
+
+            GmailService.get(messageId)
+                .then(function (message) {
+                    angular.safeApply($scope, function ($scope) {
+                        $scope.message = message;
+
+                        $scope.loading = false;
+
+                        var currentMessage = $scope.messages.filter(function (message) {
+                            return message.id == messageId;
+                        })[0];
+
+                        $scope.messages.map(function (message) {
+                            if (message.id == messageId && $scope.isUnRead(message)) {
+                                var index = message.labels.indexOf('UNREAD');
+
+                                message.labels.splice(index, 1);
+
+                                GmailService.markAsRead(messageId);
+                            }
+
+                            return message;
+                        });
+                    });
+                })
+                .catch(function () {
+                    console.log(arguments);
 
                     $scope.loading = false;
-
-                    var currentMessage = $scope.messages.filter(function (message) {
-                        return message.id == messageId;
-                    })[0];
-
-                    $scope.messages.map(function (message) {
-                        if (message.id == messageId && $scope.isUnRead(message)) {
-                            var index = message.labels.indexOf('UNREAD');
-
-                            message.labels.splice(index, 1);
-
-                            GmailService.markAsRead(messageId);
-                        }
-
-                        return message;
-                    });
                 });
-            })
-            .catch(function () {
-                console.log(arguments);
-
-                $scope.loading = false;
-            });
-    }
-}]);
+        }
+    }]);
 app.controller('QuoteController', ['$scope', '$http', function ($scope, $http) {
     $scope.quote = {
         id: null,

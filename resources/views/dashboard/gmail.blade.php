@@ -8,7 +8,7 @@
                 <div ng-show="!searchMode">
                     <div class="form-group">
                         <div class="input-group">
-                            <input ng-focus="toggleSearchMode()" value="@{{ query }}" type="text" class="form-control" placeholder="{{ trans('gmail.search') }}">
+                            <input ng-focus="toggleSearchMode(true)" value="@{{ query }}" type="text" class="form-control" placeholder="{{ trans('gmail.search') }}">
                             <span class="input-group-btn">
                                 <button type="button" disabled class="btn waves-effect waves-light btn-primary">
                                     <i class="fa fa-search"></i></button>
@@ -34,7 +34,7 @@
                 <div class="divider"></div>
                 <div class="form-group">
                     <button class="btn btn-primary" ng-disabled="loading" type="submit">{{ trans('buttons.search') }}</button>
-                    <button class="btn btn-default" type="button" ng-click="$parent.switchEditableMode(toggleSearchMode)">{{ trans('buttons.cancel') }}</button>
+                    <button class="btn btn-default" type="button" ng-click="toggleSearchMode(false, $parent.switchEditableMode)">{{ trans('buttons.cancel') }}</button>
                 </div>
             </form>
         </card-box-actions>

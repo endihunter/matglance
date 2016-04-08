@@ -28,10 +28,9 @@ class LanguageTableSeeder extends Seeder
     protected function langs()
     {
         DB::table('languages')->delete();
-        DB::table('languages')->truncate();
 
         return [
-            ['title' => 'English', 'iso6391' => 'en', 'locale' => 'en_US', 'active' => true, 'is_default' => 1],
+            ['id' => 1, 'title' => 'English', 'iso6391' => 'en', 'locale' => 'en_US', 'active' => true, 'is_default' => 1],
         ];
     }
 }

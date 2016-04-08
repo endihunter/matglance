@@ -52,7 +52,7 @@ class GMailRepository
         return $gMail
             ->match($request->get('q', null))
             ->withSpamTrash('true' == $request->get('includeSpamTrash'))
-            ->take((int) $request->get('maxResults', 5))
+            ->take((int) $request->get('maxResults', 10))
             ->messages();
     }
 
@@ -68,6 +68,13 @@ class GMailRepository
         $gMail = Gmail::of($userId);
 
         return $gMail->get($messageId);
+    }
+
+    public function fetchAttachment($userId, $messageId, $attachmentId)
+    {
+        $gMail = Gmail::of($userId);
+
+        return $gMail->attachment($messageId, $attachmentId);
     }
 
     protected function cacheMessageFor()

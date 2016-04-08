@@ -102,6 +102,7 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/gmail/messages/{id}/body', [
         'middleware' => 'auth',
+        'as' => 'gmail.body',
         'uses' => function ($messageId, GMailRepository $repo) {
             $me = auth()->user();
 
@@ -110,6 +111,18 @@ Route::group(['middleware' => ['web']], function () {
             return view('iframe', [
                 'body' => array_get($body, 'html', array_get($body, 'plain')),
             ]);
+        },
+    ]);
+
+    Route::get('/gmail/messages/{message_id}/attachment/{attachment_id}', [
+        'middleware' => 'auth',
+        'as' => 'gmail.attachment',
+        'uses' => function ($messageId, $attachmentId, GMailRepository $repo) {
+            $me = auth()->user();
+
+            $data = $repo->fetchAttachment($me->email, $messageId, $attachmentId);
+
+            return response(\App\Base64::decode($data), 200);
         },
     ]);
 });

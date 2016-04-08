@@ -11,7 +11,7 @@
                             <input ng-focus="toggleSearchMode()" value="@{{ query }}" type="text" class="form-control" placeholder="{{ trans('gmail.search') }}">
                             <span class="input-group-btn">
                                 <button type="button" disabled class="btn waves-effect waves-light btn-primary">
-                                <i class="fa fa-search"></i></button>
+                                    <i class="fa fa-search"></i></button>
                             </span>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                     <i class="class zmdi zmdi-swap"></i>
                     {{ trans('buttons.view_in_gmail') }}
                 </a>
-                <br /><br />
+                <br/><br/>
 
                 <table class="table">
                     <tr>
@@ -72,19 +72,17 @@
                 <div ng-if="loading">{{ trans('gmail.loading') }}</div>
 
                 <ul class="list-group">
-                    <li class="g-message-list-item list-group-item" ng-repeat="message in messages">
-                        <a ng-click="readMessage(message.id)">
-                            <small class="label label-default pull-right">@{{ message.date }}</small>
+                    <li ng-click="readMessage(message.id)" class="g-message-list-item list-group-item" ng-repeat="message in messages">
+                        <small class="label label-default pull-right">@{{ message.date }}</small>
                         <span class="msg-from pull-left">
                             @{{ message.from[1] || message.from[0] }}
                         </span>
-                            <div class="clearfix"></div>
+                        <br class="clearfix" />
                         <span class="msg-subject text-dark" ng-class="{'font-bold': isUnRead(message)}">
                             @{{ message.subject }}
                         </span><br/>
-                            <small class="msg-snippet text-muted" ng-bind-html="message.snippet"></small>
-                            <div class="clearfix"></div>
-                        </a>
+                        <small class="msg-snippet text-muted" ng-bind-html="message.snippet"></small>
+                        <br class="clearfix" />
                     </li>
                 </ul>
             </div>

@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Base64;
 use Carbon\Carbon;
 use Google_Service_Gmail_Message;
+use Google_Service_Gmail_MessagePart;
 
 class GmailMessage
 {
@@ -17,6 +19,8 @@ class GmailMessage
     protected $message;
 
     protected $headers = [];
+
+    protected $attachments = [];
 
     public function __construct(Google_Service_Gmail_Message $message)
     {
@@ -70,25 +74,32 @@ class GmailMessage
     {
         if (null === $message) {
             $message = $this->message->getPayload();
+
+            $this->attachments = $this->collectAttachments($message);
         }
 
         if (empty($parts = $message->getParts())) {
-            $body = $message->getBody()->getData();
-
-            $body = strtr($body, '-_', '+/');
-            $body = base64_decode($body);
-
             $type = $message->getMimeType();
-            if (in_array($type, ['text/plain', 'text/html'])) {
-                $type = $this->messageType($type);
+            $type = $this->messageType($type);
 
-                return [$type => $body];
+            $body = Base64::decode(
+                $message->getBody()->getData()
+            );
+
+            if ('html' == $type) {
+                $body = $this->handleContentID($body);
             }
+
+            if ('plain' == $type) {
+                $body = nl2br($body);
+            }
+
+            return [$type => $body];
         } else {
             $body = [];
+
             foreach ($parts as $message) {
-                $type = $message->getMimeType();
-                if (in_array($type, ['text/plain', 'text/html'])) {
+                if ($this->isContent($message)) {
                     $body += $this->body($message);
                 }
             }
@@ -109,11 +120,23 @@ class GmailMessage
         )->diffForHumans();
     }
 
-    public function explore()
+    /**
+     * Expose the internal Google Message API.
+     *
+     * @return mixed
+     */
+    public function expose()
     {
         return get_class_methods($this->message);
     }
 
+    /**
+     * Proxy calls to Google_Message class.
+     *
+     * @param $method
+     * @param $args
+     * @return mixed
+     */
     public function __call($method, $args)
     {
         return call_user_func_array([$this->message, $method], $args);
@@ -150,5 +173,81 @@ class GmailMessage
         $type = array_pop($mime);
 
         return $type;
+    }
+
+    protected function collectAttachments($message)
+    {
+        $attachments = [];
+
+        foreach ($message->getParts() as $part) {
+            if ($this->isAttachment($part)) {
+                $attachments[] = $part;
+            }
+
+            if ($part->getParts()) {
+                $attachments = array_merge(
+                    $attachments,
+                    $this->collectAttachments($part)
+                );
+            }
+        }
+
+        return $attachments;
+    }
+
+    protected function isAttachment(Google_Service_Gmail_MessagePart $part)
+    {
+        return $part->getFilename() || $part->getBody()->getAttachmentId();
+    }
+
+    protected function isContent(Google_Service_Gmail_MessagePart $part)
+    {
+        return in_array(
+            $part->getMimeType(),
+            ['text/plain', 'text/html', 'multipart/alternative', 'multipart/related']
+        );
+    }
+
+    /**
+     * Handle the Content-ID for HTML messages.
+     *
+     * @param $body
+     * @return mixed
+     */
+    private function handleContentID($body)
+    {
+        $body = preg_replace_callback('~src="cid:(.+)"~isUm', function ($matches) {
+            $cid = $matches[1];
+
+            if ($attachmentId = $this->findCidContent($cid)) {
+                return 'src="'.route('gmail.attachment', [
+                    'message_id' => $this->message->getId(),
+                    'attachment_id' => $attachmentId
+                ]).'"';
+            }
+
+            return "/blank.gif";
+        }, $body);
+
+        return $body;
+    }
+
+    /**
+     * Find the Content-ID attachment.
+     *
+     * @param $cid
+     * @return array|null
+     */
+    private function findCidContent($cid)
+    {
+        foreach ($this->attachments as $attachment) {
+            foreach ($attachment->getHeaders() as $header) {
+                if ($header->getName() == 'Content-ID' && $header->getValue() == '<' . $cid . '>') {
+                    return $attachment->getBody()->getAttachmentId();
+                }
+            }
+        }
+
+        return null;
     }
 }

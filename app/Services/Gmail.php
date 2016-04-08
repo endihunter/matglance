@@ -200,6 +200,24 @@ class Gmail
     }
 
     /**
+     * Fetch the message attachment.
+     *
+     * @param $messageId
+     * @param $attachmentId
+     * @return mixed
+     */
+    public function attachment($messageId, $attachmentId)
+    {
+        $attachment = $this->client->users_messages_attachments->get(
+            $this->email,
+            $messageId,
+            $attachmentId
+        );
+
+        return $attachment->getData();
+    }
+
+    /**
      * Add/Remove message labels.
      *
      * @param $messageId

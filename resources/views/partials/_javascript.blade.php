@@ -17,5 +17,5 @@
 <script src="{{ asset('assets/js/jquery.core.js') }}"></script>
 <script src="{{ asset('assets/js/jquery.app.js') }}"></script>
 
-<script src="{{ asset(asset('js/vendor.js')) }}"></script>
+<script src="{{ asset(elixir('js/vendor.js')) }}"></script>
 <script src="{{ asset(elixir('js/app.js')) }}"></script>

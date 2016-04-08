@@ -22,14 +22,16 @@ class QuoteTableSeeder extends Seeder
 
         $total = 0;
         while ($page++ <= $pages) {
-            $body = $client->get('life?page=' . $page)->send()->getBody(true);
+            //$body = $client->get('life?page=' . $page)->send()->getBody(true);
+            $body = file_get_contents($client->getBaseUrl() . '/life?page=' . $page);
 
-            $crowler = new Symfony\Component\DomCrawler\Crawler($body);
+            $crowler = new Symfony\Component\DomCrawler\Crawler();
+            $crowler->addHtmlContent($body);
 
             $quotes = $crowler->filter('.leftContainer div.quoteText');
 
             $quotes->each(function ($node) use (&$total) {
-                $parts = array_filter(explode("\n", trim(strip_tags($node->text()))), function (&$value) {
+                $parts = array_filter(explode(PHP_EOL, trim(strip_tags($node->text()))), function (&$value) {
                     $value = trim($value);
 
                     if (empty($value) || '―' == $value)

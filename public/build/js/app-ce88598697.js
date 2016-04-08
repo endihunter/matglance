@@ -238,7 +238,7 @@ app.controller('WeatherController', [
         // when location or units did change => fetch new weather and set to cache
         $scope.$on('location.changed', function () {
             WeatherService.get(currentLocation(), {units: $scope.filter.units}).then(function (results) {
-                $scope.weather = results;
+                $scope.weather = angular.extend(results, $scope.filter);
                 localStorageService.set('weather', JSON.stringify(results));
             });
         });
@@ -325,6 +325,10 @@ app.controller('WeatherController', [
             $scope.filter.location = city.description;
 
             $scope.cities = null;
+
+            $timeout(function () {
+                skipTracking = false;
+            }, 10);
         }
     }]);
 app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootScope) {

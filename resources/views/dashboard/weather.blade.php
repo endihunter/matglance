@@ -41,11 +41,11 @@
                             <div class="clearfix"></div>
                         </li>
                         <li>
-                            <h4 class="text-muted">@{{ locationToCity(filter.location) }}</h4>
+                            <h4 class="text-muted">@{{ locationToCity(weather.location) }}</h4>
                             <span class="label label-info">@{{ weather.currently.time }}</span>
                         </li>
                         <li>
-                            {{ trans('weather.wind') }}: @{{ weather.currently.windSpeed }} @{{ (filter.units == 'us' ? 'm/h' : 'm/s') }}
+                            {{ trans('weather.wind') }}: @{{ weather.currently.windSpeed }} @{{ (weather.units == 'us' ? 'm/h' : 'm/s') }}
                         </li>
                         <li>
                             {{ trans('weather.precip_probability') }}: @{{ weather.currently.precipProbability }}%

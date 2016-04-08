@@ -216,7 +216,6 @@ app.controller('WeatherController', [
 
         // when location or units did change => fetch new weather and set to cache
         $scope.$on('location.changed', function () {
-            $scope.weather = null;
             WeatherService.get(currentLocation(), {units: $scope.filter.units}).then(function (results) {
                 $scope.weather = results;
                 localStorageService.set('weather', JSON.stringify(results));

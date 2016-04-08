@@ -26,7 +26,7 @@ class GeoController extends Controller
     }
 
     /**
-     * Conver coordinates to address
+     * Convert coordinates to address
      *
      * @param Request $request
      * @return mixed

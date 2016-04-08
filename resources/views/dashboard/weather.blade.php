@@ -16,8 +16,14 @@
                         <label for="fahrenheit">{{ trans('weather.fahrenheit') }}</label>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="btn-group">
                     <input type="text" required class="form-control" placeholder="{{ trans('weather.location') }}" ng-model="filter.location"/>
+
+                    <ul style="position: absolute;" class="dropdown-menu demo-dropdown" role="menu" ng-if="cities.length">
+                        <li ng-repeat="city in cities">
+                            <a ng-click="selectCity(city)">@{{ city.description }}</a>
+                        </li>
+                    </ul>
                 </div>
                 <div class="divider"></div>
                 <div class="form-group">

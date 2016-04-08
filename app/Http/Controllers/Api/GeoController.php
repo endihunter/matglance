@@ -42,6 +42,21 @@ class GeoController extends Controller
     }
 
     /**
+     * Suggest places that matches query.
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function places(Request $request)
+    {
+        $url = $this->getPlacesUrl([
+            'input' => $request->get('name')
+        ]);
+
+        return $this->buildResponse($url);
+    }
+
+    /**
      * @param array $params
      * @return string
      */
@@ -58,6 +73,18 @@ class GeoController extends Controller
         return $url;
     }
 
+    protected function getPlacesUrl(array $params = [])
+    {
+        $me = auth()->user();
+
+        return 'https://maps.googleapis.com/maps/api/place/autocomplete/json?' .
+            http_build_query(array_merge([
+                'key' => config('services.places.api_key'),
+                'types' => '(cities)',
+                'language' => $me->lang()->iso6391,
+            ], $params));
+    }
+
     /**
      * @param $url
      * @return mixed
@@ -67,4 +94,6 @@ class GeoController extends Controller
         return response(file_get_contents($url), 200)
             ->header('Content-Type', 'json');
     }
+
+
 }

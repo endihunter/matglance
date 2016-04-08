@@ -181,10 +181,12 @@ app.controller('RssController', ['$scope', '$timeout', function ($scope, $timeou
     };
 }]);
 app.controller('WeatherController', [
-    '$scope', '$timeout', 'WeatherService', 'GeoService', 'localStorageService',
-    function ($scope, $timeout, WeatherService, GeoService, localStorageService) {
+    '$scope', '$timeout', 'WeatherService', 'GeoService', 'localStorageService', '$http',
+    function ($scope, $timeout, WeatherService, GeoService, localStorageService, $http) {
         var cachedFilter = localStorageService.get('weather_filter');
         var filterChanged = false, weather, location;
+
+        $scope.cities = [];
 
         $scope.filter = angular.extend({
             units: 'si',
@@ -195,11 +197,30 @@ app.controller('WeatherController', [
 
         $scope.loading = false;
 
+        function searchForCity(name) {
+            $http.get(app.API_PREFIX + '/geo/places/?name=' + name)
+                .then(function (response) {
+                    var cities = _.uniq(response.data.predictions) || [];
+
+                    $scope.cities = cities;
+                });
+        }
+
+        // skipTracking used when city is predicted by Places API and directly inserted into filter.location
+        // so to prevent double checking, temporary skip this step
+        var skipTracking = false;
         $scope.$watch('filter', function (n1, n2) {
-            if (n1 === n2) return false;
+            if (skipTracking || n1 === n2) return false;
             filterChanged = true;
 
+            if (n1.location !== n2.location) {
+                searchForCity(n1.location);
+            }
+
             localStorageService.set('weather_filter', JSON.stringify($scope.filter));
+
+            // restore tracking:
+            skipTracking = false;
         }, true);
 
         // fetch last weather data from cache
@@ -258,7 +279,7 @@ app.controller('WeatherController', [
          * @returns {boolean}
          */
         $scope.savePreferences = function () {
-            if (! filterChanged) return false;
+            if (!filterChanged) return false;
 
             $scope.loading = true;
 
@@ -292,8 +313,18 @@ app.controller('WeatherController', [
         };
 
         $scope.locationToCity = function (location) {
-            if (! location.indexOf(',')) return '';
-            return location.split(', ').shift();
+            if (!location || !location.indexOf(',')) return '';
+
+            return _.first(
+                location.split(', ')
+            );
+        };
+
+        $scope.selectCity = function (city) {
+            skipTracking = true;
+            $scope.filter.location = city.description;
+
+            $scope.cities = null;
         }
     }]);
 app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootScope) {

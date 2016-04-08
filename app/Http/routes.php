@@ -97,6 +97,11 @@ Route::group(['middleware' => ['web']], function () {
                 'as' => 'api.geo.lookup',
                 'uses' => 'Api\GeoController@lookup'
             ]);
+
+            Route::get('places', [
+                'as' => 'api.geo.place',
+                'uses' => 'Api\GeoController@places'
+            ]);
         });
     });
 
@@ -125,4 +130,5 @@ Route::group(['middleware' => ['web']], function () {
             return response(\App\Base64::decode($data), 200);
         },
     ]);
+
 });

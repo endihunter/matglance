@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="app">
+<html ng-app="app"  ng-model-options="{ debounce: 250 }">
 
 @include('partials._head')
 

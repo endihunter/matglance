@@ -18,7 +18,8 @@ elixir(function(mix) {
         'node_modules/angular/angular.min.js',
         'node_modules/angular-sanitize/angular-sanitize.min.js',
         'node_modules/angular-local-storage/dist/angular-local-storage.min.js',
-        'bower_components/skycons/skycons.js'
+        'node_modules/underscore/underscore-min.js',
+        'bower_components/skycons/skycons.js',
     ], 'public/js/vendor.js', './');
 
     mix.scripts([

@@ -35,7 +35,7 @@
                             <div class="clearfix"></div>
                         </li>
                         <li>
-                            <h4 class="text-muted">@{{ timezoneToCity(weather.timezone) }}</h4>
+                            <h4 class="text-muted">@{{ locationToCity(filter.location) }}</h4>
                             <span class="label label-info">@{{ weather.currently.time }}</span>
                         </li>
                         <li>

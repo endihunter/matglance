@@ -109,8 +109,8 @@ app.controller('WeatherController', [
             return false;
         };
 
-        $scope.timezoneToCity = function (timezone) {
-            if (! timezone) return '';
-            return timezone.split('/').pop().split('_').join(' ');
+        $scope.locationToCity = function (location) {
+            if (! location.indexOf(',')) return '';
+            return location.split(', ').shift();
         }
     }]);

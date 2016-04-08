@@ -184,26 +184,25 @@ app.controller('WeatherController', [
     '$scope', '$timeout', 'WeatherService', 'GeoService', 'localStorageService',
     function ($scope, $timeout, WeatherService, GeoService, localStorageService) {
         var cachedFilter = localStorageService.get('weather_filter');
+        var filterChanged = false, weather, location;
+
         $scope.filter = angular.extend({
             units: 'si',
             location: ""
         }, cachedFilter ? JSON.parse(cachedFilter) : {});
 
-        $scope.filterChanged = false;
-
-        $scope.$watch('filter', function (n1, n2) {
-            if (n1 === n2) return false;
-            $scope.filterChanged = true;
-
-            localStorageService.set('weather_filter', JSON.stringify($scope.filter));
-        }, true);
-
         $scope.weather = {};
 
         $scope.loading = false;
 
+        $scope.$watch('filter', function (n1, n2) {
+            if (n1 === n2) return false;
+            filterChanged = true;
+
+            localStorageService.set('weather_filter', JSON.stringify($scope.filter));
+        }, true);
+
         // fetch last weather data from cache
-        var weather;
         if (weather = localStorageService.get('weather')) {
             $scope.weather = JSON.parse(weather);
         }
@@ -217,19 +216,21 @@ app.controller('WeatherController', [
 
         // when location or units did change => fetch new weather and set to cache
         $scope.$on('location.changed', function () {
+            $scope.weather = null;
             WeatherService.get(currentLocation(), {units: $scope.filter.units}).then(function (results) {
                 $scope.weather = results;
                 localStorageService.set('weather', JSON.stringify(results));
             });
         });
 
-        var location;
         if (!(location = localStorageService.get('location'))) {
             GeoService.geolocate().then(function (GeoService) {
                 var location = {
                     lat: GeoService.getLatitude(),
                     lng: GeoService.getLongitude()
                 };
+
+                console.log(location);
 
                 GeoService.lookup(location.lat, location.lng).then(function (result) {
                     var address = result.formatted_address;
@@ -258,13 +259,13 @@ app.controller('WeatherController', [
          * @returns {boolean}
          */
         $scope.savePreferences = function () {
-            if (! $scope.filterChanged) return false;
+            if (! filterChanged) return false;
 
             $scope.loading = true;
 
-            if ($scope.filterChanged && $scope.filter.location.length) {
-                $scope.filterChanged = false;
-                GeoService.geodecode($scope.filter.location).then(function (result) {
+            if (filterChanged && $scope.filter.location.length) {
+                filterChanged = false;
+                GeoService.geocode($scope.filter.location).then(function (result) {
                     if (result && result.hasOwnProperty('geometry')) {
                         var address = $scope.filter.location = result.formatted_address;
                         var location = result.geometry.location;
@@ -292,7 +293,7 @@ app.controller('WeatherController', [
         };
 
         $scope.timezoneToCity = function (timezone) {
-            return timezone.split('/').join("<br />");
+            return timezone.split('/').pop().split('_').join(' ');
         }
     }]);
 app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootScope) {
@@ -376,12 +377,14 @@ app.factory('GeoService', ['$q', '$http', function ($q, $http) {
         return this.lng;
     };
 
-    factory.lookup = function (lat, lng) {
-        return $http.get(app.API_PREFIX + '/geo/lookup?latlng=' + [lat, lng].join(','))
-            .then(function (response) {
-                return response.data.results[0];
-            });
-    };
+    function setDefaultLocation() {
+        factory.setLocation(
+            40.7127837,
+            -74.0059413
+        );
+
+        return factory;
+    }
 
     /**
      * Locate the client by asking Navigator.GeoLocation.
@@ -397,16 +400,30 @@ app.factory('GeoService', ['$q', '$http', function ($q, $http) {
                 );
 
                 defer.resolve(factory);
+            }, function (blocked) {
+                defer.resolve(
+                    setDefaultLocation()
+                );
             });
         } else {
-            defer.reject('Geolocation is not supported.');
+            // set default location to new york
+            defer.resolve(
+                setDefaultLocation()
+            );
         }
 
         return defer.promise;
     };
 
-    factory.geodecode = function (location) {
+    factory.geocode = function (location) {
         return $http.get(app.API_PREFIX + '/geo/code?loc=' + location)
+            .then(function (response) {
+                return response.data.results[0];
+            });
+    };
+
+    factory.lookup = function (lat, lng) {
+        return $http.get(app.API_PREFIX + '/geo/lookup?latlng=' + [lat, lng].join(','))
             .then(function (response) {
                 return response.data.results[0];
             });

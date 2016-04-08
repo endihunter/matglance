@@ -19,12 +19,14 @@ app.factory('GeoService', ['$q', '$http', function ($q, $http) {
         return this.lng;
     };
 
-    factory.lookup = function (lat, lng) {
-        return $http.get(app.API_PREFIX + '/geo/lookup?latlng=' + [lat, lng].join(','))
-            .then(function (response) {
-                return response.data.results[0];
-            });
-    };
+    function setDefaultLocation() {
+        factory.setLocation(
+            40.7127837,
+            -74.0059413
+        );
+
+        return factory;
+    }
 
     /**
      * Locate the client by asking Navigator.GeoLocation.
@@ -40,16 +42,30 @@ app.factory('GeoService', ['$q', '$http', function ($q, $http) {
                 );
 
                 defer.resolve(factory);
+            }, function (blocked) {
+                defer.resolve(
+                    setDefaultLocation()
+                );
             });
         } else {
-            defer.reject('Geolocation is not supported.');
+            // set default location to new york
+            defer.resolve(
+                setDefaultLocation()
+            );
         }
 
         return defer.promise;
     };
 
-    factory.geodecode = function (location) {
+    factory.geocode = function (location) {
         return $http.get(app.API_PREFIX + '/geo/code?loc=' + location)
+            .then(function (response) {
+                return response.data.results[0];
+            });
+    };
+
+    factory.lookup = function (lat, lng) {
+        return $http.get(app.API_PREFIX + '/geo/lookup?latlng=' + [lat, lng].join(','))
             .then(function (response) {
                 return response.data.results[0];
             });

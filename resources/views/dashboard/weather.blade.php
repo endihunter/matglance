@@ -28,7 +28,7 @@
                 <div class="divider"></div>
                 <div class="form-group">
                     <button class="btn btn-primary" type="submit" ng-disabled="loading">{{ trans('buttons.save') }}</button>
-                    <button class="btn btn-default" type="button" ng-click="$parent.switchEditableMode()">{{ trans('buttons.cancel') }}</button>
+                    <button class="btn btn-default" type="button" ng-disabled="loading" ng-click="cancel($parent.switchEditableMode)">{{ trans('buttons.cancel') }}</button>
                 </div>
             </form>
         </card-box-actions>

@@ -183,15 +183,14 @@ app.controller('RssController', ['$scope', '$timeout', function ($scope, $timeou
 app.controller('WeatherController', [
     '$scope', '$timeout', 'WeatherService', 'GeoService', 'localStorageService', '$http',
     function ($scope, $timeout, WeatherService, GeoService, localStorageService, $http) {
-        var cachedFilter = localStorageService.get('weather_filter');
         var filterChanged = false, weather, location;
 
         $scope.cities = [];
 
-        $scope.filter = angular.extend({
+        $scope.filter = {
             units: 'si',
             location: ""
-        }, cachedFilter ? JSON.parse(cachedFilter) : {});
+        };
 
         $scope.weather = {};
 
@@ -209,23 +208,38 @@ app.controller('WeatherController', [
         // skipTracking used when city is predicted by Places API and directly inserted into filter.location
         // so to prevent double checking, temporary skip this step
         var skipTracking = false;
+
+        function addressModified(n1, n2) {
+            return n1.location !== n2.location && n1.location.length >= 3;
+        }
+
         $scope.$watch('filter', function (n1, n2) {
             if (skipTracking || n1 === n2) return false;
             filterChanged = true;
 
-            if (n1.location !== n2.location) {
+            if (addressModified(n1, n2)) {
                 searchForCity(n1.location);
             }
-
-            localStorageService.set('weather_filter', JSON.stringify($scope.filter));
 
             // restore tracking:
             skipTracking = false;
         }, true);
 
+        function restoreSavedFilter() {
+            delayFilterTracking();
+
+            $scope.filter = {
+                units: $scope.weather.units,
+                location: $scope.weather.location
+            }
+        }
+
         // fetch last weather data from cache
         if (weather = localStorageService.get('weather')) {
             $scope.weather = JSON.parse(weather);
+
+            // restore filter from cache
+            restoreSavedFilter();
         }
 
         function currentLocation() {
@@ -274,6 +288,14 @@ app.controller('WeatherController', [
             $scope.$emit('location.changed');
         }
 
+        $scope.cancel = function (callback) {
+            restoreSavedFilter();
+
+            if (callback) {
+                callback();
+            }
+        };
+
         /**
          * Save module preferences
          * @returns {boolean}
@@ -320,15 +342,20 @@ app.controller('WeatherController', [
             );
         };
 
-        $scope.selectCity = function (city) {
+        function delayFilterTracking() {
             skipTracking = true;
-            $scope.filter.location = city.description;
-
-            $scope.cities = null;
 
             $timeout(function () {
                 skipTracking = false;
-            }, 10);
+            }, 100);
+        }
+
+        $scope.selectCity = function (city) {
+            delayFilterTracking();
+
+            $scope.filter.location = city.description;
+
+            $scope.cities = null;
         }
     }]);
 app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootScope) {

@@ -19,7 +19,7 @@
     <link href="{{ asset('assets/css/menu.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('assets/css/responsive.css') }}" rel="stylesheet" type="text/css"/>
 
-    <link rel="stylesheet" href="{{ elixir('css/helpers.css') }}">
+    <link rel="stylesheet" href="{{ asset(elixir('css/helpers.css')) }}">
 
     <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

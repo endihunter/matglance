@@ -32,6 +32,7 @@ elixir(function(mix) {
 
     mix.version([
         'css/helpers.css',
-        'js/app.js'
+        'js/app.js',
+        'js/vendor.js'
     ])
 });

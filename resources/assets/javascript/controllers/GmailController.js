@@ -16,14 +16,14 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
         };
 
         var savedFilter;
-        if (! (savedFilter = localStorageService.get('gmail'))) {
+        if (! (savedFilter = localStorageService.get('g_fltr'))) {
             savedFilter = JSON.stringify(emptyFilter());
-            localStorageService.set('gmail', savedFilter);
+            localStorageService.set('g_fltr', savedFilter);
         }
 
         $scope.filter = JSON.parse(savedFilter);
 
-        $scope.messages = [];
+        $scope.messages = JSON.parse(localStorageService.get('g_msgs')) || [];
 
         $scope.query = buildQuery();
 
@@ -48,7 +48,7 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
             $scope.loading = true;
 
             // save filter
-            localStorageService.set('gmail', savedFilter = JSON.stringify($scope.filter));
+            localStorageService.set('g_fltr', savedFilter = JSON.stringify($scope.filter));
 
             var args = {
                 'includeSpamTrash': !!$scope.filter.includeSpamTrash,
@@ -58,12 +58,12 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
             GmailService.fetchMessages(args)
                 .then(function (messages) {
                     // restore listing view
-                    $scope.message = null;
-
                     angular.safeApply($scope, function ($scope) {
                         $scope.messages = messages;
 
                         $scope.loading = false;
+
+                        localStorageService.set('g_msgs', JSON.stringify(messages));
                     });
                 })
                 .catch(function () {

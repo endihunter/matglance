@@ -82,8 +82,6 @@ app.controller('WeatherController', [
                     lng: GeoService.getLongitude()
                 };
 
-                console.log(location);
-
                 GeoService.lookup(location.lat, location.lng).then(function (result) {
                     var address = result.formatted_address;
 
@@ -127,7 +125,7 @@ app.controller('WeatherController', [
                 filterChanged = false;
                 GeoService.geocode($scope.filter.location).then(function (result) {
                     if (result && result.hasOwnProperty('geometry')) {
-                        var address = $scope.filter.location = result.formatted_address;
+                        var address = /*$scope.filter.location = */result.formatted_address;
                         var location = result.geometry.location;
 
                         GeoService.setLocation(location.lat, location.lng);

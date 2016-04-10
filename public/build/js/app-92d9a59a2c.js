@@ -27,9 +27,10 @@ app.config(['localStorageServiceProvider', function (localStorageServiceProvider
 
 app.run(['$rootScope', function ($rootScope) {
     window.onclick = function (event) {
-        if (0 == $(event.target).closest('div.card-actions.dropdown.open').length) {
+        if (0 == $(event.target).closest('div.card-actions.dropdown.open').length
+            && 0 == $(event.target).closest('#cities-list').length) {
             $rootScope.$broadcast('cardbox.close');
-        }        
+        }
     }
 }]);
 
@@ -248,10 +249,10 @@ app.controller('WeatherController', [
         function restoreSavedFilter() {
             delayFilterTracking();
 
-            $scope.filter = {
+            $scope.filter = angular.extend({
                 units: $scope.weather.units,
                 location: $scope.weather.location
-            }
+            }, $scope.filter);
         }
 
         // fetch last weather data from cache

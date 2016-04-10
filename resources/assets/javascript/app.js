@@ -7,9 +7,10 @@ app.config(['localStorageServiceProvider', function (localStorageServiceProvider
 
 app.run(['$rootScope', function ($rootScope) {
     window.onclick = function (event) {
-        if (0 == $(event.target).closest('div.card-actions.dropdown.open').length) {
+        if (0 == $(event.target).closest('div.card-actions.dropdown.open').length
+            && 0 == $(event.target).closest('#cities-list').length) {
             $rootScope.$broadcast('cardbox.close');
-        }        
+        }
     }
 }]);
 

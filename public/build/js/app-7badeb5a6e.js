@@ -55,15 +55,12 @@ app.controller('CalendarController', [
 
         function selectDefaultCalendar() {
             var calendar = $scope.calendars.filter(function (c) {
-                console.log(c);
                 return !!c.primary;
             })[0];
 
             select(calendar);
 
             persistCalendar();
-
-            console.log('set primary', $scope.filter.calendar);
         }
 
         function persistCalendar () {
@@ -88,7 +85,6 @@ app.controller('CalendarController', [
             var savedCalendar;
             if (savedCalendar = localStorageService.get('cal')) {
                 savedCalendar = JSON.parse(savedCalendar);
-                console.log('saved', savedCalendar);
                 $scope.filter.calendar = savedCalendar;
             } else {
                 selectDefaultCalendar();
@@ -105,7 +101,6 @@ app.controller('CalendarController', [
 
         $scope.select = function (cal) {
             $scope.filter.calendar = angular.copy(cal);
-            console.log('selected', $scope.filter.calendar);
         };
 
         $scope.selected = function (cal) {

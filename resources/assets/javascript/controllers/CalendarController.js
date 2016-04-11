@@ -16,15 +16,23 @@ app.controller('CalendarController', [
         }
 
         function selectDefaultCalendar() {
-            if (!$scope.filter.calendar) {
-                var calendar = $scope.calendars.filter(function (c) {
-                    return 'true' == c.primary;
-                })[0];
+            var calendar = $scope.calendars.filter(function (c) {
+                console.log(c);
+                return !!c.primary;
+            })[0];
 
-                console.log('primary', calendar);
+            select(calendar);
 
-                select(calendar);
-            }
+            persistCalendar();
+
+            console.log('set primary', $scope.filter.calendar);
+        }
+
+        function persistCalendar () {
+            localStorageService.set(
+                'cal',
+                JSON.stringify(angular.copy($scope.filter.calendar))
+            );
         }
 
         function fetchEvents() {
@@ -44,18 +52,15 @@ app.controller('CalendarController', [
                 savedCalendar = JSON.parse(savedCalendar);
                 console.log('saved', savedCalendar);
                 $scope.filter.calendar = savedCalendar;
+            } else {
+                selectDefaultCalendar();
             }
-
-            selectDefaultCalendar();
 
             fetchEvents();
         };
 
         $scope.savePreferences = function () {
-            localStorageService.set(
-                'cal',
-                JSON.stringify(angular.copy($scope.filter.calendar))
-            );
+            persistCalendar();
 
             fetchEvents();
         };

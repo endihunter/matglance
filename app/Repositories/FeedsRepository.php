@@ -15,7 +15,7 @@ class FeedsRepository
         return NewsFeed::ofLang($langId)->orderBy('name')->get(['id', 'name']);
     }
 
-    public function news(array $feeds = [], $take = 3)
+    public function news(array $feeds = [], $take = 3000)
     {
         $collection = NewsFeed::whereIn('id', $feeds)->get(['url']);
 

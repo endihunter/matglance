@@ -444,6 +444,7 @@ app.controller('WeatherController', [
 
                 GeoService.lookup(GeoService.getLatitude(), GeoService.getLongitude()).then(function (result) {
                     console.debug('Lookup');
+                    delayFilterTracking();
                     $scope.filter.address = result.formatted_address;
                     console.log('Address:', $scope.filter.address);
 

@@ -33,38 +33,40 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div class="row" ng-if="weather && weather.timezone">
-                <div class="col-lg-5 col-md-5 col-sm-6">
-                    <ul class="list-unstyled">
-                        <li>
-                            <h2 class="text-primary">@{{ weather.currently.summary }}</h2>
-                            <div class="clearfix"></div>
-                        </li>
-                        <li>
-                            <h4 class="text-muted">@{{ locationToCity(weather.location) }}</h4>
-                            <span class="label label-info">@{{ weather.currently.time }}</span>
-                        </li>
-                        <li>
-                            {{ trans('weather.wind') }}: @{{ weather.currently.windSpeed }} @{{ (filter.units == 'us' ? 'm/h' : 'm/s') }}
-                        </li>
-                        <li>
-                            {{ trans('weather.precip_probability') }}: @{{ weather.currently.precipProbability }}%
-                        </li>
-                        <li>
-                            {{ trans('weather.pressure') }}: @{{ weather.currently.pressure }} hPa
-                        </li>
-                        <li>
-                            {{ trans('weather.humidity') }}: @{{ weather.currently.humidity }}%
-                        </li>
-                        <li>
-                            {{ trans('weather.cloudiness') }}: @{{ weather.currently.cloudCover }}%
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-lg-7 col-md-7 col-sm-6 text-left">
-                    <skycon ng-if="weather.currently.icon" icon="@{{ weather.currently.icon }}" width="128" height="128"></skycon>
+            <div style="height: 300px;">
+                <div class="row" ng-if="weather && weather.timezone">
+                    <div class="col-lg-5 col-md-5 col-sm-6" style="margin-bottom: 32px;">
+                        <ul class="list-unstyled">
+                            <li>
+                                <h2 class="text-primary">@{{ weather.currently.summary }}</h2>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li>
+                                <h4 class="text-muted">@{{ locationToCity(weather.location) }}</h4>
+                                <span class="label label-info">@{{ weather.currently.time }}</span>
+                            </li>
+                            <li>
+                                {{ trans('weather.wind') }}: @{{ weather.currently.windSpeed }} @{{ (filter.units == 'us' ? 'm/h' : 'm/s') }}
+                            </li>
+                            <li>
+                                {{ trans('weather.precip_probability') }}: @{{ weather.currently.precipProbability }}%
+                            </li>
+                            <li>
+                                {{ trans('weather.pressure') }}: @{{ weather.currently.pressure }} hPa
+                            </li>
+                            <li>
+                                {{ trans('weather.humidity') }}: @{{ weather.currently.humidity }}%
+                            </li>
+                            <li>
+                                {{ trans('weather.cloudiness') }}: @{{ weather.currently.cloudCover }}%
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-7 col-md-7 col-sm-6 text-left">
+                        <skycon ng-if="weather.currently.icon" icon="@{{ weather.currently.icon }}" width="128" height="128"></skycon>
 
-                    <h1 class="text-primary">@{{ weather.currently.temperature }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</h1>
+                        <h1 class="text-primary">@{{ weather.currently.temperature }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</h1>
+                    </div>
                 </div>
             </div>
         </card-box-body>

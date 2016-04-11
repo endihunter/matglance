@@ -194,13 +194,83 @@ app.controller('QuoteController', ['$scope', '$http', function ($scope, $http) {
         });
     }
 }]);
-app.controller('RssController', ['$scope', '$timeout', function ($scope, $timeout) {
-    $scope.savePreferences = function () {
-        console.log('saving rss prefs', $scope.data);
+app.controller('RssController', [
+    '$scope', '$timeout', 'localStorageService', 'FeedService',
+    function ($scope, $timeout, localStorageService, FeedService) {
+        function fullList() {
+            return mapToInt(_.pluck($scope.allFeeds, 'id'));
+        }
 
-        return false;
-    };
-}]);
+        function mapToInt(values) {
+            return values.map(function (value) {
+                return parseInt(value);
+            });
+        }
+
+        function restoreReadableFeeds() {
+            var savedFeeds;
+            if ((savedFeeds = localStorageService.get('feeds')) && savedFeeds.length) {
+                $scope.feeds = mapToInt(savedFeeds.split(','));
+            } else {
+                $scope.feeds = fullList();
+            }
+        }
+
+        function fetchNews() {
+            FeedService.news($scope.feeds).then(function (news) {
+                $scope.articles = news;
+                console.log($scope.articles);
+            });
+        }
+
+        // all feeds
+        $scope.allFeeds = [];
+
+        // readable feeds
+        $scope.feeds = [];
+
+        $scope.articles = [];
+
+        $scope.init = function (allFeeds) {
+            $scope.allFeeds = allFeeds;
+
+            restoreReadableFeeds();
+
+            fetchNews();
+        };
+
+        $scope.savePreferences = function () {
+            localStorageService.set('feeds', mapToInt($scope.feeds).join(','));
+
+            fetchNews();
+
+            return false;
+        };
+
+        $scope.cancel = function (callback) {
+            restoreReadableFeeds();
+
+            if (callback) {
+                callback();
+            }
+        };
+
+        $scope.trackUntrack = function (feed_id) {
+            feed_id = parseInt(feed_id);
+
+            if ($scope.trackable(feed_id)) {
+                $scope.feeds = _.without($scope.feeds, feed_id);
+            } else {
+                $scope.feeds.push(feed_id);
+            }
+        };
+
+        $scope.trackable = function (feed_id) {
+            feed_id = parseInt(feed_id);
+
+            return _.indexOf($scope.feeds, feed_id) != -1;
+        }
+    }]);
 app.controller('WeatherController', [
     '$scope', '$timeout', 'WeatherService', 'GeoService', 'localStorageService', '$http',
     function ($scope, $timeout, WeatherService, GeoService, localStorageService, $http) {
@@ -449,6 +519,21 @@ app.directive('skycon', function () {
         template: '<canvas id="skycon"></canvas>'
     };
 });
+app.factory('FeedService', ['$http', '$httpParamSerializer', function ($http, $httpParamSerializer) {
+    var factory = {};
+
+    factory.news = function (feeds) {
+        var args = $httpParamSerializer({
+            ids: feeds.join(',')
+        });
+        return $http.get(app.API_PREFIX + '/feed/news?' + args)
+            .then(function (response) {
+                return response.data.data;
+            });
+    };
+
+    return factory;
+}]);
 app.factory('GeoService', ['$q', '$http', function ($q, $http) {
     var factory = {
         lat: null,

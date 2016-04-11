@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\FeedsRepository;
 use App\Repositories\QuotesRepository;
 use Illuminate\Http\Request;
 
@@ -12,18 +13,26 @@ class DashboardController extends Controller
     /**
      * @var QuotesRepository
      */
-    protected $quotesRepository;
+    private $quotes;
+    /**
+     * @var FeedsRepository
+     */
+    private $feeds;
 
-    public function __construct(QuotesRepository $quotesRepository)
+    public function __construct(QuotesRepository $quotes, FeedsRepository $feeds)
     {
-        $this->quotesRepository = $quotesRepository;
+        $this->quotes = $quotes;
+        $this->feeds = $feeds;
     }
 
     public function index()
     {
+        $me = auth()->user();
+
         return view('dashboard')
             ->with([
-                'quote' => $this->quotesRepository->random()
+                'quote' => $this->quotes->random($me->lang()->id),
+                'feeds' => $this->feeds->feeds($me->lang()->id)
             ]);
     }
 }

@@ -39,54 +39,56 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div ng-if="message">
-                <a ng-click="backToList()" class="btn btn-default">
-                    <i class="zmdi zmdi-long-arrow-return"></i>
-                    {{ trans('buttons.back') }}
-                </a>
-                <a ng-href="https://mail.google.com/mail/u/0/#inbox/@{{ message.id }}" target="_blank" class="btn btn-link">
-                    <i class="class zmdi zmdi-swap"></i>
-                    {{ trans('buttons.view_in_gmail') }}
-                </a>
-                <br/><br/>
+            <div>
+                <div ng-if="message">
+                    <a ng-click="backToList()" class="btn btn-default">
+                        <i class="zmdi zmdi-long-arrow-return"></i>
+                        {{ trans('buttons.back') }}
+                    </a>
+                    <a ng-href="https://mail.google.com/mail/u/0/#inbox/@{{ message.id }}" target="_blank" class="btn btn-link">
+                        <i class="class zmdi zmdi-swap"></i>
+                        {{ trans('buttons.view_in_gmail') }}
+                    </a>
+                    <br/><br/>
 
-                <table class="table">
-                    <tr>
-                        <td>{{ trans('gmail.from') }}</td>
-                        <td>@{{ message.from[0] }} <@{{ message.from[1] }}></td>
-                    </tr>
-                    <tr>
-                        <td>{{ trans('gmail.subject') }}</td>
-                        <td>@{{ message.subject }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <iframe id="msg-iframe" height="0" width="100%" ng-src="@{{ fullMessageUrl(message.id) }}" frameborder="0" scrolling="0"></iframe>
-                        </td>
-                    </tr>
-                </table>
-                <div class="clearfix"></div>
-            </div>
+                    <table class="table">
+                        <tr>
+                            <td>{{ trans('gmail.from') }}</td>
+                            <td>@{{ message.from[0] }} <@{{ message.from[1] }}></td>
+                        </tr>
+                        <tr>
+                            <td>{{ trans('gmail.subject') }}</td>
+                            <td>@{{ message.subject }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <iframe id="msg-iframe" height="0" width="100%" ng-src="@{{ fullMessageUrl(message.id) }}" frameborder="0" scrolling="0"></iframe>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="clearfix"></div>
+                </div>
 
-            <div ng-if="! message" style="overflow: hidden">
-                <ul class="list-group">
-                    <li ng-if="loading" class="g-message-list-item list-group-item">{{ trans('gmail.loading') }}</li>
-                    <li ng-click="readMessage(message.id)" class="g-message-list-item list-group-item" ng-repeat="message in messages">
-                        <small class="label label-default pull-right">@{{ message.date }}</small>
+                <div ng-if="! message" style="overflow: hidden">
+                    <ul class="list-group">
+                        <li ng-if="loading" class="g-message-list-item list-group-item">{{ trans('gmail.loading') }}</li>
+                        <li ng-click="readMessage(message.id)" class="g-message-list-item list-group-item" ng-repeat="message in messages">
+                            <small class="label label-default pull-right">@{{ message.date }}</small>
                         <span class="msg-from pull-left">
                             @{{ message.from[1] || message.from[0] }}
                         </span>
-                        <br class="clearfix" />
+                            <br class="clearfix" />
                         <span class="msg-subject text-dark" ng-class="{'font-bold': isUnRead(message)}">
                             @{{ message.subject }}
                         </span><br/>
-                        <small class="msg-snippet text-muted" ng-bind-html="message.snippet"></small>
-                        <br class="clearfix" />
-                    </li>
-                </ul>
-            </div>
+                            <small class="msg-snippet text-muted" ng-bind-html="message.snippet"></small>
+                            <br class="clearfix" />
+                        </li>
+                    </ul>
+                </div>
 
-            <div class="clearfix"></div>
+                <div class="clearfix"></div>
+            </div>
         </card-box-body>
     </card-box>
 </div>

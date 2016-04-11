@@ -15,6 +15,8 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('google_id', 30)->unique();
+            $table->unsignedInteger('language_id')->default(1)->nullable();
+            $table->string('theme', 20)->nullable();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('url')->nullable();
@@ -23,6 +25,12 @@ class CreateUsersTable extends Migration
             $table->string('password', 60)->nullable();
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('language_id')
+                ->references('id')
+                ->on('languages')
+                ->onUpdate('cascade')
+                ->onDelete('set null');
         });
     }
 

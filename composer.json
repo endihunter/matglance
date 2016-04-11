@@ -15,7 +15,8 @@
         "laravel/framework": "5.2.*",
         "google/apiclient": "^1.1",
         "terranet/restable": "dev-master",
-        "adminarchitect/localizer": "^1.0"
+        "adminarchitect/localizer": "^1.0",
+        "zendframework/zend-feed": "^2.7"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -29,6 +30,9 @@
         "themsaid/laravel-langman": "^1.1"
     },
     "autoload": {
+        "files": [
+            "app/Http/helpers.php"
+        ],
         "classmap": [
             "database"
         ],

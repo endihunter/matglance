@@ -87,6 +87,11 @@ Route::group(['middleware' => ['web']], function () {
             'uses' => 'Api\WeatherController@get',
         ]);
 
+        Route::get('feed/news', [
+            'as' => 'api.feed.news',
+            'uses' => 'Api\FeedController@news'
+        ]);
+
         Route::group(['prefix' => 'geo'], function () {
             Route::get('code', [
                 'as' => 'api.geo.code',

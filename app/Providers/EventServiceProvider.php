@@ -28,11 +28,5 @@ class EventServiceProvider extends ServiceProvider
     public function boot(DispatcherContract $events)
     {
         parent::boot($events);
-
-        User::created(function ($user) {
-            $user->preferences()->create([
-                'lang_id' => 1
-            ]);
-        });
     }
 }

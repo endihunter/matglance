@@ -2,5 +2,6 @@
 
 return [
     'title' => 'Calendar',
-    'settings' => 'Settings'
+    'settings' => 'Settings',
+    'all_day' => 'All day'
 ];

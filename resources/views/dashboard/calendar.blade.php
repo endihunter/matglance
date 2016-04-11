@@ -29,7 +29,7 @@
                         @{{ event.start.formattedDate }}
                     </td>
                     <td>
-                        <span ng-if="event.allDay">{{ trans('calendar.event_all_day') }}</span>
+                        <span ng-if="event.allDay">{{ trans('calendar.all_day') }}</span>
                         <span ng-if="! event.allDay">
                             @{{ event.start.time }} - @{{ event.end.time }}
                         </span>

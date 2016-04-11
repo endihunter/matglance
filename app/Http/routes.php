@@ -54,6 +54,7 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::group([
         'prefix' => 'api/v1',
+        'middleware' => 'auth'
     ], function () {
         Route::get('quotes/random', [
             'as' => 'api.quotes.random',
@@ -91,6 +92,18 @@ Route::group(['middleware' => ['web']], function () {
             'as' => 'api.feed.news',
             'uses' => 'Api\FeedController@news'
         ]);
+
+        Route::group(['prefix' => 'calendar'], function () {
+            Route::get('list', [
+                'as' => 'api.calendar.list',
+                'uses' => 'Api\CalendarController@calendars'
+            ]);
+
+            Route::get('events', [
+                'as' => 'api.calendar.events',
+                'uses' => 'Api\CalendarController@events'
+            ]);
+        });
 
         Route::group(['prefix' => 'geo'], function () {
             Route::get('code', [

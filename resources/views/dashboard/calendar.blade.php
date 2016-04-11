@@ -1,22 +1,44 @@
-<div ng-controller="CalendarController">
+<div ng-controller="CalendarController" ng-init="init({{ json_encode($calendars) }})">
     <card-box title="{{ trans('calendar.title') }}">
         <card-box-actions>
             <div class="form-group">
                 <h5>{{ trans('calendar.title') }}</h5>
             </div>
             <form ng-submit="savePreferences()" novalidate name="form">
-                <div class="form-group text-left">
-                    Calendars list
+                <div class="btn-group">
+                    <ul class="list-unstyled">
+                        <li ng-repeat="cal in calendars">
+                            <label>
+                                <input type="radio" name="calendar" ng-click="select(cal)" ng-checked="selected(cal)">&nbsp;
+                                @{{ cal.summary }}
+                            </label>
+                        </li>
+                    </ul>
                 </div>
                 <div class="divider"></div>
                 <div class="form-group">
-                    <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid">{{ trans('buttons.save') }}</button>
-                    <button class="btn btn-default" type="button" ng-click="$parent.switchEditableMode()">{{ trans('buttons.cancel') }}</button>
+                    <button class="btn btn-primary" type="submit" ng-disabled="loading">{{ trans('buttons.save') }}</button>
+                    <button class="btn btn-default" type="button" ng-disabled="loading" ng-click="cancel($parent.switchEditableMode)">{{ trans('buttons.cancel') }}</button>
                 </div>
             </form>
         </card-box-actions>
         <card-box-body>
-            My agenda here
+            <table class="table">
+                <tr ng-repeat="event in events">
+                    <td class="text-primary">
+                        @{{ event.start.formattedDate }}
+                    </td>
+                    <td>
+                        <span ng-if="event.allDay">{{ trans('calendar.event_all_day') }}</span>
+                        <span ng-if="! event.allDay">
+                            @{{ event.start.time }} - @{{ event.end.time }}
+                        </span>
+                    </td>
+                    <td>
+                        <a ng-href="@{{ event.link }}" target="_blank">@{{ event.summary }}</a>
+                    </td>
+                </tr>
+            </table>
         </card-box-body>
     </card-box>
 </div>

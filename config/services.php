@@ -53,7 +53,7 @@ return [
     ],
 
     'places' => [
-        'api_key' => env('GEOCODE_KEY', 'AIzaSyBK2OkpLluTlXQtnRZaxv5IHGaEDd-95HM'),
+        'api_key' => env('PLACES_KEY', 'AIzaSyBK2OkpLluTlXQtnRZaxv5IHGaEDd-95HM'),
     ],
 
     'forecast' => [

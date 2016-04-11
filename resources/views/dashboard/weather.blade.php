@@ -4,7 +4,7 @@
             <div class="form-group">
                 <h5>{{ trans('weather.settings') }}</h5>
             </div>
-            <form ng-submit="savePreferences();" novalidate name="form">
+            <form ng-submit="savePreferences($parent.switchEditableMode);" novalidate name="form">
                 <div class="form-group text-left">
                     <p class="text-muted font-13 m-b-15 m-t-20">{{ trans('weather.units') }}</p>
                     <div class="radio radio-info radio-inline">
@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div class="btn-group">
-                    <input type="text" required class="form-control" placeholder="{{ trans('weather.location') }}" ng-model="filter.location"/>
+                    <input type="text" required class="form-control" placeholder="{{ trans('weather.location') }}" ng-model="filter.address"/>
 
                     <ul style="position: absolute;" id="cities-list" class="dropdown-menu demo-dropdown" role="menu" ng-if="cities.length">
                         <li ng-repeat="city in cities">
@@ -42,7 +42,7 @@
                                 <div class="clearfix"></div>
                             </li>
                             <li>
-                                <h4 class="text-muted">@{{ locationToCity(weather.location) }}</h4>
+                                <h4 class="text-muted">@{{ locationToCity(weather.address) }}</h4>
                                 <span class="label label-info">@{{ weather.currently.time }}</span>
                             </li>
                             <li>

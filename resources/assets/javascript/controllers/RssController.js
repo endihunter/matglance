@@ -23,7 +23,6 @@ app.controller('RssController', [
         function fetchNews() {
             FeedService.news($scope.feeds).then(function (news) {
                 $scope.articles = news;
-                console.log($scope.articles);
             });
         }
 

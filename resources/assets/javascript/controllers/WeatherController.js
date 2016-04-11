@@ -1,14 +1,17 @@
 app.controller('WeatherController', [
     '$scope', '$timeout', 'WeatherService', 'GeoService', 'localStorageService', '$http',
     function ($scope, $timeout, WeatherService, GeoService, localStorageService, $http) {
-        var filterChanged = false, weather, location;
+        var filterChanged = false, savedFilter;
+
+        var defaultFilter = {
+            units: 'si',
+            location: {},
+            address: ""
+        };
 
         $scope.cities = [];
 
-        $scope.filter = {
-            units: 'si',
-            location: ""
-        };
+        $scope.filter = angular.copy(defaultFilter);
 
         $scope.weather = {};
 
@@ -28,7 +31,7 @@ app.controller('WeatherController', [
         var skipTracking = false;
 
         function addressModified(n1, n2) {
-            return n1.location !== n2.location && n1.location.length >= 3;
+            return n1.address !== n2.address && n1.address.length >= 3;
         }
 
         $scope.$watch('filter', function (n1, n2) {
@@ -36,7 +39,7 @@ app.controller('WeatherController', [
             filterChanged = true;
 
             if (addressModified(n1, n2)) {
-                searchForCity(n1.location);
+                searchForCity(n1.address);
             }
 
             // restore tracking:
@@ -46,24 +49,30 @@ app.controller('WeatherController', [
         function restoreSavedFilter() {
             delayFilterTracking();
 
-            $scope.filter = angular.extend({
-                units: $scope.weather.units,
-                location: $scope.weather.location
-            }, $scope.filter);
+            $scope.filter = angular.copy(defaultFilter);
         }
 
-        // fetch last weather data from cache
-        if (weather = localStorageService.get('weather')) {
-            $scope.weather = JSON.parse(weather);
+        function finish(cb) {
+            if (cb) {
+                cb();
+            }
+        }
 
-            // restore filter from cache
-            restoreSavedFilter();
+        function cacheFilter() {
+            console.log('Cache filter:', $scope.filter);
+            localStorageService.set('w_fltr', JSON.stringify($scope.filter));
+
+            defaultFilter = angular.copy($scope.filter);
+        }
+
+        function loadCachedFilter() {
+            return JSON.parse(localStorageService.get('w_fltr'));
         }
 
         function currentLocation() {
             return [
-                GeoService.getLatitude(),
-                GeoService.getLongitude()
+                $scope.filter.location.lat,
+                $scope.filter.location.lng
             ].join(",")
         }
 
@@ -71,90 +80,86 @@ app.controller('WeatherController', [
         $scope.$on('location.changed', function () {
             WeatherService.get(currentLocation(), {units: $scope.filter.units}).then(function (results) {
                 $scope.weather = angular.extend(results, $scope.filter);
-                localStorageService.set('weather', JSON.stringify(results));
             });
         });
 
-        if (!(location = localStorageService.get('location'))) {
+        if (!(savedFilter = loadCachedFilter())) {
             GeoService.geolocate().then(function (GeoService) {
-                var location = {
+                console.debug('Geolocate...');
+                $scope.filter.location = {
                     lat: GeoService.getLatitude(),
                     lng: GeoService.getLongitude()
                 };
+                console.log('Location:', $scope.filter.location);
 
-                GeoService.lookup(location.lat, location.lng).then(function (result) {
-                    var address = result.formatted_address;
+                GeoService.lookup(GeoService.getLatitude(), GeoService.getLongitude()).then(function (result) {
+                    console.debug('Lookup');
+                    $scope.filter.address = result.formatted_address;
+                    console.log('Address:', $scope.filter.address);
 
-                    localStorageService.set('location', JSON.stringify({
-                        address: address,
-                        location: location
-                    }));
-
-                    $scope.filter.location = address;
+                    cacheFilter();
 
                     $scope.$emit('location.changed');
                 });
             });
         } else {
-            var location = JSON.parse(location);
-            var coords = location.location;
-            $scope.filter.location = location.address;
+            $scope.filter = angular.copy(savedFilter);
+            defaultFilter = angular.copy($scope.filter);
 
-            GeoService.setLocation(coords.lat, coords.lng);
             $scope.$emit('location.changed');
+            console.log('Load cached filter:', $scope.filter);
         }
 
         $scope.cancel = function (callback) {
             restoreSavedFilter();
 
-            if (callback) {
-                callback();
-            }
+            finish(callback);
         };
 
         /**
          * Save module preferences
          * @returns {boolean}
          */
-        $scope.savePreferences = function () {
+        $scope.savePreferences = function (callback) {
             if (!filterChanged) return false;
 
             $scope.loading = true;
 
-            if (filterChanged && $scope.filter.location.length) {
+            if (filterChanged && $scope.filter.address.length) {
                 filterChanged = false;
-                GeoService.geocode($scope.filter.location).then(function (result) {
+                GeoService.geocode($scope.filter.address).then(function (result) {
+                    console.log('Geocoding for :', $scope.filter.address);
                     if (result && result.hasOwnProperty('geometry')) {
-                        var address = /*$scope.filter.location = */result.formatted_address;
-                        var location = result.geometry.location;
+                        delayFilterTracking();
 
-                        GeoService.setLocation(location.lat, location.lng);
+                        $scope.filter = angular.extend($scope.filter, {
+                            address: result.formatted_address,
+                            location: result.geometry.location
+                        });
+
+                        cacheFilter();
 
                         $scope.$emit('location.changed');
 
-                        localStorageService.set('location', JSON.stringify({
-                            address: address,
-                            location: {
-                                lat: location.lat,
-                                lng: location.lng
-                            }
-                        }));
+                        finish(callback);
                     }
 
                     $scope.loading = false;
                 });
             } else {
                 $scope.$emit('location.changed');
+
+                finish(callback);
             }
 
             return false;
         };
 
-        $scope.locationToCity = function (location) {
-            if (!location || !location.indexOf(',')) return '';
+        $scope.locationToCity = function (address) {
+            if (!address || !address.indexOf(',')) return '';
 
             return _.first(
-                location.split(', ')
+                address.split(', ')
             );
         };
 
@@ -169,7 +174,7 @@ app.controller('WeatherController', [
         $scope.selectCity = function (city) {
             delayFilterTracking();
 
-            $scope.filter.location = city.description;
+            $scope.filter.address = city.description;
 
             $scope.cities = null;
         }

@@ -14,7 +14,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'url', 'password', 'token', 'google_id', 'avatar', 'language_id', 'theme'
+        'name', 'email', 'url', 'password', 'token', 'google_id', 'avatar', 'language', 'theme'
     ];
 
     /**
@@ -103,18 +103,6 @@ class User extends Authenticatable
      */
     public function lang()
     {
-        $langId = $this->language_id;
-            
-        return Language::find($langId) ? : Language::where('is_default', 1)->first();
-    }
-
-    /**
-     * Language relationship
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function language()
-    {
-        return $this->belongsTo(Language::class);
+        return $this->language;
     }
 }

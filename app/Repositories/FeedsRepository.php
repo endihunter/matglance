@@ -10,9 +10,9 @@ use Zend\Feed\Reader\Reader;
 
 class FeedsRepository
 {
-    public function feeds($langId)
+    public function feeds($lang)
     {
-        return NewsFeed::ofLang($langId)->orderBy('name')->get(['id', 'name']);
+        return NewsFeed::ofLang($lang)->orderBy('name')->get(['id', 'name']);
     }
 
     public function news(array $feeds = [], $take = 300)

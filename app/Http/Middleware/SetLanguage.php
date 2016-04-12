@@ -19,11 +19,11 @@ class SetLanguage
     {
         if (auth()->check()) {
             $me = auth()->user();
-            $lang = $me->lang()->iso6391;
+            $lang = $me->lang();
 
             if ($lang !== config('app.locale')) {
                 Config::set('app.locale', $lang);
-                Carbon::setLocale(config('app.locale'));
+                Carbon::setLocale($lang);
             }
         }
 

@@ -67,7 +67,7 @@ class GeoController extends Controller
         $url = 'https://maps.googleapis.com/maps/api/geocode/json?' .
             http_build_query(array_merge([
                 'key' => config('services.geocode.api_key'),
-                'language' => $me->lang()->iso6391,
+                'language' => $me->lang(),
             ], $params));
 
         return $url;
@@ -81,7 +81,7 @@ class GeoController extends Controller
             http_build_query(array_merge([
                 'key' => config('services.places.api_key'),
                 'types' => '(cities)',
-                'language' => $me->lang()->iso6391,
+                'language' => $me->lang(),
             ], $params));
     }
 

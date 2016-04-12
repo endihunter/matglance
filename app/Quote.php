@@ -9,11 +9,11 @@ class Quote extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'lang_id', 'show_at', 'quote', 'author'
+        'language', 'show_at', 'quote', 'author'
     ];
 
-    public function scopeForLang($query, $langId)
+    public function scopeForLang($query, $lang = 'en')
     {
-        return $query->where('lang_id', (int) $langId);
+        return $query->where('language', $lang);
     }
 }

@@ -43,7 +43,7 @@ class FeedController extends Controller
     {
         $feedList = ($ids = $request->get('ids', [])) ? explode(",", $ids) : [];
         if (empty($feedList)) {
-            $feedList = $this->news->feeds($me->lang()->id)->pluck('id')->toArray();
+            $feedList = $this->news->feeds($me->lang())->pluck('id')->toArray();
 
             return $feedList;
         }

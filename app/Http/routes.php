@@ -41,13 +41,12 @@ Route::group(['middleware' => ['web']], function () {
     Route::group(['prefix' => 'prefs', 'middleware' => 'auth'], function () {
         Route::get('lang/{language}', [
             'as' => 'user.prefs.lang',
-            'uses' => function (Language $language) {
+            'uses' => function ($language) {
                 /**
                  * @var $user \App\User
                  */
                 $user = auth()->user();
-                $user->language()->associate($language);
-                $user->save();
+                $user->fill(['language' => $language])->save();
 
                 return redirect()->back(301);
             }

@@ -1,5 +1,3 @@
-@inject('languages', '\App\Repositories\LanguagesRepository')
-
 <div id="sidebar-menu">
     <ul>
         <li class="text-muted menu-title">{{ trans('general.navigation') }}</li>
@@ -18,8 +16,8 @@
                 <span class="menu-arrow"></span>
             </a>
             <ul class="list-unstyled">
-                @foreach($languages->active() as $lang)
-                    <li class="{{ ($lang->id == auth()->user()->lang()->id ? 'active' : '') }}"><a href="{{ route('user.prefs.lang', ['id' => $lang->id]) }}">{{ $lang->title }}</a></li>
+                @foreach(config('languages') as $slug => $title)
+                    <li class="{{ ($slug == auth()->user()->lang() ? 'active' : '') }}"><a href="{{ route('user.prefs.lang', ['language' => $slug]) }}">{{ $title }}</a></li>
                 @endforeach
             </ul>
         </li>

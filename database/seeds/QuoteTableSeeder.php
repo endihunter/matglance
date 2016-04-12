@@ -25,10 +25,10 @@ class QuoteTableSeeder extends Seeder
             //$body = $client->get('life?page=' . $page)->send()->getBody(true);
             $body = file_get_contents($client->getBaseUrl() . '/life?page=' . $page);
 
-            $crowler = new Symfony\Component\DomCrawler\Crawler();
-            $crowler->addHtmlContent($body);
+            $crawler = new Symfony\Component\DomCrawler\Crawler();
+            $crawler->addHtmlContent($body);
 
-            $quotes = $crowler->filter('.leftContainer div.quoteText');
+            $quotes = $crawler->filter('.leftContainer div.quoteText');
 
             $quotes->each(function ($node) use (&$total) {
                 $parts = array_filter(explode(PHP_EOL, trim(strip_tags($node->text()))), function (&$value) {
@@ -44,12 +44,10 @@ class QuoteTableSeeder extends Seeder
                 $quote = array_shift($parts);
                 $author = array_shift($parts);
 
-                $lang = rand(1, 2);
-
                 Quote::create([
-                    'lang_id' => $lang,
-                    'quote' => (1 == $lang ? 'EN: ' : 'DE: ') . trim($quote),
-                    'author' => trim($author, '., ')
+                    'language' => ($lang = rand(0, 1) ? 'en' : 'de'),
+                    'quote' => $lang . ': ' . trim($quote),
+                    'author' => trim($author, '., '),
                 ]);
 
                 $total++;

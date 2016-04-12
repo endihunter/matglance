@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class NewsFeed extends Model
 {
     protected $fillable = [
-        'lang_id', 'name', 'url', 'categories',
+        'language', 'name', 'url', 'categories',
     ];
 
-    public function scopeOfLang($query, $langId)
+    public function scopeOfLang($query, $lang = 'en')
     {
-        return $query->where('lang_id', (int) $langId);
+        return $query->where('language', $lang);
     }
 
     public function categories()

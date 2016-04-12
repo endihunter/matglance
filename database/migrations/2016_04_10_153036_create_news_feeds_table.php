@@ -14,13 +14,11 @@ class CreateNewsFeedsTable extends Migration
     {
         Schema::create('news_feeds', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('lang_id');
+            $table->string('language', 2)->default('en')->index();
             $table->string('name', 100)->index();
             $table->string('url', 255)->unique();
             $table->string('categories')->nullable();
             $table->timestamps();
-
-            $table->foreign('lang_id')->references('id')->on('languages')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Repositories\CalendarRepository;
 use App\Repositories\FeedsRepository;
 use App\Repositories\QuotesRepository;
-use App\Services\Calendar;
-use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
@@ -38,8 +36,8 @@ class DashboardController extends Controller
 
         return view('dashboard')
             ->with([
-                'quote' => $this->quotes->random($me->lang()->id),
-                'feeds' => $this->feeds->feeds($me->lang()->id),
+                'quote' => $this->quotes->random($me->lang()),
+                'feeds' => $this->feeds->feeds($me->lang()),
                 'calendars' => $this->calendar->calendars($me->email)
             ]);
     }

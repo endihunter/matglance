@@ -46,17 +46,23 @@ Route::group(['middleware' => ['web']], function () {
                  * @var $user \App\User
                  */
                 $user = auth()->user();
-                $user->fill(['language' => $language])->save();
+                $user->savePreference('language', $language);
 
                 return redirect()->back(301);
-            }
+            },
         ]);
 
-        Route::get('theme/{id}', [
-            'as' => 'user.prefs.theme',
-            'uses' => function ($theme) {
-                dd($theme);
-            }
+        Route::get('layout/{id}', [
+            'as' => 'user.prefs.layout',
+            'uses' => function ($layout) {
+                /**
+                 * @var $user \App\User
+                 */
+                $user = auth()->user();
+                $user->savePreference('theme', $layout);
+
+                return redirect()->back(301);
+            },
         ]);
     });
 
@@ -77,7 +83,7 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::group([
         'prefix' => 'api/v1',
-        'middleware' => 'auth'
+        'middleware' => 'auth',
     ], function () {
         Route::get('quotes/random', [
             'as' => 'api.quotes.random',
@@ -113,35 +119,35 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('feed/news', [
             'as' => 'api.feed.news',
-            'uses' => 'Api\FeedController@news'
+            'uses' => 'Api\FeedController@news',
         ]);
 
         Route::group(['prefix' => 'calendar'], function () {
             Route::get('list', [
                 'as' => 'api.calendar.list',
-                'uses' => 'Api\CalendarController@calendars'
+                'uses' => 'Api\CalendarController@calendars',
             ]);
 
             Route::get('events', [
                 'as' => 'api.calendar.events',
-                'uses' => 'Api\CalendarController@events'
+                'uses' => 'Api\CalendarController@events',
             ]);
         });
 
         Route::group(['prefix' => 'geo'], function () {
             Route::get('code', [
                 'as' => 'api.geo.code',
-                'uses' => 'Api\GeoController@code'
+                'uses' => 'Api\GeoController@code',
             ]);
 
             Route::get('lookup', [
                 'as' => 'api.geo.lookup',
-                'uses' => 'Api\GeoController@lookup'
+                'uses' => 'Api\GeoController@lookup',
             ]);
 
             Route::get('places', [
                 'as' => 'api.geo.place',
-                'uses' => 'Api\GeoController@places'
+                'uses' => 'Api\GeoController@places',
             ]);
         });
     });

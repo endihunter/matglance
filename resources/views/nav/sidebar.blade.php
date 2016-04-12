@@ -17,7 +17,9 @@
             </a>
             <ul class="list-unstyled">
                 @foreach(config('languages') as $slug => $title)
-                    <li class="{{ ($slug == auth()->user()->lang() ? 'active' : '') }}"><a href="{{ route('user.prefs.lang', ['language' => $slug]) }}">{{ $title }}</a></li>
+                    <li class="{{ ($slug == auth()->user()->lang() ? 'active' : '') }}">
+                        <a href="{{ route('user.prefs.lang', ['language' => $slug]) }}">{{ $title }}</a>
+                    </li>
                 @endforeach
             </ul>
         </li>
@@ -29,9 +31,11 @@
                 <span class="menu-arrow"></span>
             </a>
             <ul class="list-unstyled">
-                <li><a href="/en">Light</a></li>
-                <li><a href="/de">Dark</a></li>
-                <li><a href="/de">Purple</a></li>
+                @foreach(config('app.themes') as $layout)
+                    <li class="{{ ($layout == auth()->user()->theme() ? 'active' : '') }}">
+                        <a href="{{ route('user.prefs.layout', ['layout' => $layout]) }}">{{ trans('layout.' . $layout) }}</a>
+                    </li>
+                @endforeach
             </ul>
         </li>
 

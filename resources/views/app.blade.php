@@ -3,7 +3,7 @@
 
 @include('partials._head')
 
-<body class="fixed-left">
+<body class="fixed-left theme-{{ config('app.theme') }}">
 
 <!-- Begin page -->
 <div id="wrapper">

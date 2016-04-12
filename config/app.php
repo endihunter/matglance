@@ -69,6 +69,14 @@ return [
 
     'locale' => 'en',
 
+    'theme' => 'light',
+
+    'themes' => [
+        'light',
+        'dark',
+        'dark_menu',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale
@@ -162,8 +170,6 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Terranet\Restable\RestableServiceProvider::class,
 
-//        Terranet\Options\ServiceProvider::class,
-//        Terranet\Localizer\ServiceProvider::class,
     ],
 
     /*

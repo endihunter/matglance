@@ -11,9 +11,34 @@ var elixir = require('laravel-elixir');
  |
  */
 
-elixir(function(mix) {
+elixir(function (mix) {
     mix.sass('helpers.scss');
-    
+
+    mix.less([
+        'light/core.less',
+        'light/components.less',
+        'light/pages.less',
+        'light/menu.less',
+        'light/responsive.less'
+    ], 'public/css/admin_light.css');
+
+    mix.less([
+        'light/core.less',
+        'light/components.less',
+        'light/pages.less',
+        'light/menu_dark.less',
+        'light/responsive.less'
+    ], 'public/css/admin_dark_menu.css');
+
+    mix.less([
+        'dark/core.less',
+        'dark/components.less',
+        'dark/pages.less',
+        'dark/menu.less',
+        'dark/responsive.less'
+    ], 'public/css/admin_dark.css');
+
+
     mix.scripts([
         'node_modules/angular/angular.js',
         'node_modules/angular-sanitize/angular-sanitize.js',
@@ -31,6 +56,9 @@ elixir(function(mix) {
     ], 'public/js/app.js', 'resources/assets/javascript');
 
     mix.version([
+        'css/admin_light.css',
+        'css/admin_dark.css',
+        'css/admin_dark_menu.css',
         'css/helpers.css',
         'js/app.js',
         'js/vendor.js'

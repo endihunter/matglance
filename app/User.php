@@ -4,7 +4,6 @@ namespace App;
 
 use Google_Service_Plus_Person;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Terranet\Localizer\Models\Language;
 
 class User extends Authenticatable
 {
@@ -104,5 +103,41 @@ class User extends Authenticatable
     public function lang()
     {
         return $this->language;
+    }
+
+    public function theme()
+    {
+        return $this->theme;
+    }
+
+    public function savePreference($key, $value)
+    {
+        switch ($key) {
+            case 'language':
+                $this->language = $value;
+                break;
+
+            case 'theme':
+                $this->theme = $this->validatedTheme($value);
+                break;
+
+            default:
+                throw new \Exception("Unknown preference: {$key}");
+        }
+
+        $this->save();
+
+        return $this;
+    }
+
+    protected function validatedTheme($theme)
+    {
+        $themes = config('app.themes');
+
+        if (! in_array($theme, $themes)) {
+            $theme = array_first($themes);
+        }
+
+        return $theme;
     }
 }

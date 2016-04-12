@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\NewsFeed;
 use App\Services\FeedReader;
+use Cache;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Zend\Feed\Reader\Reader;
@@ -36,7 +37,9 @@ class FeedsRepository
     {
         $cacheKey = md5($feed->url);
 
-        return \Cache::remember($cacheKey, 20, function () use ($feed) {
+//        Cache::forget($cacheKey);
+
+        return Cache::remember($cacheKey, 20, function () use ($feed) {
             $reader = Reader::importString(
                 file_get_contents($feed->url)
             );
@@ -49,7 +52,7 @@ class FeedsRepository
                     'link' => $item->getLink(),
                     'content' => strip_tags(html_entity_decode($item->getContent())),
                     'enclosure' => $item->getEnclosure(),
-                    'pubDate' => Carbon::parse($item->getDateModified()->format('Y-m-d H:i:s')),
+                    'pubDate' => $item->getDateModified() ? Carbon::parse($item->getDateModified()->format('Y-m-d H:i:s')) : Carbon::today(),
                     'media' => get_rss_media($item, $key),
                 ]);
             }

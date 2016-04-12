@@ -17,12 +17,14 @@ class SetLanguage
      */
     public function handle($request, Closure $next)
     {
-        $me = auth()->user();
-        $lang = $me->lang()->iso6391;
+        if (auth()->check()) {
+            $me = auth()->user();
+            $lang = $me->lang()->iso6391;
 
-        if ($lang !== config('app.locale')) {
-            Config::set('app.locale', $lang);
-            Carbon::setLocale(config('app.locale'));
+            if ($lang !== config('app.locale')) {
+                Config::set('app.locale', $lang);
+                Carbon::setLocale(config('app.locale'));
+            }
         }
 
         return $next($request);

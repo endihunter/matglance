@@ -31,6 +31,7 @@ class LanguageTableSeeder extends Seeder
 
         return [
             ['id' => 1, 'title' => 'English', 'iso6391' => 'en', 'locale' => 'en_US', 'active' => true, 'is_default' => 1],
+            ['id' => 2, 'title' => 'Deutsche', 'iso6391' => 'de', 'locale' => 'de_DE', 'active' => true, 'is_default' => 0],
         ];
     }
 }

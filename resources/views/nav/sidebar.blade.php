@@ -1,30 +1,33 @@
+@inject('languages', '\App\Repositories\LanguagesRepository')
+
 <div id="sidebar-menu">
     <ul>
-        <li class="text-muted menu-title">Navigation</li>
+        <li class="text-muted menu-title">{{ trans('general.navigation') }}</li>
 
         <li>
             <a href="{{ url('/') }}" class="waves-effect">
                 <i class="zmdi zmdi-view-dashboard"></i>
-                <span> Dashboard </span>
+                <span> {{ trans('general.dashboard') }} </span>
             </a>
         </li>
 
         <li class="has_sub">
             <a href="javascript:void(0);" class="waves-effect">
                 <i class="zmdi zmdi-map"></i>
-                <span> Language </span>
+                <span> {{ trans('general.language') }} </span>
                 <span class="menu-arrow"></span>
             </a>
             <ul class="list-unstyled">
-                <li><a href="/en">English</a></li>
-                <li><a href="/de">German</a></li>
+                @foreach($languages->active() as $lang)
+                    <li class="{{ ($lang->id == auth()->user()->lang()->id ? 'active' : '') }}"><a href="{{ route('user.prefs.lang', ['id' => $lang->id]) }}">{{ $lang->title }}</a></li>
+                @endforeach
             </ul>
         </li>
 
         <li class="has_sub">
             <a href="javascript:void(0);" class="waves-effect">
                 <i class="zmdi zmdi-layers"></i>
-                <span> Color Scheme </span>
+                <span> {{ trans('general.theme') }} </span>
                 <span class="menu-arrow"></span>
             </a>
             <ul class="list-unstyled">
@@ -37,7 +40,7 @@
         <li>
             <a href="{{ url('logout') }}" class="waves-effect text-danger">
                 <i class="zmdi zmdi-square-right"></i>
-                <span> Logout </span>
+                <span> {{ trans('general.logout') }} </span>
             </a>
         </li>
 

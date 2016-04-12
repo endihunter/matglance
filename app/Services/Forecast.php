@@ -19,7 +19,7 @@ class Forecast
             http_build_query([
                 'units' => $units,
                 'exclude' => join(",", ['minutely', 'hourly', 'daily', 'flags', 'alerts']),
-                'lang' => config('app.lang'),
+                'lang' => config('app.locale'),
             ]);
 
         $data = json_decode(file_get_contents($url), true);

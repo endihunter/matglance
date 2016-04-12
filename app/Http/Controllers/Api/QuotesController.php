@@ -29,8 +29,10 @@ class QuotesController extends Controller
      */
     public function random()
     {
+        $me = auth()->user();
+
         return Restable::single(
-            $this->quotesRepository->random(),
+            $this->quotesRepository->random($me->lang()->id),
             new QuoteTransformer
         );
     }

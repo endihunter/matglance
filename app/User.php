@@ -14,7 +14,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'url', 'password', 'token', 'google_id', 'avatar',
+        'name', 'email', 'url', 'password', 'token', 'google_id', 'avatar', 'language_id', 'theme'
     ];
 
     /**
@@ -109,12 +109,12 @@ class User extends Authenticatable
     }
 
     /**
-     * Preferences relationship
+     * Language relationship
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function preferences()
+    public function language()
     {
-        return $this->hasOne(Preference::class);
+        return $this->belongsTo(Language::class);
     }
 }

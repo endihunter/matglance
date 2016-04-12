@@ -22,6 +22,10 @@ class EventTransformer extends TransformerAbstract
             'start' => $this->dateTime($event->getStart()),
             'end' => $this->dateTime($event->getEnd()),
             'allDay' => $this->allDayEvent($event),
+            'visibility' => $event->getVisibility(),
+            'birthday' => false !== stripos($event->getId(), 'BIRTHDAY'),
+            //'object' => $event->toSimpleObject(),
+            //'methods' => get_class_methods($event)
         ];
     }
 

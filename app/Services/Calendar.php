@@ -36,7 +36,8 @@ class Calendar
             'showDeleted' => false,
             'singleEvents' => true,
             'timeMin' => Carbon::today()->toRfc3339String(),
-            'timeMax' => Carbon::today()->addDays(7)->toRfc3339String()
+            //'timeMax' => Carbon::today()->addDays(7)->toRfc3339String()
+            'timeMax' => Carbon::today()->addMonth()->toRfc3339String()
         ]);
     }
 }

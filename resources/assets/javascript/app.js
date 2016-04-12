@@ -11,7 +11,7 @@ app.run(['$rootScope', function ($rootScope) {
             && 0 == $(event.target).closest('#cities-list').length) {
             $rootScope.$broadcast('cardbox.close');
         }
-    }
+    };
 }]);
 
 app.API_PREFIX = '/api/v1';

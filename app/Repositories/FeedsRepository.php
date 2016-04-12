@@ -53,7 +53,7 @@ class FeedsRepository
                     'content' => strip_tags(html_entity_decode($item->getContent())),
                     'enclosure' => $item->getEnclosure(),
                     'pubDate' => $item->getDateModified() ? Carbon::parse($item->getDateModified()->format('Y-m-d H:i:s')) : Carbon::today(),
-                    'media' => get_rss_media($item, $key),
+                    'media' => get_rss_media($item, $key + 1),
                 ]);
             }
 

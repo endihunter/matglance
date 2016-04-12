@@ -33,4 +33,7 @@
 
     <script src="{{ asset('assets/js/modernizr.min.js') }}"></script>
 
+    <script>
+        window['lang'] = '{{ config('app.locale') }}';
+    </script>
 </head>

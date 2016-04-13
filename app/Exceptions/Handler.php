@@ -34,6 +34,11 @@ class Handler extends ExceptionHandler
     public function report(Exception $e)
     {
         parent::report($e);
+
+        if (auth()->check() && $this->apiAccessRevoked($e)) {
+            header("Location: " . url('logout'));
+            exit();
+        }
     }
 
     /**
@@ -46,5 +51,14 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
         return parent::render($request, $e);
+    }
+
+    /**
+     * @param Exception $e
+     * @return bool
+     */
+    protected function apiAccessRevoked(Exception $e)
+    {
+        return get_class($e) == 'Google_Service_Exception' && 401 == $e->getCode();
     }
 }

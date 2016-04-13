@@ -2,7 +2,7 @@
 
 return [
     'navigation' => 'Navigation',
-    'dashboard' => 'Instrumententafel',
+    'dashboard' => 'Werkzeuge',
     'language' => 'Sprache',
     'theme' => 'Thema',
     'logout' => 'Ausloggen',

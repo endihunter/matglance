@@ -18,7 +18,7 @@ app.directive('skycon', function () {
                 skycons.add('skycon', Skycons[draw]);
 
                 // start animation!
-                skycons.play();
+                //skycons.play();
             };
             setTimeout(initIcon, 0);
 

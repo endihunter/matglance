@@ -34,7 +34,7 @@
         </card-box-actions>
         <card-box-body>
             <div style="height: 300px;">
-                <div class="row" ng-if="weather && weather.timezone">
+                <div class="row" ng-show="weather && weather.timezone">
                     <div class="col-lg-5 col-md-5 col-sm-6" style="margin-bottom: 32px;">
                         <ul class="list-unstyled">
                             <li>
@@ -63,7 +63,7 @@
                         </ul>
                     </div>
                     <div class="col-lg-7 col-md-7 col-sm-6 text-left">
-                        <skycon ng-if="weather.currently.icon" icon="@{{ weather.currently.icon }}" width="128" height="128"></skycon>
+                        <skycon icon="@{{ weather.currently.icon }}" width="128" height="128"></skycon>
 
                         <h1 class="text-primary">@{{ weather.currently.temperature }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</h1>
                     </div>

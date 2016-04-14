@@ -27,6 +27,6 @@ app.directive('skycon', function () {
 
             attribs.$observe('icon', initIcon);
         },
-        template: '<canvas id="skycon"></canvas>'
+        template: '<canvas ng-if="icon" id="skycon"></canvas>'
     };
 });

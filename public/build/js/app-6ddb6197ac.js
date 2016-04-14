@@ -609,11 +609,12 @@ app.directive('skycon', function () {
 
                 // you can add a canvas by it's ID...
                 var draw = attribs.icon.split('-').join('_').toUpperCase();
-                if (createNew) {
-                    skycons.add('skycon', Skycons[draw]);
-                } else {
-                    skycons.set('skycon', Skycons[draw]);
-                }
+                // if (createNew) {
+                //     skycons.add('skycon', Skycons[draw]);
+                // } else {
+                //     skycons.set('skycon', Skycons[draw]);
+                // }
+                skycons.set('skycon', Skycons[draw]);
 
                 // start animation!
                 skycons.play();

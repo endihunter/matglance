@@ -11,6 +11,8 @@ app.directive('skycon', function () {
             var initIcon = function (createNew) {
                 var skycons = new Skycons({'color': 'grey'});
 
+                skycons.remove("skycon");
+
                 // you can add a canvas by it's ID...
                 var draw = attribs.icon.split('-').join('_').toUpperCase();
                 // if (createNew) {
@@ -27,6 +29,6 @@ app.directive('skycon', function () {
 
             attribs.$observe('icon', initIcon);
         },
-        template: '<canvas ng-if="icon" id="skycon"></canvas>'
+        template: '<canvas id="skycon"></canvas>'
     };
 });

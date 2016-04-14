@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use GeoIp2\Database\Reader;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -50,10 +51,26 @@ class GeoController extends Controller
     public function places(Request $request)
     {
         $url = $this->getPlacesUrl([
-            'input' => $request->get('name')
+            'input' => $request->get('name'),
         ]);
 
         return $this->buildResponse($url);
+    }
+
+    public function geoip(Request $request)
+    {
+//        $ip = $request->ip();
+        //$ip = "89.28.82.88";
+        $ip = "8.8.8.8";
+
+        $reader = new Reader(resource_path('geoip/GeoLite2-City.mmdb'));
+        $record = $reader->city($ip);
+
+        dd([
+            'city' => $record->city->name,
+            'lat' => $record->location->latitude,
+            'lng' => $record->location->longitude
+        ]);
     }
 
     /**
@@ -78,11 +95,11 @@ class GeoController extends Controller
         $me = auth()->user();
 
         return 'https://maps.googleapis.com/maps/api/place/autocomplete/json?' .
-            http_build_query(array_merge([
-                'key' => config('services.places.api_key'),
-                'types' => '(cities)',
-                'language' => $me->lang(),
-            ], $params));
+        http_build_query(array_merge([
+            'key' => config('services.places.api_key'),
+            'types' => '(cities)',
+            'language' => $me->lang(),
+        ], $params));
     }
 
     /**

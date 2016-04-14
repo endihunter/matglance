@@ -169,7 +169,7 @@ return [
         App\Providers\GoogleApiServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Terranet\Restable\RestableServiceProvider::class,
-
+        
     ],
 
     /*

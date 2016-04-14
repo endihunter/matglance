@@ -135,6 +135,11 @@ Route::group(['middleware' => ['web']], function () {
         });
 
         Route::group(['prefix' => 'geo'], function () {
+            Route::get('ip', [
+                'as' => 'api.geo.geoip',
+                'uses' => 'Api\GeoController@geoip',
+            ]);
+
             Route::get('code', [
                 'as' => 'api.geo.code',
                 'uses' => 'Api\GeoController@code',

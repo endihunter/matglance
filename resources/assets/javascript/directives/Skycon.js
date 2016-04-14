@@ -9,18 +9,20 @@ app.directive('skycon', function () {
             scope.size = attribs.size || 128;
 
             var initIcon = function () {
+                if (! attribs.icon) return false;
+
                 var skycons = new Skycons({'color': 'grey'});
 
                 skycons.remove("skycon");
 
                 // you can add a canvas by it's ID...
                 var draw = attribs.icon.split('-').join('_').toUpperCase();
+
                 skycons.add('skycon', Skycons[draw]);
 
                 // start animation!
                 //skycons.play();
             };
-            setTimeout(initIcon, 0);
 
             attribs.$observe('icon', initIcon);
         },

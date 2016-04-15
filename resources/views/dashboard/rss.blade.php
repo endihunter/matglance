@@ -4,7 +4,7 @@
             <div class="form-group">
                 <h5>{{ trans('rss.settings') }}</h5>
             </div>
-            <form ng-submit="savePreferences()" novalidate name="form">
+            <form ng-submit="savePreferences($parent.switchEditableMode)" novalidate name="form">
                 <div class="btn-group">
                     <ul class="list-unstyled" role="menu">
                         <li ng-repeat="feed in allFeeds">

@@ -72,7 +72,7 @@ app.controller('CalendarController', [
 
         function fetchEvents() {
             $scope.loading = true;
-            EventsService.events($scope.filter.calendar.id)
+            return EventsService.events($scope.filter.calendar.id)
                 .then(function (events) {
                     $scope.events = events;
                     $scope.loading = false;
@@ -93,10 +93,14 @@ app.controller('CalendarController', [
             fetchEvents();
         };
 
-        $scope.savePreferences = function () {
+        $scope.savePreferences = function (cb) {
             persistCalendar();
 
-            fetchEvents();
+            fetchEvents().then(function () {
+                if (cb) {
+                    cb();
+                }
+            });
         };
 
         $scope.select = function (cal) {
@@ -165,7 +169,13 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
             return $scope.query;
         }
 
-        $scope.next = $scope.fetchMessages = function () {
+        $scope.savePreferences = function (cb) {
+            $scope.messages = [];
+
+            return $scope.fetchMessages(cb);
+        };
+
+        $scope.next = $scope.fetchMessages = function (cb) {
             $scope.loading = true;
 
             // save filter
@@ -177,8 +187,12 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                 'nextPageToken': $scope.nextPageToken
             };
 
-            GmailService.fetchMessages(args)
+            return GmailService.fetchMessages(args)
                 .then(function (messages) {
+                    if (cb) {
+                        cb();
+                    }
+                    
                     // restore listing view
                     angular.safeApply($scope, function ($scope) {
                         for (var i in messages.messages) {
@@ -302,7 +316,7 @@ app.controller('RssController', [
         }
 
         function fetchNews() {
-            FeedService.news($scope.feeds).then(function (news) {
+            return FeedService.news($scope.feeds).then(function (news) {
                 $scope.articles = news;
             });
         }
@@ -323,19 +337,21 @@ app.controller('RssController', [
             fetchNews();
         };
 
-        $scope.savePreferences = function () {
+        $scope.savePreferences = function (cb) {
             localStorageService.set('feeds', mapToInt($scope.feeds).join(','));
 
-            fetchNews();
-
-            return false;
+            return fetchNews().then(function () {
+                if (cb) {
+                    cb();
+                }
+            });
         };
 
-        $scope.cancel = function (callback) {
+        $scope.cancel = function (cb) {
             restoreReadableFeeds();
 
-            if (callback) {
-                callback();
+            if (cb) {
+                cb();
             }
         };
 

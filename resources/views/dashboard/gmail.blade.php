@@ -4,7 +4,7 @@
             <div class="form-group">
                 <h5>{{ trans('gmail.settings') }}</h5>
             </div>
-            <form ng-submit="fetchMessages()" novalidate name="form" class="form-horizontal">
+            <form ng-submit="savePreferences($parent.switchEditableMode)" novalidate name="form" class="form-horizontal">
                 <div ng-show="!searchMode">
                     <div class="form-group">
                         <div class="input-group">

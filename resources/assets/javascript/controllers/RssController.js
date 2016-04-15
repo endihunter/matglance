@@ -21,7 +21,7 @@ app.controller('RssController', [
         }
 
         function fetchNews() {
-            FeedService.news($scope.feeds).then(function (news) {
+            return FeedService.news($scope.feeds).then(function (news) {
                 $scope.articles = news;
             });
         }
@@ -42,19 +42,21 @@ app.controller('RssController', [
             fetchNews();
         };
 
-        $scope.savePreferences = function () {
+        $scope.savePreferences = function (cb) {
             localStorageService.set('feeds', mapToInt($scope.feeds).join(','));
 
-            fetchNews();
-
-            return false;
+            return fetchNews().then(function () {
+                if (cb) {
+                    cb();
+                }
+            });
         };
 
-        $scope.cancel = function (callback) {
+        $scope.cancel = function (cb) {
             restoreReadableFeeds();
 
-            if (callback) {
-                callback();
+            if (cb) {
+                cb();
             }
         };
 

@@ -46,7 +46,13 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
             return $scope.query;
         }
 
-        $scope.next = $scope.fetchMessages = function () {
+        $scope.savePreferences = function (cb) {
+            $scope.messages = [];
+
+            return $scope.fetchMessages(cb);
+        };
+
+        $scope.next = $scope.fetchMessages = function (cb) {
             $scope.loading = true;
 
             // save filter
@@ -58,8 +64,12 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                 'nextPageToken': $scope.nextPageToken
             };
 
-            GmailService.fetchMessages(args)
+            return GmailService.fetchMessages(args)
                 .then(function (messages) {
+                    if (cb) {
+                        cb();
+                    }
+                    
                     // restore listing view
                     angular.safeApply($scope, function ($scope) {
                         for (var i in messages.messages) {

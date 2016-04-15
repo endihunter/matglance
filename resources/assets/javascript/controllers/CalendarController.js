@@ -34,7 +34,7 @@ app.controller('CalendarController', [
 
         function fetchEvents() {
             $scope.loading = true;
-            EventsService.events($scope.filter.calendar.id)
+            return EventsService.events($scope.filter.calendar.id)
                 .then(function (events) {
                     $scope.events = events;
                     $scope.loading = false;
@@ -55,10 +55,14 @@ app.controller('CalendarController', [
             fetchEvents();
         };
 
-        $scope.savePreferences = function () {
+        $scope.savePreferences = function (cb) {
             persistCalendar();
 
-            fetchEvents();
+            fetchEvents().then(function () {
+                if (cb) {
+                    cb();
+                }
+            });
         };
 
         $scope.select = function (cal) {

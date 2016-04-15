@@ -130,8 +130,6 @@ app.controller('WeatherController', [
 
             $scope.loading = true;
 
-            finish(callback);
-
             if (filterChanged && $scope.filter.address.length) {
                 filterChanged = false;
                 GeoService.geocode($scope.filter.address).then(function (result) {
@@ -147,12 +145,16 @@ app.controller('WeatherController', [
                         cacheFilter();
 
                         $scope.$emit('location.changed');
+
+                        finish(callback);
                     }
 
                     $scope.loading = false;
                 });
             } else {
                 $scope.$emit('location.changed');
+
+                finish(callback);
             }
 
             return false;

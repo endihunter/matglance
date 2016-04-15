@@ -67,12 +67,12 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                 'nextPageToken': $scope.nextPageToken
             };
 
-            if (cb) {
-                cb();
-            }
-
             return GmailService.fetchMessages(args)
                 .then(function (messages) {
+                    if (cb) {
+                        cb();
+                    }
+
                     // restore listing view
                     angular.safeApply($scope, function ($scope) {
                         for (var i in messages.messages) {

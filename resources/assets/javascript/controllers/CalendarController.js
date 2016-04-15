@@ -60,11 +60,11 @@ app.controller('CalendarController', [
         $scope.savePreferences = function (cb) {
             persistCalendar();
 
-            if (cb) {
-                cb();
-            }
-
-            return fetchEvents();
+            fetchEvents().then(function () {
+                if (cb) {
+                    cb();
+                }
+            });
         };
 
         $scope.select = function (cal) {

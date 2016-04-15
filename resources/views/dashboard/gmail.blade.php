@@ -71,7 +71,6 @@
 
                 <div ng-if="! message" style="overflow: hidden">
                     <ul class="list-group">
-                        <li ng-if="loading" class="g-message-list-item list-group-item">{{ trans('gmail.loading') }}</li>
                         <li ng-click="readMessage(message.id)" class="g-message-list-item list-group-item" ng-repeat="message in messages">
                             <small class="label label-default pull-right">@{{ message.date }}</small>
                         <span class="msg-from pull-left">
@@ -86,7 +85,9 @@
                         </li>
                     </ul>
                     <div>
-                        <button ng-click="next()" ng-disabled="loading" class="btn btn-default btn-block">{{ trans('buttons.more') }}</button>
+                        <button ng-if="messages.length && nextPageToken" ng-click="next()" ng-disabled="loading" class="btn btn-default btn-block">
+                            {{ trans('buttons.more') }}
+                        </button>
                     </div>
                     <div class="clearfix"></div>
                 </div>

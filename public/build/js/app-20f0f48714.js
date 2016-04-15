@@ -702,7 +702,7 @@ app.factory('GeoService', ['$q', '$http', function ($q, $http) {
     function fetchLocationUsingIP(defer) {
         $http.get(app.API_PREFIX + '/geo/ip').then(function (response) {
             var data = response.data;
-            if (data.cityName.length) {
+            if (data.cityName.length && '-' != data.cityName) {
                 factory.setLocation(
                     data.latitude,
                     data.longitude

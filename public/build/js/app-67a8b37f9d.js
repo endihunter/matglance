@@ -98,11 +98,11 @@ app.controller('CalendarController', [
         $scope.savePreferences = function (cb) {
             persistCalendar();
 
-            fetchEvents().then(function () {
-                if (cb) {
-                    cb();
-                }
-            });
+            if (cb) {
+                cb();
+            }
+
+            return fetchEvents();
         };
 
         $scope.select = function (cal) {
@@ -173,6 +173,7 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
 
         $scope.savePreferences = function (cb) {
             $scope.messages = [];
+            $scope.nextPageToken = null;
 
             return $scope.fetchMessages(cb);
         };
@@ -191,12 +192,12 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                 'nextPageToken': $scope.nextPageToken
             };
 
+            if (cb) {
+                cb();
+            }
+
             return GmailService.fetchMessages(args)
                 .then(function (messages) {
-                    if (cb) {
-                        cb();
-                    }
-                    
                     // restore listing view
                     angular.safeApply($scope, function ($scope) {
                         for (var i in messages.messages) {
@@ -377,11 +378,11 @@ app.controller('RssController', [
         $scope.savePreferences = function (cb) {
             localStorageService.set('feeds', mapToInt($scope.feeds).join(','));
 
-            return fetchNews().then(function () {
-                if (cb) {
-                    cb();
-                }
-            });
+            if (cb) {
+                cb();
+            }
+
+            return fetchNews();
         };
 
         $scope.cancel = function (cb) {
@@ -540,6 +541,8 @@ app.controller('WeatherController', [
 
             $scope.loading = true;
 
+            finish(callback);
+
             if (filterChanged && $scope.filter.address.length) {
                 filterChanged = false;
                 GeoService.geocode($scope.filter.address).then(function (result) {
@@ -555,16 +558,12 @@ app.controller('WeatherController', [
                         cacheFilter();
 
                         $scope.$emit('location.changed');
-
-                        finish(callback);
                     }
 
                     $scope.loading = false;
                 });
             } else {
                 $scope.$emit('location.changed');
-
-                finish(callback);
             }
 
             return false;

@@ -76,11 +76,11 @@ app.controller('RssController', [
         $scope.savePreferences = function (cb) {
             localStorageService.set('feeds', mapToInt($scope.feeds).join(','));
 
-            return fetchNews().then(function () {
-                if (cb) {
-                    cb();
-                }
-            });
+            if (cb) {
+                cb();
+            }
+
+            return fetchNews();
         };
 
         $scope.cancel = function (cb) {

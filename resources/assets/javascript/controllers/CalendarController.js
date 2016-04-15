@@ -33,6 +33,8 @@ app.controller('CalendarController', [
         }
 
         function fetchEvents() {
+            if ($scope.loading) return false;
+
             $scope.loading = true;
             return EventsService.events($scope.filter.calendar.id)
                 .then(function (events) {

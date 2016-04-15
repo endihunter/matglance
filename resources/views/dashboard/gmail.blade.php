@@ -33,7 +33,7 @@
                 </div>
                 <div class="divider"></div>
                 <div class="form-group">
-                    <button class="btn btn-primary" ng-disabled="loading" type="submit">{{ trans('buttons.search') }}</button>
+                    <button class="btn btn-primary" type="submit">{{ trans('buttons.search') }}</button>
                     <button class="btn btn-default" type="button" ng-click="toggleSearchMode(false, $parent.switchEditableMode)">{{ trans('buttons.cancel') }}</button>
                 </div>
             </form>
@@ -85,7 +85,7 @@
                         </li>
                     </ul>
                     <div>
-                        <button ng-if="messages.length && nextPageToken" ng-click="next()" ng-disabled="loading" class="btn btn-default btn-block">
+                        <button ng-if="messages.length && nextPageToken" ng-click="next()" class="btn btn-default btn-block">
                             {{ trans('buttons.more') }}
                         </button>
                     </div>

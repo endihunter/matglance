@@ -35,7 +35,7 @@ class GoogleController extends Controller
 
             auth()->login(
                 User::fromGPlusUser($me = $plus->people->get('me'), $client->getAccessToken()),
-                true
+                false
             );
 
             return redirect()->route('dashboard');

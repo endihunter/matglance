@@ -23,7 +23,7 @@
                 </div>
                 <div class="divider"></div>
                 <div class="form-group">
-                    <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid">{{ trans('buttons.save') }}</button>
+                    <button class="btn btn-primary" type="submit">{{ trans('buttons.save') }}</button>
                     <button class="btn btn-default" type="button" ng-click="cancel($parent.switchEditableMode)">{{ trans('buttons.cancel') }}</button>
                 </div>
             </form>

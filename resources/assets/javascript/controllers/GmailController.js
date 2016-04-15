@@ -53,6 +53,8 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
         };
 
         $scope.next = $scope.fetchMessages = function (cb) {
+            if ($scope.loading) return false;
+
             $scope.loading = true;
 
             // save filter

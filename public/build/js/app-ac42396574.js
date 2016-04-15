@@ -71,6 +71,8 @@ app.controller('CalendarController', [
         }
 
         function fetchEvents() {
+            if ($scope.loading) return false;
+
             $scope.loading = true;
             return EventsService.events($scope.filter.calendar.id)
                 .then(function (events) {
@@ -176,6 +178,8 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
         };
 
         $scope.next = $scope.fetchMessages = function (cb) {
+            if ($scope.loading) return false;
+
             $scope.loading = true;
 
             // save filter
@@ -286,6 +290,8 @@ app.controller('QuoteController', ['$scope', '$http', function ($scope, $http) {
      * Fetch random quote
      */
     $scope.fetchRandom = function () {
+        if ($scope.loading) return false;
+
         $scope.loading = true;
         $http.get(app.API_PREFIX + '/quotes/random').then(function (response) {
             $scope.quote = response.data;
@@ -296,6 +302,8 @@ app.controller('QuoteController', ['$scope', '$http', function ($scope, $http) {
 app.controller('RssController', [
     '$scope', '$timeout', 'localStorageService', 'FeedService',
     function ($scope, $timeout, localStorageService, FeedService) {
+        $scope.loading = false;
+
         function fullList() {
             return mapToInt(_.pluck($scope.allFeeds, 'id'));
         }
@@ -318,8 +326,15 @@ app.controller('RssController', [
         }
 
         function fetchNews() {
+            if ($scope.loading)
+                return false;
+
+            $scope.loading = true;
+
             return FeedService.news($scope.feeds).then(function (news) {
                 $scope.articles = news;
+
+                $scope.loading = false;
             });
         }
 
@@ -517,7 +532,11 @@ app.controller('WeatherController', [
          * @returns {boolean}
          */
         $scope.savePreferences = function (callback) {
-            if (!filterChanged) return false;
+            if (!filterChanged)
+                return false;
+
+            if ($scope.loading)
+                return false;
 
             $scope.loading = true;
 

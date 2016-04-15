@@ -1,6 +1,8 @@
 app.controller('RssController', [
     '$scope', '$timeout', 'localStorageService', 'FeedService',
     function ($scope, $timeout, localStorageService, FeedService) {
+        $scope.loading = false;
+
         function fullList() {
             return mapToInt(_.pluck($scope.allFeeds, 'id'));
         }
@@ -23,8 +25,15 @@ app.controller('RssController', [
         }
 
         function fetchNews() {
+            if ($scope.loading)
+                return false;
+
+            $scope.loading = true;
+
             return FeedService.news($scope.feeds).then(function (news) {
                 $scope.articles = news;
+
+                $scope.loading = false;
             });
         }
 

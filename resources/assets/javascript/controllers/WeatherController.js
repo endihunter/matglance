@@ -122,7 +122,11 @@ app.controller('WeatherController', [
          * @returns {boolean}
          */
         $scope.savePreferences = function (callback) {
-            if (!filterChanged) return false;
+            if (!filterChanged)
+                return false;
+
+            if ($scope.loading)
+                return false;
 
             $scope.loading = true;
 

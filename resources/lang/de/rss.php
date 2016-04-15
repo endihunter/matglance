@@ -2,5 +2,6 @@
 
 return [
     'title' => 'News feed',
-    'settings' => 'Settings'
+    'settings' => 'Settings',
+    'toggle' => 'Select/Unselect All',
 ];

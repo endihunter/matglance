@@ -313,6 +313,8 @@ app.controller('RssController', [
             } else {
                 $scope.feeds = fullList();
             }
+
+            allChecked();
         }
 
         function fetchNews() {
@@ -321,13 +323,33 @@ app.controller('RssController', [
             });
         }
 
-        // all feeds
+        $scope.allChecked = false;
+
+            // all feeds
         $scope.allFeeds = [];
 
         // readable feeds
         $scope.feeds = [];
 
         $scope.articles = [];
+
+        function allChecked () {
+            $scope.allChecked = ($scope.feeds.length == $scope.allFeeds.length);
+        }
+
+        $scope.$watch('feeds', function (v1, v2) {
+            if (v1 === v2) return false;
+
+            allChecked();
+        }, true);
+
+        $scope.toggleAll = function ($event) {
+            if ($event.target.checked == true) {
+                $scope.feeds = fullList();
+            } else {
+                $scope.feeds = [];
+            }
+        };
 
         $scope.init = function (allFeeds) {
             $scope.allFeeds = allFeeds;

@@ -7,6 +7,12 @@
             <form ng-submit="savePreferences($parent.switchEditableMode)" novalidate name="form">
                 <div class="btn-group">
                     <ul class="list-unstyled" role="menu">
+                        <li>
+                            <label>
+                                <input type="checkbox" ng-click="toggleAll($event)" ng-checked="allChecked">
+                                {{ trans('rss.toggle') }}
+                            </label>
+                        </li>
                         <li ng-repeat="feed in allFeeds">
                             <label>
                                 <input type="checkbox" ng-click="trackUntrack(feed.id)" ng-checked="trackable(feed.id)">&nbsp;

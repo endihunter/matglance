@@ -708,6 +708,10 @@ app.factory('GeoService', ['$q', '$http', function ($q, $http) {
                     data.longitude
                 );
                 defer.resolve(factory);
+            } else {
+                defer.resolve(
+                    setDefaultLocation()
+                );
             }
         }).catch(function () {
             defer.resolve(

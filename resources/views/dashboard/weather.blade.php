@@ -63,7 +63,7 @@
                         </ul>
                     </div>
                     <div class="col-lg-7 col-md-7 col-sm-6 text-left">
-                        <skycon icon="@{{ weather.currently.icon }}" width="128" height="128"></skycon>
+                        <img ng-if="weather.currently.icon" ng-src="/icons/w/@{{ weather.currently.icon }}.png" width="128" height="128" alt="">
 
                         <h1 class="text-primary">@{{ weather.currently.temperature }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</h1>
                     </div>

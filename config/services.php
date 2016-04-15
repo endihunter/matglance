@@ -52,6 +52,10 @@ return [
         'api_key' => env('GEOCODE_KEY', 'AIzaSyD3qcJmYvBZWMCm_HWyu4q_dvl8ARcShXc'),
     ],
 
+    'ipinfodb' => [
+        'api_key' => env('IPINFODB_KEY', 'd5535a670af73a930430928c68ee65ac5fcb6f07b8e1f7149c639840011831ab'),
+    ],
+
     'places' => [
         'api_key' => env('PLACES_KEY', 'AIzaSyBK2OkpLluTlXQtnRZaxv5IHGaEDd-95HM'),
     ],

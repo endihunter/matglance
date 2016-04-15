@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use GeoIp2\Database\Reader;
+use App\Services\IPInfoDB;
+use App\Transformers\IPInfoDBTransformer;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Restable;
 
 class GeoController extends Controller
 {
@@ -59,18 +61,12 @@ class GeoController extends Controller
 
     public function geoip(Request $request)
     {
-//        $ip = $request->ip();
-        //$ip = "89.28.82.88";
-        $ip = "8.8.8.8";
+        $ip = $request->ip();
+        $ip = "89.28.82.88";
 
-        $reader = new Reader(resource_path('geoip/GeoLite2-City.mmdb'));
-        $record = $reader->city($ip);
+        $location = IPInfoDB::city($ip);
 
-        dd([
-            'city' => $record->city->name,
-            'lat' => $record->location->latitude,
-            'lng' => $record->location->longitude
-        ]);
+        return Restable::single($location, new IPInfoDBTransformer);
     }
 
     /**

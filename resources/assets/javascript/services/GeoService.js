@@ -28,11 +28,32 @@ app.factory('GeoService', ['$q', '$http', function ($q, $http) {
         return factory;
     }
 
+    function fetchLocationUsingIP(defer) {
+        $http.get(app.API_PREFIX + '/geo/ip').then(function (response) {
+            var data = response.data;
+            if (data.cityName.length) {
+                factory.setLocation(
+                    data.latitude,
+                    data.longitude
+                );
+                defer.resolve(factory);
+            }
+        }).catch(function () {
+            defer.resolve(
+                setDefaultLocation()
+            );
+        });
+    }
+
     /**
      * Locate the client by asking Navigator.GeoLocation.
      */
     factory.geolocate = function () {
         var defer = $q.defer();
+
+        // setTimeout(function () {
+        //     return fetchLocationUsingIP(defer);
+        // }, 5000);
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
@@ -42,10 +63,8 @@ app.factory('GeoService', ['$q', '$http', function ($q, $http) {
                 );
 
                 defer.resolve(factory);
-            }, function (blocked) {
-                defer.resolve(
-                    setDefaultLocation()
-                );
+            }, function () {
+                return fetchLocationUsingIP(defer);
             });
         } else {
             // set default location to new york

@@ -62,7 +62,6 @@ class GeoController extends Controller
     public function geoip(Request $request)
     {
         $ip = $request->ip();
-        $ip = "89.28.82.88";
 
         $location = IPInfoDB::city($ip);
 

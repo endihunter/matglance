@@ -125,6 +125,8 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
 
         $scope.loading = false;
 
+        $scope.nextPageToken = null;
+
         var emptyFilter = function () {
             return {
                 'from': '',
@@ -135,14 +137,14 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
         };
 
         var savedFilter;
-        if (! (savedFilter = localStorageService.get('g_fltr'))) {
+        if (!(savedFilter = localStorageService.get('g_fltr'))) {
             savedFilter = JSON.stringify(emptyFilter());
             localStorageService.set('g_fltr', savedFilter);
         }
 
         $scope.filter = JSON.parse(savedFilter);
 
-        $scope.messages = JSON.parse(localStorageService.get('g_msgs')) || [];
+        $scope.messages = [];
 
         $scope.query = buildQuery();
 
@@ -163,7 +165,7 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
             return $scope.query;
         }
 
-        $scope.fetchMessages = function () {
+        $scope.next = $scope.fetchMessages = function () {
             $scope.loading = true;
 
             // save filter
@@ -171,14 +173,19 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
 
             var args = {
                 'includeSpamTrash': !!$scope.filter.includeSpamTrash,
-                'q': buildQuery()
+                'q': buildQuery(),
+                'nextPageToken': $scope.nextPageToken
             };
 
             GmailService.fetchMessages(args)
                 .then(function (messages) {
                     // restore listing view
                     angular.safeApply($scope, function ($scope) {
-                        $scope.messages = messages;
+                        for (var i in messages.messages) {
+                            $scope.messages.push(messages.messages[i]);
+                        }
+
+                        $scope.nextPageToken = messages.nextPage;
 
                         $scope.loading = false;
 
@@ -728,9 +735,10 @@ app.factory('GmailService', ['$http', '$httpParamSerializer', function ($http, $
      * @returns {*}
      */
     factory.fetchMessages = function (args) {
+        console.log(args);
         return $http.get(app.API_PREFIX + '/gmail/messages?' + $httpParamSerializer(args))
             .then(function (response) {
-                return response.data.data;
+                return response.data;
             });
     };
 

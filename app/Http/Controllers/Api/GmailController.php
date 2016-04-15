@@ -31,7 +31,14 @@ class GmailController extends Controller
             $request
         );
 
-        return Restable::listing($messages, new GmailMessageTransformer);
+        return [
+            'messages' => array_map(function ($item) {
+                return (new GmailMessageTransformer)->transform($item);
+            }, $messages['messages']),
+            'nextPage' => $messages['nextPage']
+        ];
+
+        return null;
     }
 
     public function get($messageId)

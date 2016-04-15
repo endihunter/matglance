@@ -92,6 +92,13 @@ class Gmail
         return $this;
     }
 
+    public function forPage($pageToken)
+    {
+        $this->pageToken = $pageToken;
+
+        return $this;
+    }
+
     /**
      * Whether include spam messages or not.
      *
@@ -176,13 +183,16 @@ class Gmail
 
         $messages = $this->client->users_messages->listUsersMessages($this->email, $args);
 
-        if ($nextPageToken = $messages->getNextPageToken()) {
-            $this->pageToken = $nextPageToken;
-        }
+        $nextPageToken = $messages->getNextPageToken();
 
-        return array_map(function (Google_Service_Gmail_Message $message) {
+        $messages = array_map(function (Google_Service_Gmail_Message $message) {
             return $this->get($message->getId());
         }, $messages->getMessages());
+
+        return [
+            'messages' => $messages,
+            'nextPage' => $nextPageToken
+        ];
     }
 
     /**

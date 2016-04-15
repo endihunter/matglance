@@ -39,7 +39,7 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div>
+            <div style="height: 350px; overflow-y: auto">
                 <div ng-if="message">
                     <a ng-click="backToList()" class="btn btn-default">
                         <i class="zmdi zmdi-long-arrow-return"></i>
@@ -85,6 +85,10 @@
                             <br class="clearfix" />
                         </li>
                     </ul>
+                    <div>
+                        <button ng-click="next()" ng-disabled="loading" class="btn btn-default btn-block">{{ trans('buttons.more') }}</button>
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
 
                 <div class="clearfix"></div>

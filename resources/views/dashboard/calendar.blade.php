@@ -23,29 +23,31 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <table class="table">
-                <tr ng-if="! events.length">
-                    <td colspan="3">
-                        {{ trans('calendar.no_events') }}
-                    </td>
-                </tr>
-                <tr ng-repeat="event in events">
-                    <td class="text-primary">
-                        @{{ event.start.formattedDate }}
-                    </td>
-                    <td>
+            <div style="height: 350px; overflow-y: auto">
+                <table class="table">
+                    <tr ng-if="! events.length">
+                        <td colspan="3">
+                            {{ trans('calendar.no_events') }}
+                        </td>
+                    </tr>
+                    <tr ng-repeat="event in events">
+                        <td class="text-primary">
+                            @{{ event.start.formattedDate }}
+                        </td>
+                        <td>
 
-                        <span ng-if="event.allDay">{{ trans('calendar.all_day') }}</span>
+                            <span ng-if="event.allDay">{{ trans('calendar.all_day') }}</span>
                         <span ng-if="! event.allDay">
                             @{{ event.start.time }} - @{{ event.end.time }}
                         </span>
-                    </td>
-                    <td>
-                        <event-icon event="@{{ event }}"></event-icon>
-                        <a ng-href="@{{ event.link }}" target="_blank">@{{ event.summary }}</a>
-                    </td>
-                </tr>
-            </table>
+                        </td>
+                        <td>
+                            <event-icon event="@{{ event }}"></event-icon>
+                            <a ng-href="@{{ event.link }}" target="_blank">@{{ event.summary }}</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </card-box-body>
     </card-box>
 </div>

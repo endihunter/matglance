@@ -38,7 +38,7 @@ class Forecast
                 }
 
                 if ('time' == $key) {
-                    $value = Carbon::createFromTimestamp($value)->toFormattedDateString();
+                    $value = $this->toFormattedDateTimeString(Carbon::createFromTimestamp($value));
                 }
             } else if (is_array($value)) {
                 $value = $this->cast($value);
@@ -46,5 +46,10 @@ class Forecast
         }
 
         return $data;
+    }
+
+    protected function toFormattedDateTimeString($time)
+    {
+        return $time->format('M j, Y H:i');
     }
 }

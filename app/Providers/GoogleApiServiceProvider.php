@@ -25,7 +25,7 @@ class GoogleApiServiceProvider extends ServiceProvider
             $client->setAccessType('offline');
 
             // @todo: Remove this statement on production
-            $client->setApprovalPrompt('force');
+            //$client->setApprovalPrompt('force');
 
             if ($user = auth()->check()) {
                 $user = auth()->user();

@@ -18,21 +18,14 @@
             @endforeach
         @endif
         <div class="text-center">
-            <?php
-            $action = ($name = Cookie::get('ymag_name')) ? 'auth.sign_in' : 'auth.sign_up';
-            ?>
-            <h3 class="text-uppercase font-bold m-b-0">{{ trans($action) }}</h3>
-            @if ($name)
-            <span class="text-muted">{{ trans('auth.hello', ['name' => $name]) }}</span>
-            @endif
+            <h3 class="text-uppercase font-bold m-b-0">{{ trans('auth.authentication') }}</h3>
         </div>
         <div class="panel-body">
-
             <div class="form-group text-center">
                 <br />
                 <a href="{{ url('auth/google') }}" class="btn btn-danger">
                     <i class="fa fa-google-plus"></i>&nbsp;
-                    {{ trans($action . '_with_g_plus') }}
+                    {{ trans('auth.sign_in_with_g_plus') }}
                 </a>
             </div>
         </div>

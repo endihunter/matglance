@@ -6,7 +6,6 @@ use App\Http\Requests;
 use App\User;
 use Google_Auth_OAuth2;
 use Google_Service_Plus;
-use Illuminate\Cookie\CookieJar;
 use Illuminate\Http\Request;
 
 class GoogleController extends Controller
@@ -24,7 +23,7 @@ class GoogleController extends Controller
         return redirect()->to($url);
     }
 
-    public function requestUser(Request $request, CookieJar $cookieJar)
+    public function requestUser(Request $request)
     {
         try {
             $client = app('google.client');
@@ -35,11 +34,8 @@ class GoogleController extends Controller
             $plus = new Google_Service_Plus($client);
 
             auth()->login(
-                User::fromGPlusUser($me = $plus->people->get('me'), $client->getAccessToken())
-            );
-
-            $cookieJar->queue(
-                cookie('ymag_name', (string) $me->getDisplayName())
+                User::fromGPlusUser($me = $plus->people->get('me'), $client->getAccessToken()),
+                true
             );
 
             return redirect()->route('dashboard');

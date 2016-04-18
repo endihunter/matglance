@@ -34,7 +34,14 @@ app.run(['$rootScope', function ($rootScope) {
     };
 }]);
 
-app.API_PREFIX = '/api/v1';
+if (location.host == 'dev-your-morning.rainbowriders.dk') {
+    app.API_PREFIX =  '/public/api/v1';
+    app.ASSETS_PATH = '/public/assets/templates/';
+} else {
+    app.API_PREFIX =  '/api/v1';
+    app.ASSETS_PATH = '/assets/templates/';
+}
+console.log('api', app.API_PREFIX);
 
 app.controller('CalendarController', [
     '$scope', 'EventsService', 'localStorageService',
@@ -429,7 +436,7 @@ app.controller('WeatherController', [
         $scope.loading = false;
 
         function searchForCity(name) {
-            $http.get(app.API_PREFIX + '/geo/places/?name=' + name)
+            $http.get(app.API_PREFIX + '/geo/places?name=' + name)
                 .then(function (response) {
                     var cities = _.uniq(response.data.predictions) || [];
 
@@ -489,7 +496,7 @@ app.controller('WeatherController', [
 
         // when location or units did change => fetch new weather and set to cache
         $scope.$on('location.changed', function () {
-            WeatherService.get(currentLocation(), {units: $scope.filter.units}).then(function (results) {
+            WeatherService.fetch(currentLocation(), {units: $scope.filter.units}).then(function (results) {
                 $scope.weather = angular.extend(results, $scope.filter);
             });
         });
@@ -637,7 +644,7 @@ app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootSco
 
             $rootScope.$on('cardbox.close', close);
         },
-        'templateUrl': '/assets/templates/card-box.html'
+        'templateUrl': app.ASSETS_PATH + 'card-box.html'
     };
 }]);
 app.directive('eventIcon', [function () {
@@ -829,23 +836,27 @@ app.factory('GmailService', ['$http', '$httpParamSerializer', function ($http, $
 
     return factory;
 }]);
-app.factory("WeatherService", ['$http', '$httpParamSerializer',
-    function ($http, $httpParamSerializer) {
-        var factory = {};
+app.factory("WeatherService", ['$http', '$httpParamSerializer', function ($http, $httpParamSerializer) {
+    var factory = {};
 
-        factory.get = function (coords, params) {
-            var args = angular.extend({
-                coords: coords,
-                units: 'si'
-            }, params || {});
+    factory.fetch = function (coords, params) {
+        var $args = angular.extend({
+            coords: coords,
+            units: 'si'
+        }, params || {});
 
-            return $http
-                .get(app.API_PREFIX + '/weather/get/?' + $httpParamSerializer(args))
-                .then(function (response) {
-                    return response.data;
-                });
-        };
+        var $url = app.API_PREFIX + '/weather/get?' + $httpParamSerializer($args);
+        console.log('weather url', $url);
+        return $http
+            .get($url)
+            .then(function (response) {
+                console.log('got weather response');
+                return response.data;
+            }).catch(function (e) {
+                console.error('error', e);
+            });
+    };
 
-        return factory;
-    }]);
+    return factory;
+}]);
 //# sourceMappingURL=app.js.map

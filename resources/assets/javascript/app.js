@@ -14,4 +14,11 @@ app.run(['$rootScope', function ($rootScope) {
     };
 }]);
 
-app.API_PREFIX = '/api/v1';
+if (location.host == 'dev-your-morning.rainbowriders.dk') {
+    app.API_PREFIX =  '/public/api/v1';
+    app.ASSETS_PATH = '/public/assets/templates/';
+} else {
+    app.API_PREFIX =  '/api/v1';
+    app.ASSETS_PATH = '/assets/templates/';
+}
+console.log('api', app.API_PREFIX);

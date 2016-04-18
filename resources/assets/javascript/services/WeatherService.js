@@ -1,19 +1,23 @@
-app.factory("WeatherService", ['$http', '$httpParamSerializer',
-    function ($http, $httpParamSerializer) {
-        var factory = {};
+app.factory("WeatherService", ['$http', '$httpParamSerializer', function ($http, $httpParamSerializer) {
+    var factory = {};
 
-        factory.get = function (coords, params) {
-            var args = angular.extend({
-                coords: coords,
-                units: 'si'
-            }, params || {});
+    factory.fetch = function (coords, params) {
+        var $args = angular.extend({
+            coords: coords,
+            units: 'si'
+        }, params || {});
 
-            return $http
-                .get(app.API_PREFIX + '/weather/get/?' + $httpParamSerializer(args))
-                .then(function (response) {
-                    return response.data;
-                });
-        };
+        var $url = app.API_PREFIX + '/weather/get?' + $httpParamSerializer($args);
+        console.log('weather url', $url);
+        return $http
+            .get($url)
+            .then(function (response) {
+                console.log('got weather response');
+                return response.data;
+            }).catch(function (e) {
+                console.error('error', e);
+            });
+    };
 
-        return factory;
-    }]);
+    return factory;
+}]);

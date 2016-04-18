@@ -18,7 +18,7 @@ app.controller('WeatherController', [
         $scope.loading = false;
 
         function searchForCity(name) {
-            $http.get(app.API_PREFIX + '/geo/places/?name=' + name)
+            $http.get(app.API_PREFIX + '/geo/places?name=' + name)
                 .then(function (response) {
                     var cities = _.uniq(response.data.predictions) || [];
 
@@ -78,7 +78,7 @@ app.controller('WeatherController', [
 
         // when location or units did change => fetch new weather and set to cache
         $scope.$on('location.changed', function () {
-            WeatherService.get(currentLocation(), {units: $scope.filter.units}).then(function (results) {
+            WeatherService.fetch(currentLocation(), {units: $scope.filter.units}).then(function (results) {
                 $scope.weather = angular.extend(results, $scope.filter);
             });
         });

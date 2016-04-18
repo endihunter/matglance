@@ -40,6 +40,6 @@ app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootSco
 
             $rootScope.$on('cardbox.close', close);
         },
-        'templateUrl': '/assets/templates/card-box.html'
+        'templateUrl': app.ASSETS_PATH + 'card-box.html'
     };
 }]);

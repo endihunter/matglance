@@ -147,8 +147,6 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                     });
                 })
                 .catch(function () {
-                    console.log(arguments);
-
                     $scope.loading = false;
                 });
         }

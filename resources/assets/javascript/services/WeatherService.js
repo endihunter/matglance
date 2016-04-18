@@ -8,14 +8,10 @@ app.factory("WeatherService", ['$http', '$httpParamSerializer', function ($http,
         }, params || {});
 
         var $url = app.API_PREFIX + '/weather/get?' + $httpParamSerializer($args);
-        console.log('weather url', $url);
         return $http
             .get($url)
             .then(function (response) {
-                console.log('got weather response');
                 return response.data;
-            }).catch(function (e) {
-                console.error('error', e);
             });
     };
 

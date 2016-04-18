@@ -59,7 +59,6 @@ app.controller('WeatherController', [
         }
 
         function cacheFilter() {
-            console.log('Cache filter:', $scope.filter);
             localStorageService.set('w_fltr', JSON.stringify($scope.filter));
 
             defaultFilter = angular.copy($scope.filter);
@@ -85,18 +84,14 @@ app.controller('WeatherController', [
 
         if (!(savedFilter = loadCachedFilter())) {
             GeoService.geolocate().then(function (GeoService) {
-                console.debug('Geolocate...');
                 $scope.filter.location = {
                     lat: GeoService.getLatitude(),
                     lng: GeoService.getLongitude()
                 };
-                console.log('Location:', $scope.filter.location);
 
                 GeoService.lookup(GeoService.getLatitude(), GeoService.getLongitude()).then(function (result) {
-                    console.debug('Lookup');
                     delayFilterTracking();
                     $scope.filter.address = result.formatted_address;
-                    console.log('Address:', $scope.filter.address);
 
                     cacheFilter();
 
@@ -108,7 +103,6 @@ app.controller('WeatherController', [
             defaultFilter = angular.copy($scope.filter);
 
             $scope.$emit('location.changed');
-            console.log('Load cached filter:', $scope.filter);
         }
 
         $scope.cancel = function (callback) {
@@ -133,7 +127,6 @@ app.controller('WeatherController', [
             if (filterChanged && $scope.filter.address.length) {
                 filterChanged = false;
                 GeoService.geocode($scope.filter.address).then(function (result) {
-                    console.log('Geocoding for :', $scope.filter.address);
                     if (result && result.hasOwnProperty('geometry')) {
                         delayFilterTracking();
 

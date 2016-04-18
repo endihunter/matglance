@@ -8,7 +8,6 @@ app.factory('GmailService', ['$http', '$httpParamSerializer', function ($http, $
      * @returns {*}
      */
     factory.fetchMessages = function (args) {
-        console.log(args);
         return $http.get(app.API_PREFIX + '/gmail/messages?' + $httpParamSerializer(args))
             .then(function (response) {
                 return response.data;

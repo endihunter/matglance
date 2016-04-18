@@ -34,14 +34,12 @@ app.run(['$rootScope', function ($rootScope) {
     };
 }]);
 
+app.REWRITE_BASE = '/';
 if (location.host == 'dev-your-morning.rainbowriders.dk') {
-    app.API_PREFIX =  '/public/api/v1';
-    app.ASSETS_PATH = '/public/assets/templates/';
-} else {
-    app.API_PREFIX =  '/api/v1';
-    app.ASSETS_PATH = '/assets/templates/';
+    app.REWRITE_BASE = '/public/';
 }
-console.log('api', app.API_PREFIX);
+
+app.API_PREFIX = app.REWRITE_BASE + 'api/v1';
 
 app.controller('CalendarController', [
     '$scope', 'EventsService', 'localStorageService',
@@ -600,6 +598,10 @@ app.controller('WeatherController', [
             $scope.filter.address = city.description;
 
             $scope.cities = null;
+        };
+
+        $scope.icon = function () {
+            return app.REWRITE_BASE + 'icons/w/' + $scope.weather.currently.icon + '.png';
         }
     }]);
 app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootScope) {
@@ -644,7 +646,7 @@ app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootSco
 
             $rootScope.$on('cardbox.close', close);
         },
-        'templateUrl': app.ASSETS_PATH + 'card-box.html'
+        'templateUrl': app.REWRITE_BASE + 'assets/templates/card-box.html'
     };
 }]);
 app.directive('eventIcon', [function () {

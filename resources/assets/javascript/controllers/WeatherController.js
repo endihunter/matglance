@@ -182,5 +182,9 @@ app.controller('WeatherController', [
             $scope.filter.address = city.description;
 
             $scope.cities = null;
+        };
+
+        $scope.icon = function () {
+            return app.REWRITE_BASE + 'icons/w/' + $scope.weather.currently.icon + '.png';
         }
     }]);

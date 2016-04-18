@@ -230,7 +230,7 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
         };
 
         $scope.fullMessageUrl = function (messageId) {
-            return $sce.trustAsResourceUrl('/gmail/messages/' + messageId + '/body');
+            return $sce.trustAsResourceUrl(app.API_PREFIX + '/gmail/messages/' + messageId + '/body');
         };
 
         $scope.toggleSearchMode = function (flag, callback) {

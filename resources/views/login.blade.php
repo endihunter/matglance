@@ -8,7 +8,7 @@
 <div class="clearfix"></div>
 <div class="wrapper-page">
     <div class="text-center">
-        <a href="index.html" class="logo"><span>Admin<span>to</span></span></a>
+        <a href="{{ url('/') }}" class="logo"><span>Admin<span>to</span></span></a>
         <h5 class="text-muted m-t-0 font-600">{{ config('app.name') }}</h5>
     </div>
     <div class="m-t-40 card-box">

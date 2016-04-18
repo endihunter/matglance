@@ -8,8 +8,8 @@
 <div class="clearfix"></div>
 <div class="wrapper-page">
     <div class="text-center">
-        <a href="{{ url('/') }}" class="logo"><span>Admin<span>to</span></span></a>
-        <h5 class="text-muted m-t-0 font-600">{{ config('app.name') }}</h5>
+        <a href="{{ url('/') }}" class="logo"><span>Your morning at a glance</span></a>
+        {{--<h5 class="text-muted m-t-0 font-600">{{ config('app.name') }}</h5>--}}
     </div>
     <div class="m-t-40 card-box">
         @if ($errors->any())

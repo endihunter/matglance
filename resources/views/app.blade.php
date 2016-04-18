@@ -14,7 +14,7 @@
         <!-- LOGO -->
         <div class="topbar-left">
             <a href="{{ url('/') }}" class="logo">
-                <span>Admin<span>to</span></span>
+                <span style="font-size: .7em;">{{ trans('general.short_name') }}</span>
                 <i class="zmdi zmdi-layers"></i>
             </a>
         </div>

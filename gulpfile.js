@@ -23,6 +23,14 @@ elixir(function (mix) {
     ], 'public/css/admin_light.css');
 
     mix.less([
+        'shadow/core.less',
+        'shadow/components.less',
+        'shadow/pages.less',
+        'shadow/menu.less',
+        'shadow/responsive.less'
+    ], 'public/css/admin_shadow.css');
+
+    mix.less([
         'light/core.less',
         'light/components.less',
         'light/pages.less',
@@ -57,6 +65,7 @@ elixir(function (mix) {
 
     mix.version([
         'css/admin_light.css',
+        'css/admin_shadow.css',
         'css/admin_dark.css',
         'css/admin_dark_menu.css',
         'css/helpers.css',

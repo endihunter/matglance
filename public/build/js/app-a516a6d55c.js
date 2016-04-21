@@ -277,8 +277,6 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                     });
                 })
                 .catch(function () {
-                    console.log(arguments);
-
                     $scope.loading = false;
                 });
         }
@@ -475,7 +473,6 @@ app.controller('WeatherController', [
         }
 
         function cacheFilter() {
-            console.log('Cache filter:', $scope.filter);
             localStorageService.set('w_fltr', JSON.stringify($scope.filter));
 
             defaultFilter = angular.copy($scope.filter);
@@ -501,18 +498,14 @@ app.controller('WeatherController', [
 
         if (!(savedFilter = loadCachedFilter())) {
             GeoService.geolocate().then(function (GeoService) {
-                console.debug('Geolocate...');
                 $scope.filter.location = {
                     lat: GeoService.getLatitude(),
                     lng: GeoService.getLongitude()
                 };
-                console.log('Location:', $scope.filter.location);
 
                 GeoService.lookup(GeoService.getLatitude(), GeoService.getLongitude()).then(function (result) {
-                    console.debug('Lookup');
                     delayFilterTracking();
                     $scope.filter.address = result.formatted_address;
-                    console.log('Address:', $scope.filter.address);
 
                     cacheFilter();
 
@@ -524,7 +517,6 @@ app.controller('WeatherController', [
             defaultFilter = angular.copy($scope.filter);
 
             $scope.$emit('location.changed');
-            console.log('Load cached filter:', $scope.filter);
         }
 
         $scope.cancel = function (callback) {
@@ -549,7 +541,6 @@ app.controller('WeatherController', [
             if (filterChanged && $scope.filter.address.length) {
                 filterChanged = false;
                 GeoService.geocode($scope.filter.address).then(function (result) {
-                    console.log('Geocoding for :', $scope.filter.address);
                     if (result && result.hasOwnProperty('geometry')) {
                         delayFilterTracking();
 
@@ -806,7 +797,6 @@ app.factory('GmailService', ['$http', '$httpParamSerializer', function ($http, $
      * @returns {*}
      */
     factory.fetchMessages = function (args) {
-        console.log(args);
         return $http.get(app.API_PREFIX + '/gmail/messages?' + $httpParamSerializer(args))
             .then(function (response) {
                 return response.data;
@@ -848,14 +838,10 @@ app.factory("WeatherService", ['$http', '$httpParamSerializer', function ($http,
         }, params || {});
 
         var $url = app.API_PREFIX + '/weather/get?' + $httpParamSerializer($args);
-        console.log('weather url', $url);
         return $http
             .get($url)
             .then(function (response) {
-                console.log('got weather response');
                 return response.data;
-            }).catch(function (e) {
-                console.error('error', e);
             });
     };
 

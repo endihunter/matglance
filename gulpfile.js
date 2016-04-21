@@ -52,8 +52,7 @@ elixir(function (mix) {
         'node_modules/angular/angular.js',
         'node_modules/angular-sanitize/angular-sanitize.js',
         'node_modules/angular-local-storage/dist/angular-local-storage.js',
-        'node_modules/underscore/underscore.js',
-        'bower_components/skycons/skycons.js',
+        'node_modules/underscore/underscore.js'
     ], 'public/js/vendor.js', './');
 
     mix.scripts([

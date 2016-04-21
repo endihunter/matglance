@@ -38,12 +38,6 @@ elixir(function (mix) {
         'light/menu_dark.less',
         'light/responsive.less'
     ], 'public/css/admin_dark_menu.css');
-
-    mix.version([
-        'css/admin_light.css',
-        'css/admin_shadow.css',
-        'css/admin_dark_menu.css'
-    ]);
     /* ========= THEMES END =========== */
 
 
@@ -62,11 +56,16 @@ elixir(function (mix) {
         'directives/*.js',
         'services/*.js'
     ], 'public/js/app.js', 'resources/assets/javascript');
+    /* ========= SCRIPTS END =========== */
 
+    /* ========= CACHE BOOSTING START =========== */
     mix.version([
+        'css/admin_light.css',
+        'css/admin_shadow.css',
+        'css/admin_dark_menu.css',
         'css/helpers.css',
         'js/app.js',
         'js/vendor.js'
     ]);
-    /* ========= SCRIPTS END =========== */
+    /* ========= CACHE BOOSTING END =========== */
 });

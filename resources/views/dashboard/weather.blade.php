@@ -33,9 +33,9 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div style="height: 300px;">
+            <div style="min-height: 300px; height: auto;">
                 <div class="row" ng-show="weather && weather.timezone">
-                    <div class="col-lg-5 col-md-5 col-sm-6" style="margin-bottom: 32px;">
+                    <div class="col-lg-6 col-md-6 col-sm-6" style="margin-bottom: 32px;">
                         <ul class="list-unstyled">
                             <li>
                                 <h2 class="text-primary">@{{ weather.currently.summary }}</h2>
@@ -62,7 +62,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="col-lg-7 col-md-7 col-sm-6 text-left">
+                    <div class="col-lg-6 col-md-6 col-sm-6 text-left">
                         <img ng-if="weather.currently.icon" ng-src="@{{ icon() }}" width="128" height="128" alt="">
 
                         <h1 class="text-primary">@{{ weather.currently.temperature }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</h1>

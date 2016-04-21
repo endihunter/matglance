@@ -74,7 +74,6 @@ return [
     'themes' => [
         'light',
         'shadow',
-//        'dark',
         'dark_menu',
     ],
 

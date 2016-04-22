@@ -33,12 +33,12 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
-        parent::report($e);
-
         if (auth()->check() && $this->apiAccessRevoked($e)) {
             header("Location: " . url('logout'));
             exit();
         }
+
+        parent::report($e);
     }
 
     /**

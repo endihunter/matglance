@@ -28,24 +28,24 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $e
+     * @param  \Exception $e
      * @return void
      */
     public function report(Exception $e)
     {
+        parent::report($e);
+
         if (auth()->check() && $this->apiAccessRevoked($e)) {
             header("Location: " . url('logout'));
             exit();
         }
-
-        parent::report($e);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $e
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Exception $e
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $e)
@@ -59,6 +59,7 @@ class Handler extends ExceptionHandler
      */
     protected function apiAccessRevoked(Exception $e)
     {
-        return get_class($e) == 'Google_Service_Exception' && 401 == $e->getCode();
+        return in_array(get_class($e), ['Google_Service_Exception', 'Google_Auth_Exception'])
+        && in_array($e->getCode(), [400, 401]);
     }
 }

@@ -26,19 +26,20 @@ use App\Repositories\GMailRepository;
 use Terranet\Localizer\Models\Language;
 
 Route::group(['middleware' => ['web']], function () {
-    Route::get('/', [
-        'as' => 'dashboard',
-        'middleware' => 'auth',
-        'uses' => 'DashboardController@index',
-    ]);
-
-    Route::get('/login', function () {
+    Route::get('login', function () {
         return view('login');
     });
 
-    Route::get('logout', 'GoogleController@logout');
+    Route::group(['middleware' => 'auth'], function () {
+        Route::get('/', [
+            'as' => 'dashboard',
+            'uses' => 'DashboardController@index',
+        ]);
+        Route::get('logout', 'GoogleController@logout');
+    });
 
     Route::group(['prefix' => 'prefs', 'middleware' => 'auth'], function () {
+
         Route::get('lang/{language}', [
             'as' => 'user.prefs.lang',
             'uses' => function ($language) {

@@ -2612,7 +2612,7 @@ a.editable-click:hover {
 }
 /* Multiple */
 .ms-container {
-  background: transparent url('../images/multiple-arrow.png') no-repeat 50% 50%;
+  background: transparent url('/images/multiple-arrow.png') no-repeat 50% 50%;
 }
 .ms-container .ms-list {
   box-shadow: none;
@@ -3962,7 +3962,7 @@ div.hopscotch-bubble .hopscotch-bubble-arrow-container.down .hopscotch-bubble-ar
    Accounts pages
 ============= */
 .account-pages {
-  background: url("../images/big/bg1.jpg") center;
+  background: url("/images/big/bg1.jpg") center;
   position: absolute;
   height: 100%;
   width: 100%;

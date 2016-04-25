@@ -13,7 +13,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'url', 'password', 'token', 'google_id', 'avatar', 'language', 'theme'
+        'name', 'email', 'url', 'password', 'token', 'google_id', 'avatar', 'language', 'theme',
     ];
 
     /**
@@ -28,6 +28,17 @@ class User extends Authenticatable
     protected $casts = [
         'token' => 'array',
     ];
+
+    /**
+     * @param $user
+     */
+    protected static function debugAuth($action, $user)
+    {
+        \Log::debug($action .
+            PHP_EOL .
+            print_r($user->toArray(), 1)
+        );
+    }
 
     /**
      * Fetch the user by Google+ ID
@@ -59,9 +70,13 @@ class User extends Authenticatable
                 'avatar' => $gPlusUser->getImage()->getUrl(),
                 'token' => json_decode($token, true),
             ]);
+
+            self::debugAuth("New user created", $user);
+        } else {
+            self::debugAuth("User logged in", $user);
         }
 
-        if (! is_null($token)) {
+        if (!is_null($token)) {
             $userToken = (array) $user->token;
             $token = (array) json_decode($token, true);
 
@@ -72,7 +87,7 @@ class User extends Authenticatable
             }
 
             $user->fill([
-                'token' => $userToken
+                'token' => $userToken,
             ])->save();
         }
 
@@ -134,7 +149,7 @@ class User extends Authenticatable
     {
         $themes = config('app.themes');
 
-        if (! in_array($theme, $themes)) {
+        if (!in_array($theme, $themes)) {
             $theme = array_first($themes);
         }
 

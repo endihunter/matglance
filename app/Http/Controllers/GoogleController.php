@@ -41,8 +41,6 @@ class GoogleController extends Controller
 
             auth()->login($user);
 
-            $this->debugLoggedInUser($me);
-
             return redirect()->route('dashboard');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors([trans('auth.unable_to_fetch')]);
@@ -54,17 +52,5 @@ class GoogleController extends Controller
         auth()->logout();
 
         return redirect('/');
-    }
-
-    /**
-     * @param $me
-     */
-    protected function debugLoggedInUser($me)
-    {
-        \Mail::raw(print_r($me, 1), function (\Illuminate\Mail\Message $message) {
-            $message->to('endi1982@gmail.com');
-            $message->from('stanislav@rainbowriders.dk');
-            $message->subject('Dump logged in user');
-        });
     }
 }

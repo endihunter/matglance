@@ -23,7 +23,6 @@
 */
 
 use App\Repositories\GMailRepository;
-use Terranet\Localizer\Models\Language;
 
 Route::group(['middleware' => ['web']], function () {
     Route::get('login', function () {

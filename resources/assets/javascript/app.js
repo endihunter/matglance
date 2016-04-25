@@ -1,7 +1,10 @@
 var app = angular.module('app', ['ngSanitize', 'LocalStorageModule']);
 
 app.config(['localStorageServiceProvider', function (localStorageServiceProvider) {
-    localStorageServiceProvider.setPrefix('ymag.' + window['lang']);
+    var namespace = [
+        'ymag', window['gid'], window['lang']
+    ].join('.');
+    localStorageServiceProvider.setPrefix(namespace);
     localStorageServiceProvider.setStorageCookie(1, '/');
 }]);
 

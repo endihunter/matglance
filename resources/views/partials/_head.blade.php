@@ -35,5 +35,8 @@
 
     <script>
         window['lang'] = '{{ config('app.locale') }}';
+        @if (auth()->check())
+        window['gid'] = '{{ auth()->user()->google_id }}';
+        @endif
     </script>
 </head>

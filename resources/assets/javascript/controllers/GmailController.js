@@ -82,8 +82,6 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                         $scope.nextPageToken = messages.nextPage;
 
                         $scope.loading = false;
-
-                        localStorageService.set('g_msgs', JSON.stringify(messages));
                     });
                 })
                 .catch(function () {

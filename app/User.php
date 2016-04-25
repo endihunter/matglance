@@ -38,7 +38,7 @@ class User extends Authenticatable
      */
     public function scopeGPlusMember($query, $id)
     {
-        return $query->where('google_id', $id);
+        return $query->where('google_id', (string) $id);
     }
 
     /**
@@ -52,7 +52,7 @@ class User extends Authenticatable
     {
         if (!$user = static::GPlusMember($gPlusUser->getId())->first()) {
             $user = static::create([
-                'google_id' => $gPlusUser->getId(),
+                'google_id' => (string) $gPlusUser->getId(),
                 'name' => $gPlusUser->getDisplayName(),
                 'email' => $gPlusUser->getEmails()[0]->getValue(),
                 'url' => $gPlusUser->getUrl() ?: null,

@@ -25,15 +25,16 @@
 use App\Repositories\GMailRepository;
 
 Route::group(['middleware' => 'web'], function () {
-    Route::get('login', ['middleware' => 'guest', 'uses' => function () {
-        return view('login');
-    }]);
-
     Route::get('/', [
         'as' => 'dashboard',
         'middleware' => 'auth',
         'uses' => 'DashboardController@index',
     ]);
+
+    Route::get('login', ['middleware' => 'guest', 'uses' => function () {
+        return view('login');
+    }]);
+
     Route::get('logout', [
         'as' => 'logout',
         'middleware' => 'auth',

@@ -24,21 +24,23 @@
 
 use App\Repositories\GMailRepository;
 
-Route::group(['middleware' => ['web']], function () {
-    Route::get('login', function () {
+Route::group(['middleware' => 'web'], function () {
+    Route::get('login', ['middleware' => 'guest', 'uses' => function () {
         return view('login');
-    });
+    }]);
 
-    Route::group(['middleware' => 'auth'], function () {
-        Route::get('/', [
-            'as' => 'dashboard',
-            'uses' => 'DashboardController@index',
-        ]);
-        Route::get('logout', 'GoogleController@logout');
-    });
+    Route::get('/', [
+        'as' => 'dashboard',
+        'middleware' => 'auth',
+        'uses' => 'DashboardController@index',
+    ]);
+    Route::get('logout', [
+        'as' => 'logout',
+        'middleware' => 'auth',
+        'uses' => 'GoogleController@logout'
+    ]);
 
     Route::group(['prefix' => 'prefs', 'middleware' => 'auth'], function () {
-
         Route::get('lang/{language}', [
             'as' => 'user.prefs.lang',
             'uses' => function ($language) {
@@ -157,7 +159,6 @@ Route::group(['middleware' => ['web']], function () {
         });
 
         Route::get('gmail/messages/{id}/body', [
-            'middleware' => 'auth',
             'as' => 'gmail.body',
             'uses' => function ($messageId, GMailRepository $repo) {
                 $me = auth()->user();
@@ -171,7 +172,6 @@ Route::group(['middleware' => ['web']], function () {
         ]);
 
         Route::get('gmail/messages/{message_id}/attachment/{attachment_id}', [
-            'middleware' => 'auth',
             'as' => 'gmail.attachment',
             'uses' => function ($messageId, $attachmentId, GMailRepository $repo) {
                 $me = auth()->user();

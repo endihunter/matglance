@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\User;
+use Auth;
 use Google_Auth_OAuth2;
 use Google_Service_Plus;
 use Illuminate\Http\Request;
+use Session;
 
 class GoogleController extends Controller
 {
@@ -41,6 +43,8 @@ class GoogleController extends Controller
 
             auth()->login($user);
 
+            Session::set('google_id', $user->google_id);
+
             return redirect()->route('dashboard');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors([trans('auth.unable_to_fetch')]);
@@ -49,10 +53,10 @@ class GoogleController extends Controller
 
     public function logout()
     {
-        auth()->logout();
+        Auth::guard()->logout();
 
-        session()->flush();
+        Session::flush();
 
-        return redirect('/');
+        return redirect()->to('/');
     }
 }

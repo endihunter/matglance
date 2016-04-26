@@ -51,6 +51,8 @@ class GoogleController extends Controller
     {
         auth()->logout();
 
+        session()->flush();
+
         return redirect('/');
     }
 }

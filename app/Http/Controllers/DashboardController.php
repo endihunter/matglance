@@ -34,11 +34,17 @@ class DashboardController extends Controller
     {
         $me = auth()->user();
 
-        return view('dashboard')
-            ->with([
-                'quote' => $this->quotes->random($me->lang()),
-                'feeds' => $this->feeds->feeds($me->lang()),
-                'calendars' => $this->calendar->calendars($me->email)
-            ]);
+        $view = view('dashboard', [
+            'quote' => $this->quotes->random($me->lang()),
+            'feeds' => $this->feeds->feeds($me->lang()),
+            'calendars' => $this->calendar->calendars($me->email),
+        ]);
+
+        return response($view, 200, [
+            'Last-Modified' => gmdate("D, d M Y H:i:s") . ' GMT',
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0',
+            'Pragma' => 'no-cache',
+            'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT',
+        ]);
     }
 }

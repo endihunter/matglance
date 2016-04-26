@@ -51,12 +51,17 @@ class GoogleController extends Controller
         }
     }
 
+    public function flush()
+    {
+        Session::flush();
+
+        return redirect()->to('login');
+    }
+
     public function logout()
     {
         Auth::guard()->logout();
 
-        Session::flush();
-
-        return redirect()->to('/');
+        return redirect()->to('flush');
     }
 }

@@ -35,8 +35,7 @@ class DashboardController extends Controller
         $me = auth()->user();
 
         if (session('google_id') !== $me->google_id) {
-            dd('have no google_id', session('google_id'), $me->google_id);
-            return redirect('login');
+            return redirect()->to('flush');
         }
 
         return view('dashboard', [

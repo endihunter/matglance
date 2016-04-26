@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Services\Calendar;
 use App\Transformers\CalendarTransformer;
 use App\Transformers\EventTransformer;
+use Auth;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -14,7 +15,7 @@ class CalendarController extends Controller
 {
     public function calendars()
     {
-        $me = auth()->user();
+        $me = Auth::guard('api')->user();
 
         return \Restable::listing(
             Calendar::of($me->email)->listCalendars(),
@@ -24,7 +25,7 @@ class CalendarController extends Controller
 
     public function events(Request $request)
     {
-        $me = auth()->user();
+        $me = Auth::guard('api')->user();
 
         return \Restable::listing(
             Calendar::of($me->email)->events($request->get('c')),

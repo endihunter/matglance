@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Services\IPInfoDB;
 use App\Transformers\IPInfoDBTransformer;
+use Auth;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -74,7 +75,7 @@ class GeoController extends Controller
      */
     protected function getGeoUrl(array $params = [])
     {
-        $me = auth()->user();
+        $me = Auth::guard('api')->user();
 
         $url = 'https://maps.googleapis.com/maps/api/geocode/json?' .
             http_build_query(array_merge([
@@ -87,7 +88,7 @@ class GeoController extends Controller
 
     protected function getPlacesUrl(array $params = [])
     {
-        $me = auth()->user();
+        $me = Auth::guard('api')->user();
 
         return 'https://maps.googleapis.com/maps/api/place/autocomplete/json?' .
         http_build_query(array_merge([

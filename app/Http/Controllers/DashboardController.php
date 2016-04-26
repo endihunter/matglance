@@ -34,10 +34,6 @@ class DashboardController extends Controller
     {
         $me = auth()->user();
 
-        if (session('google_id') !== $me->google_id) {
-            return redirect()->to('flush');
-        }
-
         return view('dashboard', [
             'quote' => $this->quotes->random($me->lang()),
             'feeds' => $this->feeds->feeds($me->lang()),

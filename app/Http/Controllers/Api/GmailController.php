@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Repositories\GMailRepository;
 use App\Transformers\GmailMessageTransformer;
+use Auth;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -24,7 +25,7 @@ class GmailController extends Controller
 
     public function lists(Request $request)
     {
-        $me = auth()->user();
+        $me = Auth::guard('api')->user();
 
         $messages = $this->gMailRepository->lists(
             $me->email,
@@ -37,13 +38,11 @@ class GmailController extends Controller
             }, $messages['messages']),
             'nextPage' => $messages['nextPage']
         ];
-
-        return null;
     }
 
     public function get($messageId)
     {
-        $me = auth()->user();
+        $me = Auth::guard('api')->user();
 
         $message = $this->gMailRepository->get(
             $me->email,
@@ -55,7 +54,7 @@ class GmailController extends Controller
 
     public function touch($messageId)
     {
-        $me = auth()->user();
+        $me = Auth::guard('api')->user();
 
         $response = $this->gMailRepository->touch(
             $me->email,

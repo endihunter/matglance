@@ -65,7 +65,7 @@ class Gmail
     {
         $this->email = $email;
 
-        $this->client = app('google.mail');
+        $this->client = app('google.mail.api');
     }
 
     /**

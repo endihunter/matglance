@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Repositories\QuotesRepository;
 use App\Transformers\QuoteTransformer;
+use Auth;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -29,7 +30,7 @@ class QuotesController extends Controller
      */
     public function random()
     {
-        $me = auth()->user();
+        $me = Auth::guard('api')->user();
 
         return Restable::single(
             $this->quotesRepository->random($me->lang()),

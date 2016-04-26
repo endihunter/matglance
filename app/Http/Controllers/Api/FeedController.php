@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Repositories\FeedsRepository;
+use Auth;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -23,7 +24,7 @@ class FeedController extends Controller
 
     public function news(Request $request)
     {
-        $me = auth()->user();
+        $me = Auth::guard('api')->user();
 
         $feedList = $this->getFeedsList($request, $me);
 

@@ -41,9 +41,7 @@ class GoogleController extends Controller
                 $client->getAccessToken()
             );
 
-            auth()->login($user);
-
-            Session::set('google_id', $user->google_id);
+            $this->login($user);
 
             return redirect()->route('dashboard');
         } catch (\Exception $e) {
@@ -51,17 +49,27 @@ class GoogleController extends Controller
         }
     }
 
-    public function flush()
+    public function logout()
     {
+        Auth::guard()->logout();
+
         Session::flush();
 
         return redirect()->to('login');
     }
 
-    public function logout()
+    /**
+     * @param $user
+     */
+    protected function login($user)
     {
-        Auth::guard()->logout();
+        Auth::login($user, true);
 
-        return redirect()->to('flush');
+        // build the token
+        $user->fill([
+            'api_token' => $user->remember_token
+        ])->save();
+
+        Auth::setUser($user);
     }
 }

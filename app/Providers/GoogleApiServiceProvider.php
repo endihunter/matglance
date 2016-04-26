@@ -27,8 +27,43 @@ class GoogleApiServiceProvider extends ServiceProvider
             // @todo: Remove this statement on production
             //$client->setApprovalPrompt('force');
 
-            if ($user = auth()->check()) {
-                $user = auth()->user();
+            $auth = auth();
+
+            if ($user = $auth->check()) {
+                $user = $auth->user();
+                $token = $user->token;
+
+                $client->setAccessToken(json_encode($token));
+
+                // Refresh the token if it's expired.
+                if ($client->isAccessTokenExpired()) {
+                    $client->refreshToken(
+                        $refreshToken = $client->getRefreshToken()
+                    );
+
+                    $user->refreshToken($refreshToken);
+                }
+            }
+
+            return $client;
+        });
+
+        $this->app->bind('google.client.api', function () {
+            $client = new \Google_Client;
+
+            $client->setScopes(config('services.google.scopes'));
+            $client->setApplicationName(config('app.url'));
+            $client->setAuthConfigFile(resource_path('client_secret.json'));
+
+            $client->setAccessType('offline');
+
+            // @todo: Remove this statement on production
+            //$client->setApprovalPrompt('force');
+
+            $auth = auth('api');
+
+            if ($user = $auth->check()) {
+                $user = $auth->user();
                 $token = $user->token;
 
                 $client->setAccessToken(json_encode($token));
@@ -52,9 +87,21 @@ class GoogleApiServiceProvider extends ServiceProvider
             );
         });
 
+        $this->app->bind('google.calendar.api', function ($app) {
+            return $calendar = new Google_Service_Calendar(
+                $app['google.client.api']
+            );
+        });
+
         $this->app->bind('google.mail', function ($app) {
             return new Google_Service_Gmail(
                 $app['google.client']
+            );
+        });
+
+        $this->app->bind('google.mail.api', function ($app) {
+            return new Google_Service_Gmail(
+                $app['google.client.api']
             );
         });
     }

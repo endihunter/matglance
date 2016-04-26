@@ -41,11 +41,6 @@ Route::group(['middleware' => 'web'], function () {
         'uses' => 'GoogleController@logout'
     ]);
 
-    Route::get('flush', [
-        'as' => 'flush',
-        'uses' => 'GoogleController@flush'
-    ]);
-
     Route::group(['prefix' => 'prefs', 'middleware' => 'auth'], function () {
         Route::get('lang/{language}', [
             'as' => 'user.prefs.lang',
@@ -91,79 +86,8 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::group([
         'prefix' => 'api/v1',
-        'middleware' => 'auth',
+        'middleware' => 'auth'
     ], function () {
-        Route::get('quotes/random', [
-            'as' => 'api.quotes.random',
-            'uses' => 'Api\QuotesController@random',
-        ]);
-
-        Route::group(['prefix' => 'gmail'], function () {
-            Route::get('labels', [
-                'as' => 'api.gmail.labels',
-                'uses' => 'Api\GmailController@labels',
-            ]);
-
-            Route::get('messages', [
-                'as' => 'api.gmail.messages',
-                'uses' => 'Api\GmailController@lists',
-            ]);
-
-            Route::get('messages/{id}', [
-                'as' => 'api.gmail.message',
-                'uses' => 'Api\GmailController@get',
-            ]);
-
-            Route::get('messages/{id}/touch', [
-                'as' => 'api.gmail.message.touch',
-                'uses' => 'Api\GmailController@touch',
-            ]);
-        });
-
-        Route::get('weather/get', [
-            'as' => 'api.weather.proxy',
-            'uses' => 'Api\WeatherController@get',
-        ]);
-
-        Route::get('feed/news', [
-            'as' => 'api.feed.news',
-            'uses' => 'Api\FeedController@news',
-        ]);
-
-        Route::group(['prefix' => 'calendar'], function () {
-            Route::get('list', [
-                'as' => 'api.calendar.list',
-                'uses' => 'Api\CalendarController@calendars',
-            ]);
-
-            Route::get('events', [
-                'as' => 'api.calendar.events',
-                'uses' => 'Api\CalendarController@events',
-            ]);
-        });
-
-        Route::group(['prefix' => 'geo'], function () {
-            Route::get('ip', [
-                'as' => 'api.geo.geoip',
-                'uses' => 'Api\GeoController@geoip',
-            ]);
-
-            Route::get('code', [
-                'as' => 'api.geo.code',
-                'uses' => 'Api\GeoController@code',
-            ]);
-
-            Route::get('lookup', [
-                'as' => 'api.geo.lookup',
-                'uses' => 'Api\GeoController@lookup',
-            ]);
-
-            Route::get('places', [
-                'as' => 'api.geo.place',
-                'uses' => 'Api\GeoController@places',
-            ]);
-        });
-
         Route::get('gmail/messages/{id}/body', [
             'as' => 'gmail.body',
             'uses' => function ($messageId, GMailRepository $repo) {
@@ -186,6 +110,82 @@ Route::group(['middleware' => 'web'], function () {
 
                 return response(\App\Base64::decode($data), 200);
             },
+        ]);
+    });
+});
+
+Route::group([
+    'prefix' => 'api/v1',
+    'middleware' => 'auth:api',
+], function () {
+    Route::get('quotes/random', [
+        'as' => 'api.quotes.random',
+        'uses' => 'Api\QuotesController@random',
+    ]);
+
+    Route::group(['prefix' => 'gmail'], function () {
+        Route::get('labels', [
+            'as' => 'api.gmail.labels',
+            'uses' => 'Api\GmailController@labels',
+        ]);
+
+        Route::get('messages', [
+            'as' => 'api.gmail.messages',
+            'uses' => 'Api\GmailController@lists',
+        ]);
+
+        Route::get('messages/{id}', [
+            'as' => 'api.gmail.message',
+            'uses' => 'Api\GmailController@get',
+        ]);
+
+        Route::get('messages/{id}/touch', [
+            'as' => 'api.gmail.message.touch',
+            'uses' => 'Api\GmailController@touch',
+        ]);
+    });
+
+    Route::get('weather/get', [
+        'as' => 'api.weather.proxy',
+        'uses' => 'Api\WeatherController@get',
+    ]);
+
+    Route::get('feed/news', [
+        'as' => 'api.feed.news',
+        'uses' => 'Api\FeedController@news',
+    ]);
+
+    Route::group(['prefix' => 'calendar'], function () {
+        Route::get('list', [
+            'as' => 'api.calendar.list',
+            'uses' => 'Api\CalendarController@calendars',
+        ]);
+
+        Route::get('events', [
+            'as' => 'api.calendar.events',
+            'uses' => 'Api\CalendarController@events',
+        ]);
+    });
+
+    Route::group(['prefix' => 'geo'], function () {
+        Route::get('ip', [
+            'as' => 'api.geo.geoip',
+            'uses' => 'Api\GeoController@geoip',
+        ]);
+
+        Route::get('code', [
+            'as' => 'api.geo.code',
+            'uses' => 'Api\GeoController@code',
+        ]);
+
+        Route::get('lookup', [
+            'as' => 'api.geo.lookup',
+            'uses' => 'Api\GeoController@lookup',
+        ]);
+
+        Route::get('places', [
+            'as' => 'api.geo.place',
+            'uses' => 'Api\GeoController@places',
         ]);
     });
 });

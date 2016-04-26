@@ -1,9 +1,10 @@
 var app = angular.module('app', ['ngSanitize', 'LocalStorageModule']);
 
-app.config(['localStorageServiceProvider', function (localStorageServiceProvider) {
+app.config(['localStorageServiceProvider', '$httpProvider', function (localStorageServiceProvider, $httpProvider) {
     var namespace = [
         'ymag', window['gid'], window['lang']
     ].join('.');
+    $httpProvider.defaults.headers.common.Authorization = 'Bearer ' + window['api_token'];
     localStorageServiceProvider.setPrefix(namespace);
     localStorageServiceProvider.setStorageCookie(1, '/');
 }]);

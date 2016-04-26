@@ -7,6 +7,7 @@ use App\User;
 use Auth;
 use Google_Auth_OAuth2;
 use Google_Service_Plus;
+use Guzzle\Http\Client;
 use Illuminate\Http\Request;
 use Session;
 
@@ -50,6 +51,11 @@ class GoogleController extends Controller
     }
 
     public function logout()
+    {
+        return redirect()->to('https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=' . url('flush'));
+    }
+
+    public function flush()
     {
         Auth::guard()->logout();
 

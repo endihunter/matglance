@@ -41,6 +41,12 @@ Route::group(['middleware' => 'web'], function () {
         'uses' => 'GoogleController@logout'
     ]);
 
+    Route::get('flush', [
+        'as' => 'flush',
+        'middleware' => 'auth',
+        'uses' => 'GoogleController@flush'
+    ]);
+
     Route::group(['prefix' => 'prefs', 'middleware' => 'auth'], function () {
         Route::get('lang/{language}', [
             'as' => 'user.prefs.lang',

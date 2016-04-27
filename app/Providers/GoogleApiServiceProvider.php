@@ -26,6 +26,7 @@ class GoogleApiServiceProvider extends ServiceProvider
 
             // @todo: Remove this statement on production
             //$client->setApprovalPrompt('force');
+            $client->setPrompt('select_account');
 
             $auth = auth();
 

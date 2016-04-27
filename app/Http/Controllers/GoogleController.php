@@ -52,7 +52,11 @@ class GoogleController extends Controller
 
     public function logout()
     {
-        return redirect()->to('https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=' . url('flush'));
+        if (env('FORCE_GOOGLE_LOGOUT', false)) {
+            return redirect()->to('https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=' . url('flush'));
+        }
+
+        return $this->flush();
     }
 
     public function flush()

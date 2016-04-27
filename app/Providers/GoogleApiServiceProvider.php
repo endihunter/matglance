@@ -8,6 +8,19 @@ use Illuminate\Support\ServiceProvider;
 
 class GoogleApiServiceProvider extends ServiceProvider
 {
+    protected function initClient()
+    {
+        $client = new \Google_Client;
+
+        $client->setScopes(config('services.google.scopes'));
+        $client->setApplicationName(config('app.url'));
+        $client->setAuthConfigFile(resource_path('client_secret.json'));
+
+        $client->setAccessType('offline');
+
+        return $client;
+    }
+
     /**
      * Bootstrap the application services.
      *
@@ -16,67 +29,29 @@ class GoogleApiServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->bind('google.client', function () {
-            $client = new \Google_Client;
-
-            $client->setScopes(config('services.google.scopes'));
-            $client->setApplicationName(config('app.url'));
-            $client->setAuthConfigFile(resource_path('client_secret.json'));
-
-            $client->setAccessType('offline');
+            $client = $this->initClient();
 
             // @todo: Remove this statement on production
             //$client->setApprovalPrompt('force');
-            $client->setPrompt('select_account');
+            if (env('FORCE_ACCOUNT_CHOOSER', true)) {
+                $client->setPrompt('select_account');
+            }
 
             $auth = auth();
-
-            if ($user = $auth->check()) {
-                $user = $auth->user();
-                $token = $user->token;
-
-                $client->setAccessToken(json_encode($token));
-
-                // Refresh the token if it's expired.
-                if ($client->isAccessTokenExpired()) {
-                    $client->refreshToken(
-                        $refreshToken = $client->getRefreshToken()
-                    );
-
-                    $user->refreshToken($refreshToken);
-                }
+            if ($auth->check()) {
+                $client = $this->handleRefreshToken($auth, $client);
             }
 
             return $client;
         });
 
         $this->app->bind('google.client.api', function () {
-            $client = new \Google_Client;
-
-            $client->setScopes(config('services.google.scopes'));
-            $client->setApplicationName(config('app.url'));
-            $client->setAuthConfigFile(resource_path('client_secret.json'));
-
-            $client->setAccessType('offline');
-
-            // @todo: Remove this statement on production
-            //$client->setApprovalPrompt('force');
+            $client = $this->initClient();
 
             $auth = auth('api');
 
-            if ($user = $auth->check()) {
-                $user = $auth->user();
-                $token = $user->token;
-
-                $client->setAccessToken(json_encode($token));
-
-                // Refresh the token if it's expired.
-                if ($client->isAccessTokenExpired()) {
-                    $client->refreshToken(
-                        $refreshToken = $client->getRefreshToken()
-                    );
-
-                    $user->refreshToken($refreshToken);
-                }
+            if ($auth->check()) {
+                $client = $this->handleRefreshToken($auth, $client);
             }
 
             return $client;
@@ -105,6 +80,29 @@ class GoogleApiServiceProvider extends ServiceProvider
                 $app['google.client.api']
             );
         });
+    }
+
+    /**
+     * @param $auth
+     * @param $client
+     */
+    protected function handleRefreshToken($auth, $client)
+    {
+        $user = $auth->user();
+        $token = $user->token;
+
+        $client->setAccessToken(json_encode($token));
+
+        // Refresh the token if it's expired.
+        if ($client->isAccessTokenExpired()) {
+            $client->refreshToken(
+                $refreshToken = $client->getRefreshToken()
+            );
+
+            $user->refreshToken($refreshToken);
+        }
+
+        return $client;
     }
 
     /**

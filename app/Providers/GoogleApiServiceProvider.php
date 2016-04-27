@@ -2,15 +2,18 @@
 
 namespace App\Providers;
 
+use App\User;
+use Google_Client;
 use Google_Service_Calendar;
 use Google_Service_Gmail;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Support\ServiceProvider;
 
 class GoogleApiServiceProvider extends ServiceProvider
 {
     protected function initClient()
     {
-        $client = new \Google_Client;
+        $client = new Google_Client;
 
         $client->setScopes(config('services.google.scopes'));
         $client->setApplicationName(config('app.url'));
@@ -37,8 +40,10 @@ class GoogleApiServiceProvider extends ServiceProvider
                 $client->setPrompt('select_account');
             }
 
-            $auth = auth();
-            if ($auth->check()) {
+            /**
+             * @var Guard $auth;
+             */
+            if (($auth = auth()) && $auth->check()) {
                 $client = $this->handleRefreshToken($auth, $client);
             }
 
@@ -48,9 +53,10 @@ class GoogleApiServiceProvider extends ServiceProvider
         $this->app->bind('google.client.api', function () {
             $client = $this->initClient();
 
-            $auth = auth('api');
-
-            if ($auth->check()) {
+            /**
+             * @var Guard $auth;
+             */
+            if (($auth = auth('api')) && $auth->check()) {
                 $client = $this->handleRefreshToken($auth, $client);
             }
 
@@ -83,11 +89,14 @@ class GoogleApiServiceProvider extends ServiceProvider
     }
 
     /**
-     * @param $auth
-     * @param $client
+     * @param Guard $auth
+     * @param Google_Client $client
      */
     protected function handleRefreshToken($auth, $client)
     {
+        /**
+         * @var $user User
+         */
         $user = $auth->user();
         $token = $user->token;
 

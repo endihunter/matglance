@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'GMail',
+    'title' => 'Mail',
     'settings' => 'Settings',
     'search' => '',
     'from' => 'From:',

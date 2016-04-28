@@ -2,7 +2,7 @@
     <card-box title="{{ trans('weather.title') }}">
         <card-box-actions>
             <div class="form-group">
-                <h5>{{ trans('weather.settings') }}</h5>
+                <h5 >{{ trans('weather.settings') }}</h5>
             </div>
             <form ng-submit="savePreferences($parent.switchEditableMode);" novalidate name="form">
                 <div class="form-group text-left">
@@ -33,12 +33,12 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div style="min-height: 300px; height: auto;">
+            <div style="height: 200px;">
                 <div class="row" ng-show="weather && weather.timezone">
-                    <div class="col-lg-6 col-md-6 col-sm-6" style="margin-bottom: 32px;">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
                         <ul class="list-unstyled">
                             <li>
-                                <h2 class="text-primary">@{{ weather.currently.summary }}</h2>
+                                <h3 style="line-height:0;" class="text-primary">@{{ weather.currently.summary }}</h3>
                                 <div class="clearfix"></div>
                             </li>
                             <li>

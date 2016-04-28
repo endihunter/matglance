@@ -31,7 +31,7 @@
                         </button>
                     </li>
                     <li>
-                        <h4 class="page-title">{{ trans('general.dashboard') }}</h4>
+                        {{--<h4 class="page-title">{{ trans('general.dashboard') }}</h4>--}}
                     </li>
                 </ul>
             </div><!-- end container -->

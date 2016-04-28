@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'News feed',
+    'title' => 'News',
     'settings' => 'Settings',
     'toggle' => 'Select/Unselect All',
 ];

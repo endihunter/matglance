@@ -29,7 +29,7 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div style="overflow-y: auto; height:300px;">
+            <div style="overflow-y: auto; height:200px;">
                 <div class="widget-user">
                     <a ng-href="@{{ article.link }}" target="_blank" ng-repeat="article in articles" style="margin-bottom: 10px; display: block; cursor: pointer">
                         <img ng-if="article.media" ng-src="@{{ article.media.url }}" style="width: 75px; height: auto;" alt="user">

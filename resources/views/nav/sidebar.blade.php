@@ -3,14 +3,14 @@
         <li class="text-muted menu-title">{{ trans('general.navigation') }}</li>
 
         <li>
-            <a href="{{ url('/') }}" class="waves-effect">
+            <a href="{{ url('/') }}">
                 <i class="zmdi zmdi-view-dashboard"></i>
                 <span> {{ trans('general.dashboard') }} </span>
             </a>
         </li>
 
         <li class="has_sub">
-            <a href="javascript:void(0);" class="waves-effect">
+            <a href="javascript:void(0);">
                 <i class="zmdi zmdi-map"></i>
                 <span> {{ trans('general.language') }} </span>
                 <span class="menu-arrow"></span>
@@ -25,7 +25,7 @@
         </li>
 
         <li class="has_sub">
-            <a href="javascript:void(0);" class="waves-effect">
+            <a href="javascript:void(0);">
                 <i class="zmdi zmdi-layers"></i>
                 <span> {{ trans('general.theme') }} </span>
                 <span class="menu-arrow"></span>
@@ -40,7 +40,7 @@
         </li>
 
         <li>
-            <a href="{{ url('logout') }}" class="waves-effect text-danger">
+            <a href="{{ url('logout') }}">
                 <i class="zmdi zmdi-square-right"></i>
                 <span> {{ trans('general.logout') }} </span>
             </a>

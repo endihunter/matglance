@@ -56,8 +56,32 @@ elixir(function (mix) {
         'directives/*.js',
         'services/*.js'
     ], 'public/js/app.js', 'resources/assets/javascript');
-    /* ========= SCRIPTS END =========== */
 
+    mix.scripts([
+        'jquery.min.js',
+        'bootstrap.min.js',
+        'detect.js',
+        'fastclick.js',
+        'jquery.slimscroll.js',
+        //'jquery.blockUI.js',
+        //'waves.js',
+        //'jquery.nicescroll.js',
+        // 'jquery.scrollTo.min.js',
+        'jquery.core.js',
+        'jquery.app.js'
+    ], 'public/js/libs.js', 'public/assets/js');
+    /* ========= SCRIPTS END =========== */
+    
+    
+    /* ========= STYLES END =========== */
+    mix.styles([
+        'bootstrap.min.css',
+        'icons.css'
+    ], 'public/css/vendor.css', 'public/assets/css');
+    /* ========= STYLES END =========== */
+
+    mix.copy('public/assets/fonts', 'public/fonts');
+    
     /* ========= CACHE BOOSTING START =========== */
     mix.version([
         'css/admin_light.css',

@@ -34,6 +34,5 @@
 </div>
 <!-- end wrapper page -->
 
-@include('partials._javascript')
 </body>
 </html>

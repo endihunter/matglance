@@ -10,7 +10,7 @@
         </li>
 
         <li class="has_sub">
-            <a href="javascript:void(0);">
+            <a href="javascript:void(0);" class="n-waves-effect">
                 <i class="zmdi zmdi-map"></i>
                 <span> {{ trans('general.language') }} </span>
                 <span class="menu-arrow"></span>
@@ -25,7 +25,7 @@
         </li>
 
         <li class="has_sub">
-            <a href="javascript:void(0);">
+            <a href="javascript:void(0);" class="n-waves-effect">
                 <i class="zmdi zmdi-layers"></i>
                 <span> {{ trans('general.theme') }} </span>
                 <span class="menu-arrow"></span>

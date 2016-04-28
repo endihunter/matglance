@@ -10,10 +10,6 @@ Homestead.yaml
 Vagrantfile
 resources/client_secret.json
 
-# versioned assets
-/public/css/*.css
-/public/js/*.js
-
 # ide-helper
 _ide_helper.php
 _ide_helper_models.php

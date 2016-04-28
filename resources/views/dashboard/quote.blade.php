@@ -11,7 +11,6 @@
                         &nbsp;-&nbsp;
                         <span class="label label-success">@{{ quote.author }}</span>
                     </div>
-                    <br>
                     <button class="btn btn-info btn-sm" ng-click="fetchRandom()">
                         <i class="zmdi zmdi-refresh-sync"></i>
                         &nbsp;

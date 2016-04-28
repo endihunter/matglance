@@ -43,7 +43,7 @@
                             </li>
                             <li>
                                 <h4 class="text-muted">@{{ locationToCity(weather.address) }}</h4>
-                                <span class="label label-info">@{{ weather.currently.time }}</span>
+                                {{--<span class="label label-info">@{{ weather.currently.time }}</span>--}}
                             </li>
                             <li>
                                 {{ trans('weather.wind') }}: @{{ weather.currently.windSpeed }} @{{ (filter.units == 'us' ? 'm/h' : 'm/s') }}

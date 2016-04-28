@@ -44,7 +44,7 @@ class EventTransformer extends TransformerAbstract
             $value = Carbon::parse($eventDateTime->date);
 
             return [
-                'date' => $value->toDateString(),
+                'date' => $value->toFormattedDateString(),
                 'formattedDate' => $value->toFormattedDateString(),
                 'time' => null,
             ];

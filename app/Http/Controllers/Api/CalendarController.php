@@ -27,9 +27,37 @@ class CalendarController extends Controller
     {
         $me = Auth::guard('api')->user();
 
-        return \Restable::listing(
-            Calendar::of($me->email)->events($request->get('c')),
-            new EventTransformer
-        );
+        $events = $this->fetchEvents($me->email, $request->get('c'));
+
+        $events = array_map([new EventTransformer, 'transform'], $events->getItems());
+
+        $events = $this->datify($events);
+
+        return response()->json([
+            'data' => $events,
+        ]);
+    }
+
+    private function fetchEvents($email, $calendar)
+    {
+        return Calendar::of($email)->events($calendar);
+    }
+
+    private function datify($events)
+    {
+        $out = array_reduce($events, function ($out, $item) {
+            $date = strtotime($item['start']['date']);
+            if (!array_has($out, $date)) {
+                $out[$date] = [
+                    'date' => $item['start']['date'],
+                    'events' => [],
+                ];
+            }
+            $out[$date]['events'][] = $item;
+
+            return $out;
+        }, []);
+
+        return $out;
     }
 }

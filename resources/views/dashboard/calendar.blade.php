@@ -25,25 +25,27 @@
         <card-box-body>
             <div style="height: 250px; overflow-y: auto">
                 <table class="table">
-                    <tr ng-if="! events.length">
-                        <td colspan="3">
+                    <tr ng-if="! hasEvents">
+                        <td colspan="2">
                             {{ trans('calendar.no_events') }}
                         </td>
                     </tr>
-                    <tr ng-repeat="event in events">
+                    <tr ng-repeat="(time, object) in events">
                         <td class="text-primary">
-                            @{{ event.start.formattedDate }}
+                            @{{ object.date }}
                         </td>
                         <td>
-
-                            <span ng-if="event.allDay">{{ trans('calendar.all_day') }}</span>
-                        <span ng-if="! event.allDay">
-                            @{{ event.start.time }} - @{{ event.end.time }}
-                        </span>
-                        </td>
-                        <td>
-                            <event-icon event="@{{ event }}"></event-icon>
-                            <a ng-href="@{{ event.link }}" target="_blank">@{{ event.summary }}</a>
+                            <ul class="list-unstyled">
+                                <li ng-repeat="event in object.events">
+                                    <event-icon event="@{{ event }}"></event-icon>
+                                    <span ng-if="event.allDay">{{ trans('calendar.all_day') }}</span>
+                                    <span ng-if="! event.allDay">
+                                        @{{ event.start.time }} - @{{ event.end.time }}
+                                    </span>
+                                    &nbsp;
+                                    <a ng-href="@{{ event.link }}" target="_blank">@{{ event.summary }}</a>
+                                </li>
+                            </ul>
                         </td>
                     </tr>
                 </table>

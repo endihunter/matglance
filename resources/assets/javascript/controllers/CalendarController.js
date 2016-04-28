@@ -9,6 +9,8 @@ app.controller('CalendarController', [
 
         $scope.calendars = [];
 
+        $scope.hasEvents = false;
+
         $scope.events = [];
 
         function select(cal) {
@@ -40,6 +42,7 @@ app.controller('CalendarController', [
                 .then(function (events) {
                     $scope.events = events;
                     $scope.loading = false;
+                    $scope.hasEvents = Object.keys(events).length;
                 });
         }
 

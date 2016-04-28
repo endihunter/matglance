@@ -29,8 +29,8 @@ class Calendar
         return app('google.calendar.api')->events->listEvents($calendarId, [
             'showDeleted' => false,
             'singleEvents' => true,
+            'orderBy' => 'startTime',
             'timeMin' => Carbon::today()->toRfc3339String(),
-            //'timeMax' => Carbon::today()->addDays(7)->toRfc3339String()
             'timeMax' => Carbon::today()->addMonth()->toRfc3339String()
         ]);
     }

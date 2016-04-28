@@ -27,7 +27,7 @@ class CalendarController extends Controller
     {
         $me = Auth::guard('api')->user();
 
-        $events = $this->fetchEvents($me->email, $request->get('c'));
+        $events = $this->fetchEvents($me->email, $request->get('c'), $request->get('t'), $request->get('tz'));
 
         $events = array_map([new EventTransformer, 'transform'], $events->getItems());
 
@@ -38,9 +38,9 @@ class CalendarController extends Controller
         ]);
     }
 
-    private function fetchEvents($email, $calendar)
+    private function fetchEvents($email, $calendar, $time, $timeZoneOffset)
     {
-        return Calendar::of($email)->events($calendar);
+        return Calendar::of($email)->events($calendar, $time, $timeZoneOffset);
     }
 
     private function datify($events)

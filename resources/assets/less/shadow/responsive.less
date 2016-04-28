@@ -37,12 +37,41 @@ File: Responsive
   body {
     overflow-x: hidden;
   }
+
+  .topbar-left {
+    width: 70px !important;
+  }
+
+  .left.side-menu {
+    width: 70px;
+    .sidebar-inner {
+      visibility: hidden;
+    }
+  }
+
+  .forced,
+  .enlarged {
+    .left.side-menu .sidebar-inner {
+      visibility: visible;
+    }
+  }
 }
 
 @media (max-width: 767px) {
   body {
     overflow-x: hidden;
   }
+
+  .left.side-menu {
+    visibility: hidden;
+  }
+  .forced,
+  .enlarged {
+    .left.side-menu {
+      visibility: visible;
+    }
+  }
+
   .enlarged {
     .left.side-menu {
       margin-left: -75px;

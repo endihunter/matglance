@@ -1,6 +1,6 @@
 app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStorageService',
     function ($scope, GmailService, $sce, localStorageService) {
-        $scope.searchMode = false;
+        $scope.searchMode = true;
 
         $scope.message = null;
 
@@ -106,7 +106,7 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                 $scope.filter = JSON.parse(savedFilter);
             }
 
-            $scope.searchMode = !!flag;
+            // $scope.searchMode = !!flag;
 
             if (callback) {
                 callback();

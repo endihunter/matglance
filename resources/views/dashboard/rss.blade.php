@@ -31,12 +31,15 @@
         <card-box-body>
             <div style="overflow-y: auto; height:200px;">
                 <div class="widget-user">
-                    <a ng-href="@{{ article.link }}" target="_blank" ng-repeat="article in articles" style="margin-bottom: 10px; display: block; cursor: pointer">
-                        <img ng-if="article.media" ng-src="@{{ article.media.url }}" style="width: 75px; height: auto;" alt="user">
-                        <div ng-class="{'wid-u-info': article.media}">
-                            <strong class="m-t-0 m-b-5 font-600">@{{ article.title }}</strong>
-                            <p class="text-muted m-b-5 font-13">@{{ article.content }}</p>
-                            <small class="text-warning"><b>@{{ article.pubDate }}</b></small>
+                    <a ng-href="@{{ article.link }}" target="_blank" ng-repeat="article in articles" style="display: block; cursor: pointer">
+                        <div class="m-b-15">
+                            <img ng-if="article.media" ng-src="@{{ article.media.url }}" style="width: 75px; height: auto;" alt="user">
+                            <div ng-class="{'wid-u-info': article.media}">
+                                <strong class="m-t-0 m-b-5 font-600">@{{ article.title }}</strong>
+                                <small class="text-muted m-r-10">@{{ article.pubDate }}</small>
+                                <p class="text-muted m-b-5 font-13">@{{ article.content }}</p>
+                            </div>
+                            <div style="height: 0px; clear: both; float: none;"></div>
                         </div>
                     </a>
                 </div>

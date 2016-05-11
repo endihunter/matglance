@@ -10,12 +10,12 @@
                         @{{ quote.quote }}
                         &nbsp;-&nbsp;
                         <span class="label label-success">@{{ quote.author }}</span>
+                        <button class="btn btn-link" ng-click="fetchRandom()">
+                            {{ trans('buttons.more') }}
+                            <i class="zmdi zmdi-long-arrow-right"></i>
+                        </button>
                     </div>
-                    <button class="btn btn-info btn-sm" ng-click="fetchRandom()">
-                        <i class="zmdi zmdi-refresh-sync"></i>
-                        &nbsp;
-                        {{ trans('buttons.more') }}
-                    </button>
+
                 </div>
             </div>
         </card-box-body>

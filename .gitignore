@@ -9,6 +9,7 @@ composer.lock
 Homestead.yaml
 Vagrantfile
 resources/client_secret.json
+.DS_Store
 
 # ide-helper
 _ide_helper.php

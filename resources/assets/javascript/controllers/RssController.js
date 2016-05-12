@@ -1,6 +1,6 @@
 app.controller('RssController', [
-    '$scope', '$timeout', 'localStorageService', 'FeedService',
-    function ($scope, $timeout, localStorageService, FeedService) {
+    '$scope', '$timeout', 'localStorageService', 'FeedService', '$q',
+    function ($scope, $timeout, localStorageService, FeedService, $q) {
         $scope.loading = false;
 
         function fullList() {
@@ -17,33 +17,37 @@ app.controller('RssController', [
             var savedFeeds;
             var hasSavedFeeds = localStorageService.keys().indexOf('feeds') > -1;
 
-            $scope.feeds = [];
+            $feeds = [];
 
             if (! hasSavedFeeds) {
-                $scope.feeds = fullList();
+                $feeds = fullList();
             } else {
                 savedFeeds = localStorageService.get('feeds');
                 if (savedFeeds.length) {
-                    $scope.feeds = mapToInt(savedFeeds.split(','));
+                    $feeds = mapToInt(savedFeeds.split(','));
                 }
             }
 
-            $scope.savedFeeds = angular.copy($scope.feeds);
+            $scope.savedFeeds = angular.copy($feeds);
 
             allChecked();
         }
 
         function fetchNews() {
-            if ($scope.loading || ! $scope.feeds.length)
-                return false;
+            var defer = $q.defer();
 
-            $scope.loading = true;
+            if ($scope.loading || ! $feeds.length) {
+                defer.resolve([]);
+            } else {
+                $scope.loading = true;
 
-            return FeedService.news($scope.feeds).then(function (news) {
-                $scope.articles = news;
-
-                $scope.loading = false;
-            });
+                FeedService.news($feeds).then(function (news) {
+                    $scope.loading = false;
+                    $scope.articles = news;
+                    defer.resolve(news);
+                });
+            }
+            return defer.promise;
         }
 
         $scope.allChecked = false;
@@ -52,14 +56,14 @@ app.controller('RssController', [
         $scope.allFeeds = [];
 
         // readable feeds
-        $scope.feeds = [];
+        var $feeds = [];
 
         $scope.savedFeeds = [];
 
         $scope.articles = [];
 
         function allChecked () {
-            $scope.allChecked = ($scope.feeds.length == $scope.allFeeds.length);
+            $scope.allChecked = ($feeds.length == $scope.allFeeds.length);
         }
 
         $scope.$watch('feeds', function (v1, v2) {
@@ -70,9 +74,9 @@ app.controller('RssController', [
 
         $scope.toggleAll = function ($event) {
             if ($event.target.checked == true) {
-                $scope.feeds = fullList();
+                $feeds = fullList();
             } else {
-                $scope.feeds = [];
+                $feeds = [];
             }
         };
 
@@ -85,7 +89,7 @@ app.controller('RssController', [
         };
 
         $scope.savePreferences = function (cb) {
-            $scope.savedFeeds = mapToInt($scope.feeds);
+            $scope.savedFeeds = mapToInt($feeds);
 
             localStorageService.set('feeds', $scope.savedFeeds.join(','));
 
@@ -108,15 +112,15 @@ app.controller('RssController', [
             feed_id = parseInt(feed_id);
 
             if ($scope.trackable(feed_id)) {
-                $scope.feeds = _.without($scope.feeds, feed_id);
+                $feeds = _.without($feeds, feed_id);
             } else {
-                $scope.feeds.push(feed_id);
+                $feeds.push(feed_id);
             }
         };
 
         $scope.trackable = function (feed_id) {
             feed_id = parseInt(feed_id);
 
-            return _.indexOf($scope.feeds, feed_id) != -1;
+            return _.indexOf($feeds, feed_id) != -1;
         }
     }]);

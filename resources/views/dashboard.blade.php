@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('content')
-    <div class="ng-cloak">
+    <div class="ng-cloak" ng-show="resized" ng-controller="SizerController">
         <div class="row">
             <div class="col-lg-6 col-md-6">
                 @include('dashboard.weather')

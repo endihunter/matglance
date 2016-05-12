@@ -33,7 +33,7 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div style="height: 200px;">
+            <div style="height: @{{ size1 }}px;">
                 <div class="row p-l-r-10" ng-show="weather && weather.timezone">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                     {{--<div class="col-lg-12 col-md-12 col-sm-12">--}}

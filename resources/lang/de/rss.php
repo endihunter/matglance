@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'title' => 'News',
-    'settings' => 'Settings',
-    'toggle' => 'Select/Unselect All',
-    'no_feeds' => 'Choose news from the settings to show them here',
+    'title' => 'Nachrichten',
+    'settings' => 'Einstellungen',
+    'toggle' => 'Auswahl/Auswahl aufheben',
+    'no_feeds' => 'Wählen Sie Nachrichten aus den Einstellungen sie hier zeigen',
 ];

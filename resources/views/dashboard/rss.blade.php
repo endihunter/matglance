@@ -30,7 +30,7 @@
         </card-box-actions>
         <card-box-body>
             <div style="overflow-y: auto; height:200px;">
-                <div class="widget-user">
+                <div class="widget-user" ng-if="savedFeeds.length">
                     <a ng-href="@{{ article.link }}" target="_blank" ng-repeat="article in articles" style="display: block; cursor: pointer">
                         <div class="m-b-15">
                             <img ng-if="article.media" ng-src="@{{ article.media.url }}" style="width: 75px; height: auto;" alt="user">
@@ -42,6 +42,10 @@
                             <div style="height: 0px; clear: both; float: none;"></div>
                         </div>
                     </a>
+                </div>
+
+                <div class="widget-user" ng-if="!savedFeeds.length">
+                    {{ trans('rss.no_feeds') }}
                 </div>
             </div>
         </card-box-body>

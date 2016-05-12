@@ -23,7 +23,7 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div style="height: 250px; overflow-y: auto">
+            <div style="height: 200px; overflow-y: auto;">
                 <table class="table">
                     <tr ng-if="! hasEvents">
                         <td colspan="2">

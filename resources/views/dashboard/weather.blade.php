@@ -34,17 +34,21 @@
         </card-box-actions>
         <card-box-body>
             <div style="height: 200px;">
-                <div class="row" ng-show="weather && weather.timezone">
+                <div class="row p-l-r-10" ng-show="weather && weather.timezone">
                     <div class="col-lg-6 col-md-6 col-sm-6">
+                    {{--<div class="col-lg-12 col-md-12 col-sm-12">--}}
                         <ul class="list-unstyled">
                             <li>
-                                <h3 style="line-height:0;" class="text-primary">@{{ weather.currently.summary }}</h3>
+                                <h5 style="line-height:0;" class="text-primary">@{{ weather.currently.summary }}</h5>
                                 <div class="clearfix"></div>
                             </li>
                             <li>
-                                <h4 class="text-muted">@{{ locationToCity(weather.address) }}</h4>
+                                <h6 class="text-muted">@{{ locationToCity(weather.address) }}</h6>
                                 {{--<span class="label label-info">@{{ weather.currently.time }}</span>--}}
                             </li>
+                            {{--<li>--}}
+                                {{--<strong>@{{ weather.currently.temperature }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</strong>--}}
+                            {{--</li>--}}
                             <li>
                                 {{ trans('weather.wind') }}: @{{ weather.currently.windSpeed }} @{{ (filter.units == 'us' ? 'm/h' : 'm/s') }}
                             </li>
@@ -63,7 +67,7 @@
                         </ul>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 text-left">
-                        <img ng-if="weather.currently.icon" ng-src="@{{ icon() }}" width="128" height="128" alt="">
+                        <img ng-if="weather.currently.icon" ng-src="@{{ icon() }}" width="100" height="100" alt="">
 
                         <h1 class="text-primary">@{{ weather.currently.temperature }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</h1>
                     </div>

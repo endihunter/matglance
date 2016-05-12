@@ -39,7 +39,7 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div style="height: 250px; overflow-y: auto">
+            <div style="height: 200px; overflow-y: auto;">
                 <div ng-if="message">
                     <a ng-click="backToList()" class="btn btn-default">
                         <i class="zmdi zmdi-long-arrow-return"></i>
@@ -72,16 +72,17 @@
                 <div ng-if="! message" style="overflow: hidden">
                     <ul class="list-group">
                         <li ng-click="readMessage(message.id)" class="g-message-list-item list-group-item" ng-repeat="message in messages">
-                            <small class="label label-default pull-right">@{{ message.date }}</small>
-                        <span class="msg-from pull-left">
-                            @{{ message.from[1] || message.from[0] }}
-                        </span>
-                            <br class="clearfix" />
-                        <span class="msg-subject text-dark" ng-class="{'font-bold': isUnRead(message)}">
-                            @{{ message.subject }}
-                        </span><br/>
-                            <small class="msg-snippet text-muted" ng-bind-html="message.snippet"></small>
-                            <br class="clearfix" />
+                            {{--<small class="label label-default pull-right">@{{ message.date }}</small>--}}
+                            <strong class="msg-from pull-left">
+                                @{{ message.from[1] || message.from[0] }}
+                            </strong>
+                            <br class="clearfix"/>
+                            <span class="msg-subject text-dark" ng-class="{'font-bold': isUnRead(message)}">
+                                @{{ message.subject }}
+                            </span>
+                            {{--<br/>
+                            <small class="msg-snippet text-muted" ng-bind-html="message.snippet"></small>--}}
+                            <br class="clearfix"/>
                         </li>
                     </ul>
                     <div>

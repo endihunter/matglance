@@ -15,10 +15,17 @@ app.controller('RssController', [
 
         function restoreReadableFeeds() {
             var savedFeeds;
-            if ((savedFeeds = localStorageService.get('feeds'))/* && savedFeeds.length*/) {
-                $scope.feeds = mapToInt(savedFeeds.split(','));
-            } else {
+            var hasSavedFeeds = localStorageService.keys().indexOf('feeds') > -1;
+
+            $scope.feeds = [];
+
+            if (! hasSavedFeeds) {
                 $scope.feeds = fullList();
+            } else {
+                savedFeeds = localStorageService.get('feeds');
+                if (savedFeeds.length) {
+                    $scope.feeds = mapToInt(savedFeeds.split(','));
+                }
             }
 
             $scope.savedFeeds = angular.copy($scope.feeds);
@@ -27,7 +34,7 @@ app.controller('RssController', [
         }
 
         function fetchNews() {
-            if ($scope.loading)
+            if ($scope.loading || ! $scope.feeds.length)
                 return false;
 
             $scope.loading = true;
@@ -78,8 +85,9 @@ app.controller('RssController', [
         };
 
         $scope.savePreferences = function (cb) {
-            $scope.savedFeeds = mapToInt($scope.feeds).join(',');
-            localStorageService.set('feeds', $scope.savedFeeds);
+            $scope.savedFeeds = mapToInt($scope.feeds);
+
+            localStorageService.set('feeds', $scope.savedFeeds.join(','));
 
             return fetchNews().then(function () {
                 if (cb) {

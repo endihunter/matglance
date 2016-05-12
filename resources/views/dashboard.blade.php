@@ -11,19 +11,19 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6 ">
+            <div class="col-lg-6 col-md-6">
                 @include('dashboard.gmail')
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-md-6">
                 @include('dashboard.calendar')
             </div>
         </div>
 
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-md-6">
                 @include('dashboard.quote')
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-md-6">
 
             </div>
         </div>

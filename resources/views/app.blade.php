@@ -13,7 +13,7 @@
 
         <!-- LOGO -->
         <div class="topbar-left">
-            <a href="{{ url('/') }}" class="logo">
+            <a class="logo">
                 <span style="font-size: .7em;">{{ trans('general.short_name') }}</span>
                 <i class="zmdi zmdi-layers"></i>
             </a>
@@ -53,9 +53,7 @@
             <!-- Sidebar -->
 
             <div class="clearfix"></div>
-
         </div>
-
     </div>
     <!-- Left Sidebar End -->
 

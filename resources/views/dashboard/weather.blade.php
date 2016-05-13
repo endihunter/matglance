@@ -33,17 +33,17 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div style="height: @{{ size1 }}px;">
+            <div ng-style="{'height': size1 + 'px'}">
                 <div class="row p-l-r-10" ng-show="weather && weather.timezone">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                     {{--<div class="col-lg-12 col-md-12 col-sm-12">--}}
                         <ul class="list-unstyled">
                             <li>
-                                <h5 style="line-height:0;" class="text-primary">@{{ weather.currently.summary }}</h5>
+                                <h4 style="line-height:0;" class="text-primary">@{{ weather.currently.summary }}</h4>
                                 <div class="clearfix"></div>
                             </li>
                             <li>
-                                <h6 class="text-muted">@{{ locationToCity(weather.address) }}</h6>
+                                <h5 class="text-muted">@{{ locationToCity(weather.address) }}</h5>
                                 {{--<span class="label label-info">@{{ weather.currently.time }}</span>--}}
                             </li>
                             {{--<li>--}}

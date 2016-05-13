@@ -39,7 +39,7 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div style="height: @{{ size2 }}px; overflow-y: auto;">
+            <div style="overflow-y: auto;" ng-style="{'height': size2 + 'px'}">
                 <div ng-if="message">
                     <a ng-click="backToList()" class="btn btn-default">
                         <i class="zmdi zmdi-long-arrow-return"></i>

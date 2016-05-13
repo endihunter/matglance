@@ -17,14 +17,6 @@ File: Responsive
       z-index: 99;
     }
   }
-
-  .topbar div.navbar-default {
-    display:none !important;
-  }
-
-  .content-page div.content {
-    margin-top: 5px !important;
-  }
 }
 
 @media (max-width: 1023px) {
@@ -37,41 +29,12 @@ File: Responsive
   body {
     overflow-x: hidden;
   }
-
-  .topbar-left {
-    width: 70px !important;
-  }
-
-  .left.side-menu {
-    width: 70px;
-    .sidebar-inner {
-      visibility: hidden;
-    }
-  }
-
-  .forced,
-  .enlarged {
-    .left.side-menu .sidebar-inner {
-      visibility: visible;
-    }
-  }
 }
 
 @media (max-width: 767px) {
   body {
     overflow-x: hidden;
   }
-
-  .left.side-menu {
-    visibility: hidden;
-  }
-  .forced,
-  .enlarged {
-    .left.side-menu {
-      visibility: visible;
-    }
-  }
-
   .enlarged {
     .left.side-menu {
       margin-left: -75px;
@@ -90,9 +53,6 @@ File: Responsive
   }
   .content-page .content {
     margin-top: 95px;
-  }
-  .topbar {
-    z-index: 999 !important;
   }
   .topbar .topbar-left {
     height: 75px;
@@ -150,9 +110,6 @@ File: Responsive
   .side-menu {
     z-index: 10 !important;
   }
-  .topbar {
-    z-index: 999 !important;
-  }
 
   .button-menu-mobile {
     display: block;
@@ -164,9 +121,6 @@ File: Responsive
 }
 
 @media (max-width: 420px) {
-  .topbar {
-    z-index: 999 !important;
-  }
   .hide-phone {
     display: none !important;
   }

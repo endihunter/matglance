@@ -33,8 +33,17 @@
   margin-bottom: 10px !important;
 }
 
-.widget-user strong,
-.widget-user p,
-.widget-user small {
-  font-size: 0.85em !important;
+.content {
+  margin-top: 83px !important;
+}
+
+/* Hide topbar for desktops */
+@media (min-width: 769px) {
+  .topbar .navbar {
+    display:none !important;
+  }
+
+  .content {
+    margin-top: 0px !important;
+  }
 }

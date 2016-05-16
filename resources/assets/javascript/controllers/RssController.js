@@ -3,6 +3,10 @@ app.controller('RssController', [
     function ($scope, $timeout, localStorageService, FeedService, $q) {
         $scope.loading = false;
 
+        function key(path) {
+            return window['lang'] + '.' + path;
+        }
+
         function fullList() {
             return mapToInt(_.pluck($scope.allFeeds, 'id'));
         }
@@ -15,14 +19,14 @@ app.controller('RssController', [
 
         function restoreReadableFeeds() {
             var savedFeeds;
-            var hasSavedFeeds = localStorageService.keys().indexOf('feeds') > -1;
+            var hasSavedFeeds = localStorageService.keys().indexOf(key('feeds')) > -1;
 
             $feeds = [];
 
-            if (! hasSavedFeeds) {
+            if (!hasSavedFeeds) {
                 $feeds = fullList();
             } else {
-                savedFeeds = localStorageService.get('feeds');
+                savedFeeds = localStorageService.get(key('feeds'));
                 if (savedFeeds.length) {
                     $feeds = mapToInt(savedFeeds.split(','));
                 }
@@ -36,7 +40,7 @@ app.controller('RssController', [
         function fetchNews() {
             var defer = $q.defer();
 
-            if ($scope.loading || ! $feeds.length) {
+            if ($scope.loading || !$feeds.length) {
                 defer.resolve([]);
             } else {
                 $scope.loading = true;
@@ -52,7 +56,7 @@ app.controller('RssController', [
 
         $scope.allChecked = false;
 
-            // all feeds
+        // all feeds
         $scope.allFeeds = [];
 
         // readable feeds
@@ -62,7 +66,7 @@ app.controller('RssController', [
 
         $scope.articles = [];
 
-        function allChecked () {
+        function allChecked() {
             $scope.allChecked = ($feeds.length == $scope.allFeeds.length);
         }
 
@@ -91,7 +95,7 @@ app.controller('RssController', [
         $scope.savePreferences = function (cb) {
             $scope.savedFeeds = mapToInt($feeds);
 
-            localStorageService.set('feeds', $scope.savedFeeds.join(','));
+            localStorageService.set(key('feeds'), $scope.savedFeeds.join(','));
 
             return fetchNews().then(function () {
                 if (cb) {

@@ -37,13 +37,23 @@
   margin-top: 83px !important;
 }
 
+.forced .side-menu.left,
+.enlarged .side-menu.left {
+  position: fixed !important;
+}
+
 /* Hide topbar for desktops */
-@media (min-width: 769px) {
-  .topbar .navbar {
-    display:none !important;
+@media (min-width: 1006px) {
+  .topbar {
+    z-index: 0 !important;
+
+    .navbar {
+      display: none !important;
+    }
   }
 
   .content {
     margin-top: 0px !important;
+    z-index: 1000 !important;
   }
 }

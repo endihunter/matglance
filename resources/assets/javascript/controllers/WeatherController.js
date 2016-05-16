@@ -59,7 +59,7 @@ app.controller('WeatherController', [
         }
 
         function cacheFilter() {
-            localStorageService.set('w_fltr', JSON.stringify($scope.filter));
+            localStorageService.set('w_fltr', JSON.stringify(_.omit($scope.filter, 'address')));
 
             defaultFilter = angular.copy($scope.filter);
         }
@@ -89,20 +89,24 @@ app.controller('WeatherController', [
                     lng: GeoService.getLongitude()
                 };
 
-                GeoService.lookup(GeoService.getLatitude(), GeoService.getLongitude()).then(function (result) {
-                    delayFilterTracking();
-                    $scope.filter.address = result.formatted_address;
-
-                    cacheFilter();
-
-                    $scope.$emit('location.changed');
-                });
+                lookup();
             });
         } else {
             $scope.filter = angular.copy(savedFilter);
             defaultFilter = angular.copy($scope.filter);
 
-            $scope.$emit('location.changed');
+            lookup(savedFilter.location.lat, savedFilter.location.lng);
+        }
+
+        function lookup(lat, lng) {
+            GeoService.lookup(lat || GeoService.getLatitude(), lng || GeoService.getLongitude()).then(function (result) {
+                delayFilterTracking();
+                $scope.filter.address = result.formatted_address;
+
+                cacheFilter();
+
+                $scope.$emit('location.changed');
+            });
         }
 
         $scope.cancel = function (callback) {
@@ -131,7 +135,7 @@ app.controller('WeatherController', [
                         delayFilterTracking();
 
                         $scope.filter = angular.extend($scope.filter, {
-                            address: result.formatted_address,
+                            // address: result.formatted_address,
                             location: result.geometry.location
                         });
 

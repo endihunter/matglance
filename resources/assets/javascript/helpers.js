@@ -18,3 +18,15 @@ angular.isOnline = function isOnline()
 
     return isOnline;
 };
+
+angular.storagePrefix = function (path) {
+    var namespace = [
+        'ymag', window['gid']
+    ];
+
+    if (path && path.length) {
+        namespace.push(path);
+    }
+
+    return namespace.join('.');
+};

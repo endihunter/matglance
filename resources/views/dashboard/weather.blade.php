@@ -37,7 +37,7 @@
                 <div class="row p-l-r-10" ng-show="weather && weather.timezone">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                     {{--<div class="col-lg-12 col-md-12 col-sm-12">--}}
-                        <ul class="list-unstyled">
+                        <ul class="list-unstyled weather-info-panel">
                             <li>
                                 <h4 style="line-height:0;" class="text-primary">@{{ weather.currently.summary }}</h4>
                                 <div class="clearfix"></div>

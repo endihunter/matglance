@@ -61,3 +61,15 @@
 body {
   padding-bottom: 0;
 }
+
+h4.left-padded-headings,
+.m-b-15,
+.p-l-r-10{
+  padding-left: 15px;
+}
+td.calendar-date {
+  padding-left: 15px !important;
+}
+ul.weather-info-panel {
+  padding-left: 10px;
+}

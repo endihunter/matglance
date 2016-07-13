@@ -26,12 +26,12 @@
             <div style="overflow-y: auto;" ng-style="{'height': size2 + 'px'}">
                 <table class="table">
                     <tr ng-if="! hasEvents">
-                        <td colspan="2">
+                        <td colspan="2" class="calendar-date">
                             {{ trans('calendar.no_events') }}
                         </td>
                     </tr>
                     <tr ng-repeat="(time, object) in events">
-                        <td class="text-primary">
+                        <td class="text-primary calendar-date">
                             @{{ object.date }}
                         </td>
                         <td>

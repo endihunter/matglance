@@ -9,6 +9,7 @@ composer.lock
 Homestead.yaml
 Vagrantfile
 resources/client_secret.json
+resources/access_token.json
 .DS_Store
 resources/assets/less/light.bak
 resources/assets/less/shadow.bak

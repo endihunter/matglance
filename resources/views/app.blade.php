@@ -74,7 +74,7 @@
 
         </div> <!-- content -->
 
-        @include('partials._footer')
+        <!-- @include('partials._footer') --> <!-- This is removed to keep page in all browser height without scroll! IMPORTANT check response -->
 
     </div>
     <!-- End content-page -->

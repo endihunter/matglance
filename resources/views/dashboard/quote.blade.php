@@ -9,8 +9,9 @@
                     <div class="well2 p-l-r-10">
                         @{{ quote.quote }}
                         &nbsp;&nbsp;
-                        <span class="label label-success">@{{ quote.author }}</span>
-                        <button class="btn btn-link" ng-click="fetchRandom()">
+                        <br>
+                        <span class="quote-author">- @{{ quote.author }}</span>
+                        <button class="btn btn-link pull-right" ng-click="fetchRandom()">
                             {{ trans('buttons.more') }}
                             <i class="zmdi zmdi-long-arrow-right"></i>
                         </button>

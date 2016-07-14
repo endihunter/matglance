@@ -24,14 +24,6 @@ app.controller('SizerController', ['$scope', '$window', function ($scope, $windo
         }
 
         $scope.resized = true;
-
-        // console.log({
-        //     s1: $scope.size1,
-        //     s2: $scope.size2,
-        //     s3: $scope.size3,
-        //     h: height,
-        //     v: viewport
-        // });
     };
     setTimeout(resize, 100);
 

@@ -14,7 +14,6 @@ angular.isMobile = (function(a)
 angular.isOnline = function isOnline()
 {
     var isOnline = (window.navigator && window.navigator.onLine);
-    console.log("Online", isOnline);
 
     return isOnline;
 };

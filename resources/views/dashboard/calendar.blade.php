@@ -9,7 +9,7 @@
                     <ul class="list-unstyled">
                         <li ng-repeat="cal in calendars">
                             <label>
-                                <input type="radio" name="calendar" ng-click="select(cal)" ng-checked="selected(cal)">&nbsp;
+                                <input type="checkbox" name="calendar" ng-checked="cal.selected" ng-click="select(cal)">&nbsp;
                                 @{{ cal.summary }}
                             </label>
                         </li>
@@ -25,7 +25,7 @@
         <card-box-body>
             <div style="overflow-y: auto;" ng-style="{'height': size2 + 'px'}">
                 <table class="table">
-                    <tr ng-if="! hasEvents">
+                    <tr ng-if="hasEvents == false">
                         <td colspan="2" class="calendar-date">
                             {{ trans('calendar.no_events') }}
                         </td>

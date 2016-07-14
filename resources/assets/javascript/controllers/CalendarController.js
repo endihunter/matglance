@@ -136,7 +136,6 @@ app.controller('CalendarController', [
                     EventsService.events($scope.calendars[i].id)
                         .then(function (res) {
                             $scope.calendarEvents.push(res);
-                            console.log(res);
                         });
                 }
             }

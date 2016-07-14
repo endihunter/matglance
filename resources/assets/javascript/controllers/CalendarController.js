@@ -67,7 +67,7 @@ app.controller('CalendarController', [
                 a = new Date(a.date);
                 b = new Date(b.date);
                 return a < b ? -1 : a > b ? 1 : 0;
-            })
+            });
         });
 
         function setDefaultCalendar() {
@@ -136,6 +136,7 @@ app.controller('CalendarController', [
                     EventsService.events($scope.calendars[i].id)
                         .then(function (res) {
                             $scope.calendarEvents.push(res);
+                            console.log(res);
                         });
                 }
             }

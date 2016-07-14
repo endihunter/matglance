@@ -33,6 +33,23 @@ class CalendarController extends Controller
 
         $events = $this->datify($events);
 
+        $deleteEvent = false;
+
+        foreach ($events as $key => $value) {
+
+            foreach ($value['events'] as $ev) {
+                foreach ($ev['attendees'] as $at) {
+                    if(($at['email'] == $me->email) && ($at['responseStatus'] == 'declined')) {
+                        $deleteEvent = true;
+                    }
+                }
+            }
+            if($deleteEvent == true) {
+                unset($events[$key]);
+            }
+            $deleteEvent = false;
+        }
+
         return response()->json([
             'data' => $events,
         ]);

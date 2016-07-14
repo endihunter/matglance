@@ -78,7 +78,6 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                         for (var i in messages.messages) {
                             $scope.messages.push(messages.messages[i]);
                         }
-
                         $scope.nextPageToken = messages.nextPage;
 
                         $scope.loading = false;

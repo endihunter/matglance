@@ -23,8 +23,8 @@
             <div class="col-lg-6 col-md-6">
                 @include('dashboard.quote')
             </div>
-            <div class="col-lg-6 col-md-6">
-
+            <div class="col-lg-6 col-md-6" id="new-event-container">
+                @include('dashboard.custom-event')
             </div>
         </div>
     </div>

@@ -68,7 +68,9 @@ elixir(function (mix) {
         //'jquery.nicescroll.js',
         // 'jquery.scrollTo.min.js',
         'jquery.core.js',
-        'jquery.app.js'
+        'jquery.app.js',
+        'bootstrap-datepicker.js'
+
     ], 'public/js/libs.js', 'public/assets/js');
     /* ========= SCRIPTS END =========== */
     
@@ -76,7 +78,12 @@ elixir(function (mix) {
     /* ========= STYLES END =========== */
     mix.styles([
         'bootstrap.min.css',
-        'icons.css'
+        'icons.css',
+        'bootstrap-datepicker.css',
+        'bootstrap-datepicker.standalone.css',
+        'bootstrap-datepicker3.css',
+        'bootstrap-datepicker3.standalone.css'
+
     ], 'public/css/vendor.css', 'public/assets/css');
     /* ========= STYLES END =========== */
 

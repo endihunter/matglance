@@ -77,3 +77,21 @@ ul.weather-info-panel {
   font-style: italic;
   font-weight: bold;
 }
+
+#new-event-container .pull-right>.dropdown-menu {
+  right: 25px;
+  margin-top: -200px;
+
+  .box-actions {
+    width: 350px !important;
+  }
+}
+
+.events-hh-mm-ss-inputs input {
+  max-width: 27%;
+  margin-right: 10px;
+}
+.events-full-width-inputs {
+  width: 100%;
+  margin-bottom: 15px;
+}

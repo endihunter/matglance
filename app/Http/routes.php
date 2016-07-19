@@ -194,4 +194,16 @@ Route::group([
             'uses' => 'Api\GeoController@places',
         ]);
     });
+
+    Route::group(['prefix' => 'custom-event'], function() {
+        Route::get('/', [
+            'as' => 'custom.event',
+            'uses' => 'Api\CustomEventController@getCustomEvent',
+        ]);
+
+        Route::post('/', [
+            'as' => 'custom.event',
+            'uses' => 'Api\CustomEventController@postCustomEvent',
+        ]);
+    });
 });

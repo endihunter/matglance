@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngSanitize', 'LocalStorageModule']);
+var app = angular.module('app', ['ngSanitize', 'LocalStorageModule', 'countdownTimer']);
 
 app.config(['localStorageServiceProvider', '$httpProvider', function (localStorageServiceProvider, $httpProvider) {
     var namespace = angular.storagePrefix();

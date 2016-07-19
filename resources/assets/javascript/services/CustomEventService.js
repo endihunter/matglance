@@ -16,5 +16,12 @@ app.factory('CustomEventService', ['$http', '$httpParamSerializer', function ($h
             })
     };
 
+    factory.updateEvent = function (data) {
+        return $http.post(app.API_PREFIX + '/custom-event/' + data.id, data)
+            .then(function (response) {
+                return response.data.data;
+            });
+    };
+
     return factory;
 }]);

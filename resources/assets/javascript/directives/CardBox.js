@@ -33,6 +33,7 @@ app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootSco
             function close() {
 
                 $rootScope.eventError = {};
+                $rootScope.rssValidLink = true;
                 var datePickerOpen = document.getElementsByClassName("datepicker");
                 if(datePickerOpen.length > 0) {
                     return;

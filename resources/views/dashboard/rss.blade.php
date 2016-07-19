@@ -27,6 +27,24 @@
                     <button class="btn btn-default" type="button" ng-click="cancel($parent.switchEditableMode)">{{ trans('buttons.cancel') }}</button>
                 </div>
             </form>
+            <form ng-submit="addCustomRSSFeed(customFeedUrl, rssName)">
+                <div class="form-group" ng-class="(rssValidLink == false) ? 'has-error has-feedback' : ''">
+                    <input type="text" ng-model="customFeedUrl" placeholder="RSS Link" class="form-control">
+                    <div ng-if="rssValidLink == false">
+                        <small class="text-danger">{{ trans('rss.invalid_link') }}</small>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="(rssValidName == false) ? 'has-error has-feedback' : ''">
+                    <input type="text" ng-model="rssName" placeholder="RSS name" class="form-control">
+                    <div ng-if="rssValidName == false">
+                        <small class="text-danger">{{ trans('rss.invalid_name') }}</small>
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" class="btn btn-custom">{{ trans('rss.add') }}</button>
+                </div>
+            </form>
         </card-box-actions>
         <card-box-body>
             <div style="overflow-y: auto;" ng-style="{'height': size1 + 'px'}">

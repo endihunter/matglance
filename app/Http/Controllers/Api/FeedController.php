@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Repositories\FeedsRepository;
 use Auth;
 use Illuminate\Http\Request;
-
+use Zend\Feed\Reader\Reader;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Restable;
+use App\NewsFeed;
 
 class FeedController extends Controller
 {
@@ -44,11 +45,28 @@ class FeedController extends Controller
     {
         $feedList = ($ids = $request->get('ids', [])) ? explode(",", $ids) : [];
         if (empty($feedList)) {
-            $feedList = $this->news->feeds($me->lang())->pluck('id')->toArray();
+            $feedList = $this->news->feeds($me->lang(), $me)->pluck('id')->toArray();
 
             return $feedList;
         }
 
         return $feedList;
+    }
+
+    public function postFeed(Request $request) {
+        $reader = Reader::importString(
+            file_get_contents($request->get('url'))
+        );
+
+        $me = Auth::guard('api')->user();
+        $feed = NewsFeed::create([
+            'user_id' => $me->id,
+            'name' => $request->get('name'),
+            'url' => $request->get('url'),
+        ]);
+
+        return response()->json([
+            'data' => $feed,
+        ]);
     }
 }

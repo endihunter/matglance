@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Auth;
 use Carbon\Carbon;
 use App\CustomEvent;
+use PhpParser\Error;
 use Validator;
 
 class CustomEventController extends Controller
@@ -26,7 +27,7 @@ class CustomEventController extends Controller
             ]);
         }
         return response()->json([
-            'data' => 'No Event created yet',
+            'data' => 'No event created yet',
         ]);
     }
 
@@ -50,7 +51,7 @@ class CustomEventController extends Controller
             ]);
         }
 
-        $eventDate = Carbon::createFromFormat('d/m/Y', $date);
+        $eventDate = Carbon::createFromFormat('d.m.Y', $date);
 
         $eventDate->hour = $this->setEventTime($request->get('hours'));
         $eventDate->minute = $this->setEventTime($request->get('minutes'));
@@ -72,6 +73,49 @@ class CustomEventController extends Controller
 
         ]);
 
+
+        return response()->json([
+            'data' => $event,
+        ]);
+    }
+    
+    public function updateCustomEvent($id, Request $request) {
+
+        $event = CustomEvent::find($id);
+
+        if(!$event) {
+            return response()->json([
+                'data' => ['error' => 'no such a event']
+            ]);
+        }
+
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'date' => 'required',
+        ]);
+
+        if($validator->fails()) {
+            return response()->json([
+                'data' => [
+                    'error' => $validator->errors()->all(),
+                ]
+            ]);
+        }
+
+
+        $event->title = $request->get('title');
+        $event->time_option = $request->get('time_option');
+
+        $date = $request->get('date');
+        $eventDate = Carbon::createFromFormat('d.m.Y', $date);
+
+        $eventDate->hour = $this->setEventTime($request->get('hours'));
+        $eventDate->minute = $this->setEventTime($request->get('minutes'));
+        $eventDate->second = $this->setEventTime($request->get('seconds'));
+
+        $event->time = $eventDate;
+        $event->save();
 
         return response()->json([
             'data' => $event,

@@ -160,7 +160,11 @@ Route::group([
         'as' => 'api.feed.news',
         'uses' => 'Api\FeedController@news',
     ]);
-
+    Route::post('feed', [
+        'as' => 'api.feed',
+        'uses' => 'Api\FeedController@postFeed',
+    ]);
+    
     Route::group(['prefix' => 'calendar'], function () {
         Route::get('list', [
             'as' => 'api.calendar.list',
@@ -204,6 +208,10 @@ Route::group([
         Route::post('/', [
             'as' => 'custom.event',
             'uses' => 'Api\CustomEventController@postCustomEvent',
+        ]);
+        Route::post('/{id}', [
+            'as' => 'custom.event',
+            'uses' => 'Api\CustomEventController@updateCustomEvent',
         ]);
     });
 });

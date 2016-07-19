@@ -36,7 +36,7 @@ class DashboardController extends Controller
 
         return view('dashboard', [
             'quote' => $this->quotes->random($me->lang()),
-            'feeds' => $this->feeds->feeds($me->lang()),
+            'feeds' => $this->feeds->feeds($me->lang(), $me),
             'calendars' => $this->calendar->calendars($me->email),
         ]);
     }

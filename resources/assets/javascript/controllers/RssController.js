@@ -1,7 +1,8 @@
 app.controller('RssController', [
-    '$scope', '$timeout', 'localStorageService', 'FeedService', '$q',
-    function ($scope, $timeout, localStorageService, FeedService, $q) {
+    '$scope', '$timeout', '$rootScope', 'localStorageService', 'FeedService', '$q',
+    function ($scope, $timeout, $rootScope, localStorageService, FeedService, $q) {
         $scope.loading = false;
+
 
         function key(path) {
             return window['lang'] + '.' + path;
@@ -66,6 +67,7 @@ app.controller('RssController', [
 
         $scope.articles = [];
 
+
         function allChecked() {
             $scope.allChecked = ($feeds.length == $scope.allFeeds.length);
         }
@@ -86,7 +88,6 @@ app.controller('RssController', [
 
         $scope.init = function (allFeeds) {
             $scope.allFeeds = allFeeds;
-
             restoreReadableFeeds();
 
             fetchNews();
@@ -126,5 +127,35 @@ app.controller('RssController', [
             feed_id = parseInt(feed_id);
 
             return _.indexOf($feeds, feed_id) != -1;
-        }
+        };
+
+        $scope.customFeedUrl = '';
+        $rootScope.rssValidLink = true;
+
+        $scope.addCustomRSSFeed = function (url, name) {
+            $rootScope.rssValidLink = true;
+            $rootScope.rssValidName = true;
+            var data = {
+                url: url,
+                name: name
+            };
+            if(!url || url == 'undefined') {
+                $rootScope.rssValidLink = false;
+            }
+            if(!name || name == 'undefined') {
+                $rootScope.rssValidName = false;
+            }
+            if($rootScope.rssValidLink == false || $rootScope.rssValidName == false) {
+                return;
+            }
+            FeedService.createCustomFeed(data)
+                .then(function (res) {
+                    $scope.customFeedUrl = '';
+                    $scope.rssName = '';
+                    $scope.allFeeds.push({id: res.id, name: res.name});
+                }, function (err) {
+                    $rootScope.rssValidLink = false;
+                })
+        };
+
     }]);

@@ -1500,7 +1500,7 @@
 		datesDisabled: [],
 		endDate: Infinity,
 		forceParse: true,
-		format: 'dd/mm/yyyy',
+		format: 'dd.mm.yyyy',
 		keyboardNavigation: true,
 		language: 'en',
 		minViewMode: 0,

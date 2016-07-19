@@ -6,14 +6,15 @@ use App\NewsFeed;
 use App\Services\FeedReader;
 use Cache;
 use Carbon\Carbon;
+use Guzzle\Http\Message\Request;
 use Illuminate\Support\Collection;
 use Zend\Feed\Reader\Reader;
 
 class FeedsRepository
 {
-    public function feeds($lang)
+    public function feeds($lang, $me)
     {
-        return NewsFeed::ofLang($lang)->orderBy('name')->get(['id', 'name']);
+        return NewsFeed::where('language', $lang)->orWhere('user_id', $me->id)->orderBy('name')->get(['id', 'name']);
     }
 
     public function news(array $feeds = [], $take = 300)

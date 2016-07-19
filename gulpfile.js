@@ -69,7 +69,8 @@ elixir(function (mix) {
         // 'jquery.scrollTo.min.js',
         'jquery.core.js',
         'jquery.app.js',
-        'bootstrap-datepicker.js'
+        'bootstrap-datepicker.js',
+        'x2js.js'
 
     ], 'public/js/libs.js', 'public/assets/js');
     /* ========= SCRIPTS END =========== */

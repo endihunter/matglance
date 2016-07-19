@@ -11,5 +11,12 @@ app.factory('FeedService', ['$http', '$httpParamSerializer', function ($http, $h
             });
     };
 
+    factory.createCustomFeed = function (data) {
+        return $http.post(app.API_PREFIX + '/feed', data)
+            .then(function (res) {
+               return res.data.data;
+            })
+    };
+
     return factory;
 }]);

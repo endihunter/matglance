@@ -4,25 +4,25 @@
             <div class="form-group">
                 <h5>{{ trans('customEvent.settings') }}</h5>
             </div>
-            <form ng-submit="createEvent($parent.switchEditableMode, eventTitle, hours, minutes, seconds)">
+            <form ng-submit="createEvent($parent.switchEditableMode, event.title, hours, minutes, seconds)">
                 <div class="input-group events-full-width-inputs" ng-class="eventError.eventTitle ? 'has-error has-feedback' : ''">
-                    <input type="text" class="form-control" placeholder=" {{ trans('customEvent.name') }} " ng-model="eventTitle" ng-change="eventError.eventTitle = ''">
+                    <input type="text" class="form-control" placeholder=" {{ trans('customEvent.name') }} " ng-model="event.title" ng-change="eventError.eventTitle = ''">
                     <div ng-if="eventError.eventTitle"><span>
                             <small class="text-danger">@{{ error.eventTitle }}</small>
                         </span>
                     </div>
                 </div>
                 <div class="input-group events-full-width-inputs" ng-class="eventError.eventDate ? 'has-error has-feedback' : ''">
-                    <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="datepicker-autoclose" data-provide="datepicker" ng-model="date">
+                    <input type="text" class="form-control" placeholder="dd.mm.yyyy" id="datepicker-autoclose" data-provide="datepicker" value="@{{ event.time | date:'dd.MM.yyyy' }}">
                     <div ng-if="eventError.eventDate"><span>
                             <small class="text-danger">@{{ error.eventDate }}</small>
                         </span>
                     </div>
                 </div>
                 <div class="input-group events-hh-mm-ss-inputs" ng-if="options.selectedTime != 3">
-                    <input type="number" class="form-control" placeholder="hh" id="custom-event-hours" min="0" max="24">
-                    <input type="number" class="form-control" placeholder="mm" id="custom-event-minutes" min="0" max="60">
-                    <input type="number" class="form-control" placeholder="ss" id="custom-event-seconds" min="0" max="60">
+                    <input type="number" class="form-control" placeholder="hh" id="custom-event-hours" min="0" max="24" value="@{{ event.time |date:'HH' }}">
+                    <input type="number" class="form-control" placeholder="mm" id="custom-event-minutes" min="0" max="60" value="@{{ event.time |date:'mm' }}">
+                    <input type="number" class="form-control" placeholder="ss" id="custom-event-seconds" min="0" max="60" value="@{{ event.time |date:'ss' }}">
                 </div>
 
                 <div class="radio">
@@ -44,21 +44,27 @@
                     </label>
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-primary" type="submit">Save</button>
+                    <button class="btn btn-primary" type="submit" ng-if="event != null">Save</button>
+                    <button class="btn btn-primary" type="submit" ng-if="event == null">{{ trans('customEvent.add') }}</button>
                     <button class="btn btn-default" type="button" ng-click="cancel($parent.switchEditableMode)">Cancel</button>
                 </div>
             </form>
         </card-box-actions>
         <card-box-body>
             <div style="overflow-y: auto;" ng-style="{'height': size3 + 'px'}">
-                <h4 class="text-dark text-center"><strong>@{{ event.title }}</strong></h4>
-                <p class="text-center">@{{ event.time | date:'dd.MM.yyyy' }}, @{{ event.time | date:'HH:mm' }}</p>
-                <p ng-if="loading == false" class="text-center">
-                    <strong>In </strong>
-                    <strong countdown end-date="@{{ stringTime }}" units="weeks|days|hours|minutes|seconds" ng-if="options.selectedTime == 1"></strong>
-                    <strong countdown end-date="@{{ stringTime }}" units="days|hours|minutes|seconds" ng-if="options.selectedTime == 2"></strong>
-                    <strong countdown end-date="@{{ stringTime }}" units="days" ng-if="options.selectedTime == 3"></strong>
-                </p>
+                <div ng-if="event != null">
+                    <h4 class="text-dark text-center"><strong>@{{ event.title }}</strong></h4>
+                    <p class="text-center">@{{ event.time | date:'dd.MM.yyyy' }}<span ng-if="options.selectedTime != 3">, @{{ event.time | date:'HH:mm' }}</span></p>
+                    <p ng-if="loading == false" class="text-center">
+                        <strong>In </strong>
+                        <strong countdown end-date="@{{ stringTime }}" units="weeks|days|hours|minutes|seconds" ng-if="options.selectedTime == 1"></strong>
+                        <strong countdown end-date="@{{ stringTime }}" units="days|hours|minutes|seconds" ng-if="options.selectedTime == 2"></strong>
+                        <strong countdown end-date="@{{ stringTime }}" units="days" ng-if="options.selectedTime == 3"></strong>
+                    </p>
+                </div>
+                <div ng-if="event == null">
+                    <h4 class="text-center text-dark">{{ trans('customEvent.not_event') }}</h4>
+                </div>
             </div>
         </card-box-body>
     </card-box>

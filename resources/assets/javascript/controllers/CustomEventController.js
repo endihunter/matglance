@@ -14,19 +14,21 @@ app.controller('CustomEventController', ['$scope', '$rootScope', 'localStorageSe
         return $scope.options.selectedTime = parseInt(val);
     };
 
-    $scope.createEvent = function (callback, eventTitle) {
+    $scope.createEvent = function (callback, title) {
 
         $rootScope.eventError = {};
 
         var date = document.getElementById("datepicker-autoclose").value;
-        var hours = document.getElementById("custom-event-hours").value;
-        var minutes = document.getElementById("custom-event-minutes").value;
-        var seconds = document.getElementById("custom-event-seconds").value;
+        if($scope.options.selectedTime != 3) {
+            var hours = document.getElementById("custom-event-hours").value;
+            var minutes = document.getElementById("custom-event-minutes").value;
+            var seconds = document.getElementById("custom-event-seconds").value;
+        }
 
         if(date == '' || date == 'undefined') {
             $rootScope.eventError.eventDate = 'Please set a event date!';
         }
-        if(eventTitle == '' || eventTitle == 'undefined') {
+        if(title == '' || title == 'undefined') {
             $rootScope.eventError.eventTitle = 'Please set a event title!';
         }
 
@@ -39,38 +41,56 @@ app.controller('CustomEventController', ['$scope', '$rootScope', 'localStorageSe
             minutes: minutes || null,
             hours: hours || null,
             seconds: seconds || null,
-            title: eventTitle,
+            title: title,
             time_option: $scope.options.selectedTime
         };
 
-        CustomEventService.createEvent(data)
-            .then(function (res) {
-                console.log(res);
-            }, function (err) {
-                console.log(err);
-            });
+        if($scope.event != null) {
 
-        if(callback) {
-            callback();
+            data.id = $scope.event.id;
+            CustomEventService.updateEvent(data)
+                .then(function (res) {
+                    fetchEvent();
+                    if(callback) {
+                        callback();
+                    }
+                });
+        } else {
+            CustomEventService.createEvent(data)
+                .then(function (res) {
+                    fetchEvent();
+                    if(callback) {
+                        callback();
+                    }
+                });
         }
+
+
 
     };
     
-    $scope.cancel = function (callback) {
+    $scope.cancel = function (callback) {;
         if(callback) {
             callback();
         }
     };
-
     function fetchEvent() {
         CustomEventService.getEvent()
             .then(function (res) {
-                $scope.event = res;
-                $scope.event.time = new Date($scope.event.time);
-                $scope.options.selectedTime = parseInt(res.time_option);
-                $scope.stringTime = $scope.event.time.toString();
-                $scope.loading = false;
+                handleEvent(res);
             })
+    }
+
+    function handleEvent(res) {
+        if(res == 'No event created yet') {
+            $scope.event = null;
+            return;
+        }
+        $scope.event = res;
+        $scope.event.time = new Date($scope.event.time);
+        $scope.options.selectedTime = parseInt(res.time_option);
+        $scope.stringTime = $scope.event.time.toString();
+        $scope.loading = false;
     }
 
     fetchEvent();

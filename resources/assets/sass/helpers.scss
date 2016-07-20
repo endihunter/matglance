@@ -99,3 +99,32 @@ ul.weather-info-panel {
 .hourly-temp-boxes {
   margin-bottom: 10px;
 }
+//.toggle-menu i  {
+//  font-size: 2.5em;
+//}
+#sidebar-menu,
+.user-box {
+  margin-left: -400px;
+}
+.topbar .topbar-left {
+  text-align: left;
+  padding-left: 10px;
+}
+i.ti-menu {
+  display: inherit;
+  position: absolute;
+  top: 20px;
+  right: 5px;
+}
+i.ti-menu:hover {
+  cursor: pointer;
+}
+@media (max-width: 1005px) {
+  i.ti-menu {
+    display: none !important;
+  }
+  #sidebar-menu,
+  .user-box {
+    margin-left: 0px;
+  }
+}

@@ -14,8 +14,9 @@
         <!-- LOGO -->
         <div class="topbar-left">
             <a class="logo">
-                <span style="font-size: .7em;">{{ trans('general.short_name') }}</span>
+                <span style="font-size: 0.8em;">{{ trans('general.short_name') }}</span>
                 <i class="zmdi zmdi-layers"></i>
+                <i class="ti-menu"></i>
             </a>
         </div>
 
@@ -81,7 +82,24 @@
 
 </div>
 <!-- END wrapper -->
-
 @include('partials._javascript')
+
+<script>
+    $(document).ready(function () {
+        var menuHidden = true;
+        $('.ti-menu').on('click', function () {
+            if(menuHidden == true) {
+                $('.user-box').animate({'margin-left': '0px'});
+                $('#sidebar-menu').animate({'margin-left': '0px'});
+                menuHidden = !menuHidden;
+            } else {
+                $('.user-box').animate({'margin-left': '-400px'});
+                $('#sidebar-menu').animate({'margin-left': '-400px'});
+                menuHidden = !menuHidden;
+            }
+      })
+    })
+</script>
+
 </body>
 </html>

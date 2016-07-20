@@ -12,7 +12,7 @@ class GmailMessageTransformer extends TransformerAbstract
     ];
 
     public function transform(GmailMessage $message)
-    {
+    {   
         return [
             'id' => $message->getId(),
             'snippet' => $message->getSnippet(),

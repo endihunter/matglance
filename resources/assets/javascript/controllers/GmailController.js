@@ -77,7 +77,9 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                     // restore listing view
                     angular.safeApply($scope, function ($scope) {
                         for (var i in messages.messages) {
-                            $scope.messages.push(messages.messages[i]);
+                            if(isFromInbox(messages.messages[i])) {
+                                $scope.messages.push(messages.messages[i]);
+                            }
                         }
                         $scope.nextPageToken = messages.nextPage;
 
@@ -147,5 +149,15 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                 .catch(function () {
                     $scope.loading = false;
                 });
+        };
+
+        function isFromInbox (msg) {
+            for (var i in msg.labels) {
+                if(msg.labels[i] == 'INBOX') {
+                    return true;
+                }
+            }
+            return false;
         }
+
     }]);

@@ -83,7 +83,6 @@ app.controller('WeatherController', [
                 var currnetHour = new Date().getHours();
                 var currentDate = new Date().getDate();
                 var counter = 1;
-                console.log($scope.weather);
                 for (var i in $scope.weather.hourly.data) {
 
                     var time = new Date($scope.weather.hourly.data[i].time);

@@ -200,7 +200,7 @@ app.controller('WeatherController', [
         };
 
         $scope.icon = function (icon) {
-            return app.REWRITE_BASE + 'icons/w/' + icon + '.png';
+            return app.REWRITE_BASE + 'images/icons/w/' + icon + '.png';
         }
 
         $scope.showThisHour = function (currentHourData) {

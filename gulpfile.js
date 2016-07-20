@@ -70,7 +70,9 @@ elixir(function (mix) {
         'jquery.core.js',
         'jquery.app.js',
         'bootstrap-datepicker.js',
-        'x2js.js'
+        'x2js.js',
+        'left-sidebar-animate.js'
+
 
     ], 'public/js/libs.js', 'public/assets/js');
     /* ========= SCRIPTS END =========== */

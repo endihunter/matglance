@@ -150,8 +150,8 @@ app.controller('RssController', [
             }
             FeedService.createCustomFeed(data)
                 .then(function (res) {
-                    $scope.customFeedUrl = '';
-                    $scope.rssName = '';
+                    document.getElementById('rss_url').value = '';
+                    document.getElementById('rss_name').value = '';
                     $scope.allFeeds.push({id: res.id, name: res.name});
                 }, function (err) {
                     $rootScope.rssValidLink = false;

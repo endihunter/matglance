@@ -18,7 +18,7 @@ class Forecast
         $url = "https://api.forecast.io/forecast/{$this->apiKey}/{$coords}/?" .
             http_build_query([
                 'units' => $units,
-                'exclude' => join(",", ['minutely', 'hourly', 'daily', 'flags', 'alerts']),
+                'exclude' => join(",", ['minutely', 'daily', 'flags', 'alerts']),
                 'lang' => config('app.locale'),
             ]);
 

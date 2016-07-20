@@ -29,13 +29,13 @@
             </form>
             <form ng-submit="addCustomRSSFeed(customFeedUrl, rssName)">
                 <div class="form-group" ng-class="(rssValidLink == false) ? 'has-error has-feedback' : ''">
-                    <input type="text" ng-model="customFeedUrl" placeholder="RSS Link" class="form-control">
+                    <input type="text" ng-model="customFeedUrl" placeholder="RSS Link" class="form-control" id="rss_url">
                     <div ng-if="rssValidLink == false">
                         <small class="text-danger">{{ trans('rss.invalid_link') }}</small>
                     </div>
                 </div>
                 <div class="form-group" ng-class="(rssValidName == false) ? 'has-error has-feedback' : ''">
-                    <input type="text" ng-model="rssName" placeholder="RSS name" class="form-control">
+                    <input type="text" ng-model="rssName" placeholder="RSS name" class="form-control" id="rss_name">
                     <div ng-if="rssValidName == false">
                         <small class="text-danger">{{ trans('rss.invalid_name') }}</small>
                     </div>

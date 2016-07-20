@@ -79,6 +79,24 @@ app.controller('WeatherController', [
         $scope.$on('location.changed', function () {
             WeatherService.fetch(currentLocation(), {units: $scope.filter.units}).then(function (results) {
                 $scope.weather = angular.extend(results, $scope.filter);
+
+                var currnetHour = new Date().getHours();
+                var currentDate = new Date().getDate();
+                var counter = 1;
+                console.log($scope.weather);
+                for (var i in $scope.weather.hourly.data) {
+
+                    var time = new Date($scope.weather.hourly.data[i].time);
+                    var hour = time.getHours();
+                    var date = time.getDate();
+                    if(currentDate == date && currnetHour == hour) {
+                        $scope.currentHourSummary = $scope.weather.hourly.data[i].summary;
+                        $scope.currentHourIcon = $scope.icon($scope.weather.hourly.data[i].icon);
+                        $scope.currnetHourTemperature = $scope.weather.hourly.data[i].temperature;
+                        $scope.startIndex = counter + 24;
+                    }
+                    counter++;
+                }
             });
         });
 
@@ -181,7 +199,26 @@ app.controller('WeatherController', [
             $scope.cities = null;
         };
 
-        $scope.icon = function () {
-            return app.REWRITE_BASE + 'icons/w/' + $scope.weather.currently.icon + '.png';
+        $scope.icon = function (icon) {
+            return app.REWRITE_BASE + 'icons/w/' + icon + '.png';
+        }
+
+        $scope.showThisHour = function (currentHourData) {
+            var currnetHour = new Date().getHours();
+            var currentDate = new Date().getDate();
+            var time = new Date(currentHourData.time);
+            var hour = time.getHours();
+            var date = time.getDate();
+            if(currentDate == date && currnetHour < hour) {
+                return true;
+            } else if(currentDate < date) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        $scope.getTimeToDate = function (time) {
+            return new Date(time);
         }
     }]);

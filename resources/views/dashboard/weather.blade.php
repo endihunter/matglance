@@ -36,40 +36,59 @@
             <div ng-style="{'height': size1 + 'px'}">
                 <div class="row p-l-r-10" ng-show="weather && weather.timezone">
                     <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="col-md-12 col-lg-12 text-center">
+                            <img  ng-src="@{{ currentHourIcon }}" alt="" width="50" height="50">
+                            <h4 class="text-primary">@{{ currentHourSummary }}</h4>
+                        </div>
                     {{--<div class="col-lg-12 col-md-12 col-sm-12">--}}
-                        <ul class="list-unstyled weather-info-panel">
-                            <li>
-                                <h4 style="line-height:0;" class="text-primary">@{{ weather.currently.summary }}</h4>
-                                <div class="clearfix"></div>
-                            </li>
-                            <li>
-                                <h5 class="text-muted">@{{ locationToCity(weather.address) }}</h5>
+                        {{--<ul class="list-unstyled weather-info-panel">--}}
+                            {{--<li>--}}
+                                {{--<h4 style="line-height:0;" class="text-primary">@{{ weather.currently.summary }}</h4>--}}
+                                {{--<div class="clearfix"></div>--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--<h5 class="text-muted">@{{ locationToCity(weather.address) }}</h5>--}}
                                 {{--<span class="label label-info">@{{ weather.currently.time }}</span>--}}
-                            </li>
+                            {{--</li>--}}
                             {{--<li>--}}
                                 {{--<strong>@{{ weather.currently.temperature }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</strong>--}}
                             {{--</li>--}}
-                            <li>
-                                {{ trans('weather.wind') }}: @{{ weather.currently.windSpeed }} @{{ (filter.units == 'us' ? 'm/h' : 'm/s') }}
-                            </li>
-                            <li>
-                                {{ trans('weather.precip_probability') }}: @{{ weather.currently.precipProbability }}%
-                            </li>
-                            <li>
-                                {{ trans('weather.pressure') }}: @{{ weather.currently.pressure }} hPa
-                            </li>
-                            <li>
-                                {{ trans('weather.humidity') }}: @{{ weather.currently.humidity }}%
-                            </li>
-                            <li>
-                                {{ trans('weather.cloudiness') }}: @{{ weather.currently.cloudCover }}%
-                            </li>
-                        </ul>
+                            {{--<li>--}}
+                                {{--{{ trans('weather.wind') }}: @{{ weather.currently.windSpeed }} @{{ (filter.units == 'us' ? 'm/h' : 'm/s') }}--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--{{ trans('weather.precip_probability') }}: @{{ weather.currently.precipProbability }}%--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--{{ trans('weather.pressure') }}: @{{ weather.currently.pressure }} hPa--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--{{ trans('weather.humidity') }}: @{{ weather.currently.humidity }}%--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--{{ trans('weather.cloudiness') }}: @{{ weather.currently.cloudCover }}%--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 text-left">
-                        <img ng-if="weather.currently.icon" ng-src="@{{ icon() }}" width="100" height="100" alt="">
+                        {{--<img ng-if="weather.currently.icon" ng-src="@{{ icon() }}" width="100" height="100" alt="">--}}
 
-                        <h1 class="text-primary">@{{ weather.currently.temperature }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</h1>
+                        <h1 class="text-primary">@{{ currnetHourTemperature | number:0 }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</h1>
+                    </div>
+                    <div class="col-lg-12 col-md-12">
+                        <span class="col-md-2 col-lg-1 col-sm-4 col-xs-4" ng-repeat="w in weather.hourly.data | limitTo: startIndex" ng-if="showThisHour(w)">
+                            <div class="hourly-temp-boxes text-center">
+                                <div>
+                                    <span style="color: black">@{{ getTimeToDate(w.time) | date:'HH:mm' }}h</span>
+                                </div>
+                                <div>
+                                    <img ng-src=" @{{ icon(w.icon) }} " alt="" width="30" height="30">
+                                </div>
+                                <div>
+                                    <span class="text-primary">@{{ w.temperature | number:0 }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</span>
+                                </div>
+                            </div>
+                        </span>
                     </div>
                 </div>
             </div>

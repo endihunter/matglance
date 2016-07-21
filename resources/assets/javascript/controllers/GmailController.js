@@ -72,7 +72,7 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                     if (cb) {
                         cb();
                     }
-
+                    console.log(messages);
                     // restore listing view
                     angular.safeApply($scope, function ($scope) {
                         for (var i in messages.messages) {

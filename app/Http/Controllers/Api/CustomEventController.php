@@ -18,7 +18,8 @@ class CustomEventController extends Controller
 
         $me = Auth::guard('api')->user();
         $event = CustomEvent::where('user_id', $me->id)
-                            ->whereDate('time', '>=', Carbon::today()->toDateString())
+                            ->whereDate('time', '>=', Carbon::now()->toDateString())
+                            ->orderBy('time', 'desc')
                             ->first();
 
         if($event) {
@@ -57,14 +58,14 @@ class CustomEventController extends Controller
         $eventDate->minute = $this->setEventTime($request->get('minutes'));
         $eventDate->second = $this->setEventTime($request->get('seconds'));
 
-        if(CustomEvent::whereDate('time', '>=', Carbon::today()->toDateString())
-                        ->where('user_id', $me->id)->first()) {
-            return response()->json([
-                'data' => [
-                    'error' => 'You can set only one active event',
-                ]
-            ]);
-        }
+//        if(CustomEvent::whereDate('time', '>=', Carbon::today()->toDateString())
+//                        ->where('user_id', $me->id)->first()) {
+//            return response()->json([
+//                'data' => [
+//                    'error' => 'You can set only one active event',
+//                ]
+//            ]);
+//        }
 
         $event = CustomEvent::create([
             'title'       => $title,

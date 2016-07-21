@@ -1,4 +1,5 @@
-app.controller('CustomEventController', ['$scope', '$rootScope', 'localStorageService', 'CustomEventService', function ($scope, $rootScope, localStorageService, CustomEventService) {
+app.controller('CustomEventController', ['$scope', '$rootScope', '$interval', 'localStorageService', 'CustomEventService',
+    function ($scope, $rootScope, $interval, localStorageService, CustomEventService) {
 
 
     $scope.eventTitle = '';
@@ -96,7 +97,7 @@ app.controller('CustomEventController', ['$scope', '$rootScope', 'localStorageSe
 
 
     };
-    
+
     $scope.cancel = function (callback) {;
         if(callback) {
             callback();
@@ -111,11 +112,19 @@ app.controller('CustomEventController', ['$scope', '$rootScope', 'localStorageSe
         CustomEventService.getEvent()
             .then(function (res) {
                 handleEvent(res);
+                $interval(function () {
+                    if($scope.event != null) {
+                        watchClock();
+                    }
+                }, 1000);
             })
     }
 
     function handleEvent(res) {
         if(res == 'No event created yet') {
+            $scope.event = null;
+            return;
+        } else if(new Date(res.time) < new Date() ) {
             $scope.event = null;
             return;
         }
@@ -126,5 +135,10 @@ app.controller('CustomEventController', ['$scope', '$rootScope', 'localStorageSe
         $scope.loading = false;
     }
 
+    function watchClock() {
+        if(new Date($scope.event.time) < new Date()) {
+            return $scope.event = null;
+        }
+    }
     fetchEvent();
 }]);

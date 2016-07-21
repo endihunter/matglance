@@ -17,7 +17,6 @@ app.controller('CustomEventController', ['$scope', '$rootScope', 'localStorageSe
     $scope.createEvent = function (callback, title) {
 
         $rootScope.eventError = {};
-
         var date = document.getElementById("datepicker-autoclose").value;
         if($scope.options.selectedTime != 3) {
             var hours = document.getElementById("custom-event-hours").value;
@@ -32,7 +31,36 @@ app.controller('CustomEventController', ['$scope', '$rootScope', 'localStorageSe
             $rootScope.eventError.eventTitle = 'Please set a event title!';
         }
 
-        if(Object.keys($scope.eventError).length > 0) {
+        if($scope.options.selectedTime == 3) {
+            hours = 23;
+            minutes = 59;
+            seconds = 59;
+        }
+
+        var dateToArr = transformDate(date);
+
+        var tempDate = new Date(dateToArr[2] + '-' + dateToArr[1] + '-' + dateToArr[0]);
+        if(hours) {
+            tempDate.setHours(parseInt(hours));
+        } else {
+            tempDate.setHours(0);
+        }
+        if(minutes) {
+            tempDate.setMinutes(parseInt(minutes));
+        } else {
+            tempDate.setMinutes(0);
+        }
+        if(seconds) {
+            tempDate.setSeconds(parseInt(seconds));
+        } else {
+            tempDate.setSeconds(0);
+        }
+
+        if(tempDate < new Date()) {
+            $rootScope.eventError.invalidTime = 'Event time must be in the future';
+        }
+
+        if(Object.keys($rootScope.eventError).length > 0) {
             return;
         }
 
@@ -74,6 +102,11 @@ app.controller('CustomEventController', ['$scope', '$rootScope', 'localStorageSe
             callback();
         }
     };
+
+    function transformDate(arg) {
+        return arg.split('.');
+    }
+
     function fetchEvent() {
         CustomEventService.getEvent()
             .then(function (res) {

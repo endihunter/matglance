@@ -23,7 +23,9 @@ app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootSco
              * Toggle box's preferences
              */
             scope.switchEditableMode = function (callback) {
+
                 scope.editable = !scope.editable;
+
 
                 if (callback) {
                     callback();
@@ -32,7 +34,15 @@ app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootSco
 
             function close() {
 
-                $rootScope.eventError = {};
+                if(Object.keys($rootScope.eventError).length > 0) {
+                    if($rootScope.eventError.invalidTime) {
+                        document.getElementById("custom-event-hours").value = '';
+                        document.getElementById("custom-event-minutes").value = '';
+                        document.getElementById("custom-event-seconds").value = '';
+                    }
+                    $rootScope.eventError = {};
+                }
+
                 $rootScope.rssValidLink = true;
                 var datePickerOpen = document.getElementsByClassName("datepicker");
                 if(datePickerOpen.length > 0) {

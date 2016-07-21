@@ -8,14 +8,14 @@
                 <div class="input-group events-full-width-inputs" ng-class="eventError.eventTitle ? 'has-error has-feedback' : ''">
                     <input type="text" class="form-control" placeholder=" {{ trans('customEvent.name') }} " ng-model="event.title" ng-change="eventError.eventTitle = ''">
                     <div ng-if="eventError.eventTitle"><span>
-                            <small class="text-danger">@{{ error.eventTitle }}</small>
+                            <small class="text-danger">@{{ eventError.eventTitle }}</small>
                         </span>
                     </div>
                 </div>
                 <div class="input-group events-full-width-inputs" ng-class="eventError.eventDate ? 'has-error has-feedback' : ''">
                     <input type="text" class="form-control" placeholder="dd.mm.yyyy" id="datepicker-autoclose" data-provide="datepicker" value="@{{ event.time | date:'dd.MM.yyyy' }}">
                     <div ng-if="eventError.eventDate"><span>
-                            <small class="text-danger">@{{ error.eventDate }}</small>
+                            <small class="text-danger">@{{ eventError.eventDate }}</small>
                         </span>
                     </div>
                 </div>
@@ -24,7 +24,11 @@
                     <input type="number" class="form-control" placeholder="mm" id="custom-event-minutes" min="0" max="60" value="@{{ event.time |date:'mm' }}">
                     <input type="number" class="form-control" placeholder="ss" id="custom-event-seconds" min="0" max="60" value="@{{ event.time |date:'ss' }}">
                 </div>
-
+                <div ng-if="eventError.invalidTime">
+                    <span>
+                        <small class="text-danger">@{{ eventError.invalidTime }}</small>
+                    </span>
+                </div>
                 <div class="radio">
                     <input type="radio" name="radio" id="radio1" ng-click="setSelectedValue(1)" ng-checked="options.selectedTime == 1">
                     <label for="radio1">

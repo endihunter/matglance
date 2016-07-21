@@ -69,7 +69,6 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
 
             return GmailService.fetchMessages(args)
                 .then(function (messages) {
-
                     if (cb) {
                         cb();
                     }

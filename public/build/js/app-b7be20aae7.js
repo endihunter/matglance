@@ -259,7 +259,7 @@ app.controller('CustomEventController', ['$scope', '$rootScope', 'localStorageSe
             $rootScope.eventError.invalidTime = 'Event time must be in the future';
         }
 
-        if(Object.keys($rootScope.eventError).length > 0) {
+        if(Object.keys($scope.eventError).length > 0) {
             return;
         }
 
@@ -951,9 +951,7 @@ app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootSco
              * Toggle box's preferences
              */
             scope.switchEditableMode = function (callback) {
-
                 scope.editable = !scope.editable;
-
 
                 if (callback) {
                     callback();
@@ -962,15 +960,7 @@ app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootSco
 
             function close() {
 
-                if(Object.keys($rootScope.eventError).length > 0) {
-                    if($rootScope.eventError.invalidTime) {
-                        document.getElementById("custom-event-hours").value = '';
-                        document.getElementById("custom-event-minutes").value = '';
-                        document.getElementById("custom-event-seconds").value = '';
-                    }
-                    $rootScope.eventError = {};
-                }
-
+                $rootScope.eventError = {};
                 $rootScope.rssValidLink = true;
                 var datePickerOpen = document.getElementsByClassName("datepicker");
                 if(datePickerOpen.length > 0) {

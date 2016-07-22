@@ -249,9 +249,13 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
     function eventTimeToString(time) {
         var year = time.getFullYear();
         var date = time.getDate() < 10 ? '0' + time.getDate() : time.getDate();
+        console.log(date);
         var month = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1): time.getMonth() + 1;
+        console.log(month);
         var hour = time.getHours() < 10 ? '0' + time.getHours(): time.getHours();
+        console.log(hour);
         var minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
+        console.log(minutes);
         var output = date + '.' + month + '.' + year + ', ' + hour + ':' + minutes;
 
         return output;
@@ -265,11 +269,5 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
 
         return output;
     }
-    console.log(new Date());
-    console.log(parseInt(new Date().getFullYear()));
-    console.log(parseInt(new Date().getMonth()));
-    console.log(parseInt(new Date().getDate()));
-    console.log(parseInt(new Date().getHours()));
-    console.log(parseInt(new Date().getMinutes()));
     fetchEvent();
 }]);

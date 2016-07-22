@@ -54,7 +54,7 @@
                     <table class="table">
                         <tr>
                             <td>{{ trans('gmail.from') }}</td>
-                            <td>@{{ message.from[0] }} <@{{ message.from[1] }}></td>
+                            <td>@{{ message.from[0] }} @{{ message.from[1] }}></td>
                         </tr>
                         <tr>
                             <td>{{ trans('gmail.subject') }}</td>

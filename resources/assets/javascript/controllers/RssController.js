@@ -52,6 +52,7 @@ app.controller('RssController', [
                     for (var i in $scope.articles){
                         $scope.articles[i].pubDate.date = new Date($scope.articles[i].pubDate.date);
                     }
+                    console.log($scope.articles);
                     defer.resolve(news);
                 });
             }

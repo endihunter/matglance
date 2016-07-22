@@ -133,7 +133,7 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
         $scope.event.time = new Date($scope.event.time);
         $scope.options.selectedTime = parseInt(res.time_option);
         $scope.loading = false;
-
+        console.log($scope.event.time);
         $scope.eventTimeToString = eventTimeToString($scope.event.time);
         $scope.eventDateToString = eventDateToString($scope.event.time);
         calculateTime($scope.event.time, $scope.options.selectedTime);
@@ -249,13 +249,9 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
     function eventTimeToString(time) {
         var year = time.getFullYear();
         var date = time.getDate() < 10 ? '0' + time.getDate() : time.getDate();
-        console.log(date);
         var month = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1): time.getMonth() + 1;
-        console.log(month);
         var hour = time.getHours() < 10 ? '0' + time.getHours(): time.getHours();
-        console.log(hour);
         var minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
-        console.log(minutes);
         var output = date + '.' + month + '.' + year + ', ' + hour + ':' + minutes;
 
         return output;

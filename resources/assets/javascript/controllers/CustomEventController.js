@@ -120,6 +120,15 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
                 watchClockInterval();
             })
     }
+    function parseDateTimeForIE(str) {
+
+        var dateAndTimeArr = str.split(' ');
+        var dateToArr = dateAndTimeArr[0].split('-');
+        var timeToArr = dateAndTimeArr[1].split(':');
+
+        return new Date(dateToArr[0], dateToArr[1], dateToArr[2], timeToArr[0], timeToArr[1], timeToArr[2]);
+
+    }
 
     function handleEvent(res) {
         if(res == 'No event created yet') {
@@ -130,11 +139,10 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
             return;
         }
         $scope.event = res;
-        console.log($scope.event.time);
+        console.log(parseDateTimeForIE($scope.event.time));
         $scope.event.time = new Date($scope.event.time);
         $scope.options.selectedTime = parseInt(res.time_option);
         $scope.loading = false;
-        console.log($scope.event.time);
         $scope.eventTimeToString = eventTimeToString($scope.event.time);
         $scope.eventDateToString = eventDateToString($scope.event.time);
         calculateTime($scope.event.time, $scope.options.selectedTime);

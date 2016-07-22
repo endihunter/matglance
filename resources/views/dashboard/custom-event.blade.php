@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <div class="input-group events-full-width-inputs" ng-class="eventError.eventDate ? 'has-error has-feedback' : ''">
-                    <input type="text" class="form-control" placeholder="dd.mm.yyyy" id="datepicker-autoclose" data-provide="datepicker" value="@{{ eventTimeToString }}">
+                    <input type="text" class="form-control" placeholder="dd.mm.yyyy" id="datepicker-autoclose" data-provide="datepicker" value="@{{ eventDateToString }}">
                     <div ng-if="eventError.eventDate"><span>
                             <small class="text-danger">@{{ eventError.eventDate }}</small>
                         </span>

@@ -133,6 +133,7 @@ app.controller('CustomEventController', ['$scope', '$rootScope', '$interval', 'l
         $scope.options.selectedTime = parseInt(res.time_option);
         $scope.loading = false;
         $scope.eventTimeToString = eventTimeToString($scope.event.time);
+        $scope.eventDateToString = eventDateToString($scope.event.time);
         calculateTime($scope.event.time, $scope.options.selectedTime);
     }
 
@@ -250,6 +251,15 @@ app.controller('CustomEventController', ['$scope', '$rootScope', '$interval', 'l
         var hour = time.getHours() < 10 ? '0' + time.getHours(): time.getHours();
         var minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
         var output = date + '.' + month + '.' + year + ', ' + hour + ':' + minutes;
+
+        return output;
+    }
+
+    function eventDateToString(time) {
+        var year = time.getFullYear();
+        var date = time.getDate() < 10 ? '0' + time.getDate() : time.getDate();
+        var month = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1): time.getMonth() + 1;
+        var output = date + '.' + month + '.' + year;
 
         return output;
     }

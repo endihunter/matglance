@@ -9,20 +9,20 @@
             </a>
         </li>
 
-        <li class="has_sub">
-            <a href="javascript:void(0);" class="n-waves-effect">
-                <i class="zmdi zmdi-map"></i>
-                <span> {{ trans('general.language') }} </span>
-                <span class="menu-arrow"></span>
-            </a>
-            <ul class="list-unstyled">
-                @foreach(config('languages') as $slug => $title)
-                    <li class="{{ ($slug == auth()->user()->lang() ? 'active' : '') }}">
-                        <a href="{{ route('user.prefs.lang', ['language' => $slug]) }}">{{ $title }}</a>
-                    </li>
-                @endforeach
-            </ul>
-        </li>
+        {{--<li class="has_sub">--}}
+            {{--<a href="javascript:void(0);" class="n-waves-effect">--}}
+                {{--<i class="zmdi zmdi-map"></i>--}}
+                {{--<span> {{ trans('general.language') }} </span>--}}
+                {{--<span class="menu-arrow"></span>--}}
+            {{--</a>--}}
+            {{--<ul class="list-unstyled">--}}
+                {{--@foreach(config('languages') as $slug => $title)--}}
+                    {{--<li class="{{ ($slug == auth()->user()->lang() ? 'active' : '') }}">--}}
+                        {{--<a href="{{ route('user.prefs.lang', ['language' => $slug]) }}">{{ $title }}</a>--}}
+                    {{--</li>--}}
+                {{--@endforeach--}}
+            {{--</ul>--}}
+        {{--</li>--}}
 
         <li class="has_sub">
             <a href="javascript:void(0);" class="n-waves-effect">

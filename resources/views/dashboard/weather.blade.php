@@ -50,7 +50,7 @@
                         <span class="col-md-2 col-lg-1 col-sm-4 col-xs-4" ng-repeat="w in weather.hourly.data | limitTo: startIndex" ng-if="showThisHour(w)">
                             <div class="hourly-temp-boxes text-center">
                                 <div>
-                                    <span style="color: black">@{{ getTimeToDate(w.time) | date:'HH:mm' }}h</span>
+                                    <span style="color: black">@{{ getTimeToDate(w.time) | date:'HH:mm' }}</span>
                                 </div>
                                 <div>
                                     <img ng-src=" @{{ icon(w.icon) }} " alt="" width="30" height="30">

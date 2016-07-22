@@ -130,6 +130,7 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
             return;
         }
         $scope.event = res;
+        console.log($scope.event.time);
         $scope.event.time = new Date($scope.event.time);
         $scope.options.selectedTime = parseInt(res.time_option);
         $scope.loading = false;

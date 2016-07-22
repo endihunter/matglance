@@ -229,22 +229,24 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
                 var hoursStr = hours == 1 ? hours + ' hour ' : hours + ' hours ';
                 var minutesStr = minutes == 1 ? minutes + ' minute ' : minutes + ' minutes ';
                 var secondsStr = seconds == 1 ? seconds + ' second ' : seconds + ' seconds ';
-                var output = 'In ' + weeksStr + daysStr + hoursStr + minutesStr + secondsStr;
-
-                document.getElementById('event-time-left-to-string').innerHTML = output;
+                $scope.timeLeftToString = 'In ' + weeksStr + daysStr + hoursStr + minutesStr + secondsStr;
+                console.log(weeks, days, hours, minutes, seconds, timeOption);
+                console.log(weeksStr, daysStr, hours, minutes, seconds, timeOption);
                 break;
             case 2:
                 var daysStr = days == 1 ? days + ' day ' : days + ' days ';
                 var hoursStr = hours == 1 ? hours + ' hour ' : hours + ' hours ';
                 var minutesStr = minutes == 1 ? minutes + ' minute ' : minutes + ' minutes ';
                 var secondsStr = seconds == 1 ? seconds + ' second ' : seconds + ' seconds ';
-                var output  = 'In ' + daysStr + hoursStr + minutesStr + secondsStr;
-                document.getElementById('event-time-left-to-string').innerHTML = output;
+                $scope.timeLeftToString = 'In ' + daysStr + hoursStr + minutesStr + secondsStr;
+                console.log(weeks, days, hours, minutes, seconds, timeOption);
+                console.log(weeksStr, daysStr, hours, minutes, seconds, timeOption);
                 break;
             case 3:
                 var daysStr = days == 1 ? days + ' day ' : days + ' days ';
-                var output = 'In ' + daysStr;
-                document.getElementById('event-time-left-to-string').innerHTML = output;
+                $scope.timeLeftToString = 'In ' + daysStr;
+                console.log(weeks, days, hours, minutes, seconds, timeOption);
+                console.log(weeksStr, daysStr, hours, minutes, seconds, timeOption);
                 break;
             default:
                 break;
@@ -258,7 +260,7 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
         var minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
         var output = date + '.' + month + '.' + year + ', ' + hour + ':' + minutes;
 
-        return document.getElementById('event-time-to-string').innerHTML = output;
+        return output;
     }
 
     function eventDateToString(time) {
@@ -267,7 +269,7 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
         var month = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1): time.getMonth() + 1;
         var output = date + '.' + month + '.' + year;
 
-        return document.getElementById('event-date-to-string').value = output;
+        return output;
     }
 
     fetchEvent();

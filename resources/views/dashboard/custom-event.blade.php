@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <div class="input-group events-full-width-inputs" ng-class="eventError.eventDate ? 'has-error has-feedback' : ''">
-                    <input type="text" class="form-control" placeholder="dd.mm.yyyy" id="datepicker-autoclose" data-provide="datepicker" value="">
+                    <input type="text" class="form-control" placeholder="dd.mm.yyyy" id="datepicker-autoclose" data-provide="datepicker" value="@{{ eventDateToString }}">
                     <div ng-if="eventError.eventDate"><span>
                             <small class="text-danger">@{{ eventError.eventDate }}</small>
                         </span>
@@ -58,9 +58,9 @@
             <div style="overflow-y: auto;" ng-style="{'height': size3 + 'px'}">
                 <div ng-if="event != null">
                     <h4 class="text-dark text-center"><strong>@{{ event.title }}</strong></h4>
-                    <p class="text-center" id="event-time-to-string"></p>
+                    <p class="text-center">@{{ eventTimeToString }}</p>
                     <p ng-if="loading == false" class="text-center">
-                        <strong id="event-time-left-to-string"></strong>
+                        <strong>@{{ timeLeftToString }}</strong>
                     </p>
                 </div>
                 <div ng-if="event == null">

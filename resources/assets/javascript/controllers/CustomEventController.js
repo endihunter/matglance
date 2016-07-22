@@ -1,5 +1,4 @@
-app.controller('CustomEventController', ['$scope', '$rootScope', '$interval', 'localStorageService', 'CustomEventService',
-    function ($scope, $rootScope, $interval, localStorageService, CustomEventService) {
+app.controller('CustomEventController', ['$scope', '$rootScope', '$interval', 'localStorageService', 'CustomEventService', function ($scope, $rootScope, $interval, localStorageService, CustomEventService) {
 
 
     $scope.eventTitle = '';
@@ -11,6 +10,13 @@ app.controller('CustomEventController', ['$scope', '$rootScope', '$interval', 'l
     $scope.event = {};
     $scope.timeNow = new Date();
     $scope.loading = true;
+    var weekInMilSeconds = 1000 * 60 * 60 * 24 * 7;
+    var dayInMilSeconds = 1000 * 60 * 60 * 24;
+    var hourInMilSeconds = 1000 * 60 * 60;
+    var minuteInMilSeconds = 1000 * 60;
+    var secondsInMilSeconds = 1000;
+
+
     $scope.setSelectedValue = function (val) {
         return $scope.options.selectedTime = parseInt(val);
     };
@@ -93,12 +99,9 @@ app.controller('CustomEventController', ['$scope', '$rootScope', '$interval', 'l
                     }
                 });
         }
-
-
-
     };
 
-    $scope.cancel = function (callback) {;
+    $scope.cancel = function (callback) {
         if(callback) {
             callback();
         }
@@ -109,14 +112,11 @@ app.controller('CustomEventController', ['$scope', '$rootScope', '$interval', 'l
     }
 
     function fetchEvent() {
+        $scope.loading = true;
         CustomEventService.getEvent()
             .then(function (res) {
                 handleEvent(res);
-                $interval(function () {
-                    if($scope.event != null) {
-                        watchClock();
-                    }
-                }, 1000);
+                watchClockInterval();
             })
     }
 
@@ -131,14 +131,128 @@ app.controller('CustomEventController', ['$scope', '$rootScope', '$interval', 'l
         $scope.event = res;
         $scope.event.time = new Date($scope.event.time);
         $scope.options.selectedTime = parseInt(res.time_option);
-        $scope.stringTime = $scope.event.time.toString();
         $scope.loading = false;
+        $scope.eventTimeToString = eventTimeToString($scope.event.time);
+        calculateTime($scope.event.time, $scope.options.selectedTime);
     }
 
-    function watchClock() {
-        if(new Date($scope.event.time) < new Date()) {
-            return $scope.event = null;
+    var watchClockInterval = function () {
+        $interval(function () {
+            if($scope.event == null) {
+                $interval.cancel(watchClockInterval);
+                return;
+            }
+            if (new Date($scope.event.time) < new Date()) {
+                return $scope.event = null;
+            }
+            calculateTime($scope.event.time, $scope.options.selectedTime);
+        }, 1000);
+    };
+
+    function calculateTime(time, timeOption) {
+
+        var timeToEvent = time - new Date();
+        switch (timeOption) {
+            case 1:
+                var weeks = getWeeksAndRest(timeToEvent);
+                var days = getDaysAndRest(weeks.rest);
+                var hours = getHoursAndRest(days.rest);
+                var minutes = getMinutesAndRest(hours.rest);
+                var seconds = getSeconds(minutes.rest);
+                generateTimeStringOutput(weeks.weeks, days.days, hours.hours, minutes.minutes, seconds.seconds, timeOption);
+                break;
+            case 2:
+                var days = getDaysAndRest(timeToEvent);
+                var hours = getHoursAndRest(days.rest);
+                minutes = getMinutesAndRest(hours.rest);
+                var seconds = getSeconds(minutes.rest);
+                generateTimeStringOutput(null, days.days, hours.hours, minutes.minutes, seconds.seconds, timeOption);
+                break;
+            case  3:
+                var days = getDaysAndRest(timeToEvent);
+                generateTimeStringOutput(null, days.days, null, null, null, timeOption);
+                break;
+            default:
+                break;
         }
     }
+
+    $scope.$watch('options.selectedTime', function () {
+        if($scope.loading == true) {
+            return;
+        }
+        calculateTime($scope.event.time, $scope.options.selectedTime);
+    });
+
+    function getWeeksAndRest(time) {
+        return {
+            weeks: parseInt(new Date(time).getTime() / weekInMilSeconds),
+            rest: new Date(time).getTime() % weekInMilSeconds
+        }
+    }
+
+    function getDaysAndRest(time) {
+        return {
+            days: parseInt(new Date(time).getTime() / dayInMilSeconds),
+            rest: new Date(time).getTime() % dayInMilSeconds
+        }
+    }
+
+    function getHoursAndRest(time) {
+        return {
+            hours: parseInt(new Date(time).getTime() / hourInMilSeconds),
+            rest: new Date(time).getTime() % hourInMilSeconds
+        }
+    }
+
+    function getMinutesAndRest(time) {
+        return {
+            minutes: parseInt(new Date(time).getTime() / minuteInMilSeconds),
+            rest: new Date(time).getTime() % minuteInMilSeconds
+        }
+    }
+
+    function getSeconds(time) {
+        return {
+            seconds: parseInt(new Date(time).getTime() / secondsInMilSeconds)
+        }
+    }
+
+    function generateTimeStringOutput(weeks, days, hours, minutes, seconds, timeOption) {
+        switch (timeOption) {
+            case 1:
+                var weeksStr = weeks == 1 ? weeks + ' week ' : weeks + ' weeks ';
+                var daysStr = days == 1 ? days + ' day ' : days + ' days ';
+                var hoursStr = hours == 1 ? hours + ' hour ' : hours + ' hours ';
+                var minutesStr = minutes == 1 ? minutes + ' minute ' : minutes + ' minutes ';
+                var secondsStr = seconds == 1 ? seconds + ' second ' : seconds + ' seconds ';
+                $scope.timeLeftToString = 'In ' + weeksStr + daysStr + hoursStr + minutesStr + secondsStr;
+                break;
+            case 2:
+                var daysStr = days == 1 ? days + ' day ' : days + ' days ';
+                var hoursStr = hours == 1 ? hours + ' hour ' : hours + ' hours ';
+                var minutesStr = minutes == 1 ? minutes + ' minute ' : minutes + ' minutes ';
+                var secondsStr = seconds == 1 ? seconds + ' second ' : seconds + ' seconds ';
+                $scope.timeLeftToString = 'In ' + daysStr + hoursStr + minutesStr + secondsStr;
+                break;
+            case 3:
+                var daysStr = days == 1 ? days + ' day ' : days + ' days ';
+                $scope.timeLeftToString = 'In ' + daysStr;
+                break;
+            default:
+                break;
+        }
+    }
+    function eventTimeToString(time) {
+        var year = time.getFullYear();
+        var date = time.getDate() < 10 ? '0' + time.getDate() : time.getDate();
+        var month = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1): time.getMonth() + 1;
+        var hour = time.getHours() < 10 ? '0' + time.getHours(): time.getHours();
+        var minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
+        var output = date + '.' + month + '.' + year + ', ' + hour + ':' + minutes;
+
+        return output;
+    }
+
     fetchEvent();
 }]);

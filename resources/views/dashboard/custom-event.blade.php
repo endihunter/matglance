@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <div class="input-group events-full-width-inputs" ng-class="eventError.eventDate ? 'has-error has-feedback' : ''">
-                    <input type="text" class="form-control" placeholder="dd.mm.yyyy" id="datepicker-autoclose" data-provide="datepicker" value="@{{ event.time | date:'dd.MM.yyyy' }}">
+                    <input type="text" class="form-control" placeholder="dd.mm.yyyy" id="datepicker-autoclose" data-provide="datepicker" value="@{{ eventTimeToString }}">
                     <div ng-if="eventError.eventDate"><span>
                             <small class="text-danger">@{{ eventError.eventDate }}</small>
                         </span>
@@ -58,12 +58,9 @@
             <div style="overflow-y: auto;" ng-style="{'height': size3 + 'px'}">
                 <div ng-if="event != null">
                     <h4 class="text-dark text-center"><strong>@{{ event.title }}</strong></h4>
-                    <p class="text-center">@{{ event.time | date:'dd.MM.yyyy' }}<span ng-if="options.selectedTime != 3">, @{{ event.time | date:'HH:mm' }}</span></p>
+                    <p class="text-center">@{{ eventTimeToString }}</p>
                     <p ng-if="loading == false" class="text-center">
-                        <strong>In </strong>
-                        <strong countdown end-date="@{{ stringTime }}" units="weeks|days|hours|minutes|seconds" ng-if="options.selectedTime == 1"></strong>
-                        <strong countdown end-date="@{{ stringTime }}" units="days|hours|minutes|seconds" ng-if="options.selectedTime == 2"></strong>
-                        <strong countdown end-date="@{{ stringTime }}" units="days" ng-if="options.selectedTime == 3"></strong>
+                        <strong>@{{ timeLeftToString }}</strong>
                     </p>
                 </div>
                 <div ng-if="event == null">

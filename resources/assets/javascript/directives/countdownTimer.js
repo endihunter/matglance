@@ -56,6 +56,7 @@
                                 //adding verbage
 
                                 returnString += ' ' + unitsLeft[unit] + ' ' + unit;
+                                
                             }
                         }
                         return returnString;

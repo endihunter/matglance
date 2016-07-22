@@ -1,3 +1,4 @@
+app.controller('CustomEventController', ['$scope', '$rootScope', '$interval', '$timeout', 'localStorageService', 'CustomEventService',
 function ($scope, $rootScope, $interval, $timeout, localStorageService, CustomEventService) {
 
 
@@ -111,6 +112,15 @@ function ($scope, $rootScope, $interval, $timeout, localStorageService, CustomEv
         return arg.split('.');
     }
 
+    function fetchEvent() {
+        $scope.loading = true;
+        CustomEventService.getEvent()
+            .then(function (res) {
+                handleEvent(res);
+                watchClockInterval();
+            })
+    }
+
     function handleEvent(res) {
         if(res == 'No event created yet') {
             $scope.event = null;
@@ -123,20 +133,13 @@ function ($scope, $rootScope, $interval, $timeout, localStorageService, CustomEv
         $scope.event.time = new Date($scope.event.time);
         $scope.options.selectedTime = parseInt(res.time_option);
         $scope.loading = false;
+
         $timeout(function () {
             $scope.eventTimeToString = eventTimeToString($scope.event.time);
             $scope.eventDateToString = eventDateToString($scope.event.time);
             calculateTime($scope.event.time, $scope.options.selectedTime);
         }, 2000);
-    }
 
-    function fetchEvent() {
-        $scope.loading = true;
-        CustomEventService.getEvent()
-            .then(function (res) {
-                handleEvent(res);
-                watchClockInterval();
-            })
     }
 
     var watchClockInterval = function () {
@@ -267,5 +270,4 @@ function ($scope, $rootScope, $interval, $timeout, localStorageService, CustomEv
     }
 
     fetchEvent();
-}]);,
-app.controller('CustomEventController', ['$scope', '$rootScope', '$interval', '$timeout', 'localStorageService', 'CustomEventService'
+}]);

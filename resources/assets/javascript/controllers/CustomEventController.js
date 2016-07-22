@@ -266,10 +266,10 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
         return output;
     }
     console.log(new Date());
-    console.log(new Date().getFullYear());
-    console.log(new Date().getMonth());
-    console.log(new Date().getDate());
-    console.log(new Date().getHours());
-    console.log(new Date().getMinutes());
+    console.log(parseInt(new Date().getFullYear()));
+    console.log(parseInt(new Date().getMonth()));
+    console.log(parseInt(new Date().getDate()));
+    console.log(parseInt(new Date().getHours()));
+    console.log(parseInt(new Date().getMinutes()));
     fetchEvent();
 }]);

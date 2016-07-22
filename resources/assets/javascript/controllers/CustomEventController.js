@@ -125,7 +125,7 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
         var dateAndTimeArr = str.split(' ');
         var dateToArr = dateAndTimeArr[0].split('-');
         var timeToArr = dateAndTimeArr[1].split(':');
-        console.log(new Date(dateToArr[0], dateToArr[1] - 1, dateToArr[2], timeToArr[0], timeToArr[1], timeToArr[2]));
+        
         return new Date(dateToArr[0], dateToArr[1] - 1, dateToArr[2], timeToArr[0], timeToArr[1], timeToArr[2]);
 
     }

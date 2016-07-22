@@ -131,3 +131,9 @@ i.ti-menu:hover {
 .dashboard-card {
   padding-bottom: 5px;
 }
+.rss-article-content {
+  white-space: nowrap;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

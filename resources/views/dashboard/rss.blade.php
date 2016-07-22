@@ -54,8 +54,8 @@
                             <img ng-if="article.media" ng-src="@{{ article.media.url }}" style="width: 75px; height: auto;" alt="user">
                             <div ng-class="{'wid-u-info': article.media}">
                                 <strong class="m-t-0 m-b-5 font-600">@{{ article.title }}</strong>
-                                <small class="text-muted m-r-10">@{{ article.pubDate }}</small>
-                                <p class="text-muted m-b-5 font-13">@{{ article.content }}</p>
+                                <small class="text-default m-r-10 pull-right">@{{ article.pubDate.date | date: 'dd.MM.yyyy , HH:mm'}}</small>
+                                <p class="text-muted m-b-5 font-13 rss-article-content">@{{ article.content }}</p>
                             </div>
                             <div style="height: 0px; clear: both; float: none;"></div>
                         </div>

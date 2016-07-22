@@ -31,7 +31,7 @@ class FeedController extends Controller
 
         return Restable::listing($this->news->news($feedList), function ($item) {
             return array_merge($item, [
-                'pubDate' => $item['pubDate']->diffForHumans(),
+                'pubDate' => $item['pubDate'],
             ]);
         });
     }

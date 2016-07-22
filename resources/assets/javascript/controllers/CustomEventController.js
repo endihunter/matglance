@@ -125,8 +125,8 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
         var dateAndTimeArr = str.split(' ');
         var dateToArr = dateAndTimeArr[0].split('-');
         var timeToArr = dateAndTimeArr[1].split(':');
-
-        return new Date(dateToArr[0], dateToArr[1], dateToArr[2], timeToArr[0], timeToArr[1], timeToArr[2]);
+        console.log(new Date(dateToArr[0], dateToArr[1] - 1, dateToArr[2], timeToArr[0], timeToArr[1], timeToArr[2]));
+        return new Date(dateToArr[0], dateToArr[1] - 1, dateToArr[2], timeToArr[0], timeToArr[1], timeToArr[2]);
 
     }
 
@@ -140,7 +140,6 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
         }
         $scope.event = res;
         $scope.event.time = parseDateTimeForIE($scope.event.time);
-        $scope.event.time = new Date($scope.event.time);
         $scope.options.selectedTime = parseInt(res.time_option);
         $scope.loading = false;
         $scope.eventTimeToString = eventTimeToString($scope.event.time);
@@ -258,7 +257,7 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
     function eventTimeToString(time) {
         var year = time.getFullYear();
         var date = time.getDate() < 10 ? '0' + time.getDate() : time.getDate();
-        var month = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1): time.getMonth() + 1;
+        var month = time.getMonth() < 10 + 1? '0' + (time.getMonth() +1): time.getMonth() + 1;
         var hour = time.getHours() < 10 ? '0' + time.getHours(): time.getHours();
         var minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
         var output = date + '.' + month + '.' + year + ', ' + hour + ':' + minutes;
@@ -269,7 +268,7 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
     function eventDateToString(time) {
         var year = time.getFullYear();
         var date = time.getDate() < 10 ? '0' + time.getDate() : time.getDate();
-        var month = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1): time.getMonth() + 1;
+        var month = time.getMonth() < 10 + 1? '0' + (time.getMonth() +1): time.getMonth() + 1;
         var output = date + '.' + month + '.' + year;
 
         return output;

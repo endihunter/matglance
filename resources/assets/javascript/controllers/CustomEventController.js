@@ -1,5 +1,5 @@
-app.controller('CustomEventController', ['$scope', '$rootScope', '$interval', '$timeout', 'localStorageService', 'CustomEventService',
-function ($scope, $rootScope, $interval, $timeout, localStorageService, CustomEventService) {
+app.controller('CustomEventController', ['$scope', '$rootScope', '$interval', 'localStorageService', 'CustomEventService',
+function ($scope, $rootScope, $interval, localStorageService, CustomEventService) {
 
 
     $scope.eventTitle = '';
@@ -134,12 +134,9 @@ function ($scope, $rootScope, $interval, $timeout, localStorageService, CustomEv
         $scope.options.selectedTime = parseInt(res.time_option);
         $scope.loading = false;
 
-        $timeout(function () {
-            $scope.eventTimeToString = eventTimeToString($scope.event.time);
-            $scope.eventDateToString = eventDateToString($scope.event.time);
-            calculateTime($scope.event.time, $scope.options.selectedTime);
-        }, 2000);
-
+        $scope.eventTimeToString = eventTimeToString($scope.event.time);
+        $scope.eventDateToString = eventDateToString($scope.event.time);
+        calculateTime($scope.event.time, $scope.options.selectedTime);
     }
 
     var watchClockInterval = function () {
@@ -232,18 +229,22 @@ function ($scope, $rootScope, $interval, $timeout, localStorageService, CustomEv
                 var hoursStr = hours == 1 ? hours + ' hour ' : hours + ' hours ';
                 var minutesStr = minutes == 1 ? minutes + ' minute ' : minutes + ' minutes ';
                 var secondsStr = seconds == 1 ? seconds + ' second ' : seconds + ' seconds ';
-                $scope.timeLeftToString = 'In ' + weeksStr + daysStr + hoursStr + minutesStr + secondsStr;
+                var output = 'In ' + weeksStr + daysStr + hoursStr + minutesStr + secondsStr;
+
+                document.getElementById('event-time-left-to-string').innerHTML = output;
                 break;
             case 2:
                 var daysStr = days == 1 ? days + ' day ' : days + ' days ';
                 var hoursStr = hours == 1 ? hours + ' hour ' : hours + ' hours ';
                 var minutesStr = minutes == 1 ? minutes + ' minute ' : minutes + ' minutes ';
                 var secondsStr = seconds == 1 ? seconds + ' second ' : seconds + ' seconds ';
-                $scope.timeLeftToString = 'In ' + daysStr + hoursStr + minutesStr + secondsStr;
+                var output  = 'In ' + daysStr + hoursStr + minutesStr + secondsStr;
+                document.getElementById('event-time-left-to-string').innerHTML = output;
                 break;
             case 3:
                 var daysStr = days == 1 ? days + ' day ' : days + ' days ';
-                $scope.timeLeftToString = 'In ' + daysStr;
+                var output = 'In ' + daysStr;
+                document.getElementById('event-time-left-to-string').innerHTML = output;
                 break;
             default:
                 break;
@@ -257,7 +258,7 @@ function ($scope, $rootScope, $interval, $timeout, localStorageService, CustomEv
         var minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
         var output = date + '.' + month + '.' + year + ', ' + hour + ':' + minutes;
 
-        return output;
+        return document.getElementById('event-time-to-string').innerHTML = output;
     }
 
     function eventDateToString(time) {
@@ -266,7 +267,7 @@ function ($scope, $rootScope, $interval, $timeout, localStorageService, CustomEv
         var month = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1): time.getMonth() + 1;
         var output = date + '.' + month + '.' + year;
 
-        return output;
+        return document.getElementById('event-date-to-string').value = output;
     }
 
     fetchEvent();

@@ -230,8 +230,6 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
                 var minutesStr = minutes == 1 ? minutes + ' minute ' : minutes + ' minutes ';
                 var secondsStr = seconds == 1 ? seconds + ' second ' : seconds + ' seconds ';
                 $scope.timeLeftToString = 'In ' + weeksStr + daysStr + hoursStr + minutesStr + secondsStr;
-                console.log(weeks, days, hours, minutes, seconds, timeOption);
-                console.log(weeksStr, daysStr, hours, minutes, seconds, timeOption);
                 break;
             case 2:
                 var daysStr = days == 1 ? days + ' day ' : days + ' days ';
@@ -239,14 +237,10 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
                 var minutesStr = minutes == 1 ? minutes + ' minute ' : minutes + ' minutes ';
                 var secondsStr = seconds == 1 ? seconds + ' second ' : seconds + ' seconds ';
                 $scope.timeLeftToString = 'In ' + daysStr + hoursStr + minutesStr + secondsStr;
-                console.log(weeks, days, hours, minutes, seconds, timeOption);
-                console.log(weeksStr, daysStr, hours, minutes, seconds, timeOption);
                 break;
             case 3:
                 var daysStr = days == 1 ? days + ' day ' : days + ' days ';
                 $scope.timeLeftToString = 'In ' + daysStr;
-                console.log(weeks, days, hours, minutes, seconds, timeOption);
-                console.log(weeksStr, daysStr, hours, minutes, seconds, timeOption);
                 break;
             default:
                 break;
@@ -271,6 +265,11 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
 
         return output;
     }
-
+    console.log(new Date());
+    console.log(new Date().getFullYear());
+    console.log(new Date().getMonth());
+    console.log(new Date().getDate());
+    console.log(new Date().getHours());
+    console.log(new Date().getMinutes());
     fetchEvent();
 }]);

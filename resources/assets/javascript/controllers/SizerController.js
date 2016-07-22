@@ -14,13 +14,13 @@ app.controller('SizerController', ['$scope', '$window', function ($scope, $windo
         var height = Math.round(viewport * k);
 
         if (! angular.isMobile) {
-            $scope.size1 = Math.round(height * 0.35);
-            $scope.size2 = Math.round(height * 0.45);
+            $scope.size1 = Math.round(height * 0.34);
+            $scope.size2 = Math.round(height * 0.44);
             $scope.size3 = height - ($scope.size1 + $scope.size2);
         } else {
-            $scope.size1 = 200;
-            $scope.size2 = 240;
-            $scope.size3 = 150;
+            $scope.size1 = 190;
+            $scope.size2 = 230;
+            $scope.size3 = 140;
         }
 
         $scope.resized = true;

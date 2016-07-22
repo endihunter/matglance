@@ -127,6 +127,9 @@ i.ti-menu:hover {
   .user-box {
     margin-left: 0px;
   }
+  body {
+    overflow-y: auto;
+  }
 }
 .dashboard-card {
   padding-bottom: 5px;
@@ -136,4 +139,10 @@ i.ti-menu:hover {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@media (min-width: 1005px) {
+  body {
+    overflow-y: hidden;
+  }
 }

@@ -48,7 +48,7 @@
                         <h4 class="text-primary" style="margin-top: 0">@{{ city }}</h4>
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <span class="col-md-2 col-lg-1 col-sm-4 col-xs-4" ng-repeat="w in weather.hourly.data | limitTo: startIndex" ng-if="showThisHour(w)">
+                        <span class="col-md-2 col-lg-1 col-sm-3 col-xs-4" ng-repeat="w in weather.hourly.data | limitTo: startIndex" ng-if="showThisHour(w)">
                             <div class="hourly-temp-boxes text-center">
                                 <div>
                                     <span style="color: black">@{{ getTimeToDate(w.time) | date:'HH:mm' }}</span>

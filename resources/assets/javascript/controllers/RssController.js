@@ -38,6 +38,15 @@ app.controller('RssController', [
             allChecked();
         }
 
+        function parseDateTimeForIE(str) {
+
+            var dateAndTimeArr = str.split(' ');
+            var dateToArr = dateAndTimeArr[0].split('-');
+            var timeToArr = dateAndTimeArr[1].split(':');
+
+            return new Date(dateToArr[0], dateToArr[1] - 1, dateToArr[2], timeToArr[0], timeToArr[1], timeToArr[2]);
+        }
+        
         function fetchNews() {
             var defer = $q.defer();
 
@@ -49,10 +58,10 @@ app.controller('RssController', [
                 FeedService.news($feeds).then(function (news) {
                     $scope.loading = false;
                     $scope.articles = news;
+
                     for (var i in $scope.articles){
-                        $scope.articles[i].pubDate.date = new Date($scope.articles[i].pubDate.date);
+                        $scope.articles[i].pubDate.date = parseDateTimeForIE($scope.articles[i].pubDate.date);
                     }
-                    console.log($scope.articles);
                     defer.resolve(news);
                 });
             }

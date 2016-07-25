@@ -127,7 +127,6 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
         var timeToArr = dateAndTimeArr[1].split(':');
         
         return new Date(dateToArr[0], dateToArr[1] - 1, dateToArr[2], timeToArr[0], timeToArr[1], timeToArr[2]);
-
     }
 
     function handleEvent(res) {

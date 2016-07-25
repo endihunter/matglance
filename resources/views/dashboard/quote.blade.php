@@ -7,8 +7,8 @@
                 </div>
                 <div ng-if="quote.id">
                     <div class="well2 p-l-r-10">
-                        @{{ quote.quote }}
-                        &nbsp;&nbsp;
+                        <span class="quote-text">@{{ quote.quote }}
+                        &nbsp;&nbsp;</span>
                         <br>
                         <span class="quote-author">- @{{ quote.author }}</span>
                         <button class="btn btn-link pull-right" ng-click="fetchRandom()">

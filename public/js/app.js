@@ -1,1 +1,1473 @@
-angular.safeApply=function(e,t){e[e.$$phase||e.$root.$$phase?"$eval":"$apply"](t||function(){})},angular.isMobile=function(e){return/((iP([oa]+d|(hone)))|Android|WebOS|BlackBerry|windows (ce|phone))/i.test(e)}(navigator.userAgent||navigator.vendor||window.opera),angular.isOnline=function e(){var e=window.navigator&&window.navigator.onLine;return e},angular.storagePrefix=function(e){var t=["ymag",window.gid];return e&&e.length&&t.push(e),t.join(".")};var app=angular.module("app",["ngSanitize","LocalStorageModule","countdownTimer"]);app.config(["localStorageServiceProvider","$httpProvider",function(e,t){var n=angular.storagePrefix();t.defaults.headers.common.Authorization="Bearer "+window.api_token,e.setPrefix(n),e.setStorageCookie(1,"/")}]),app.run(["$rootScope",function(e){window.onclick=function(t){0==$(t.target).closest("div.card-actions.dropdown.open").length&&0==$(t.target).closest("#cities-list").length&&e.$broadcast("cardbox.close")}}]),app.REWRITE_BASE="/","dev-your-morning.rainbowriders.dk"==location.host&&(app.REWRITE_BASE="/public/"),app.API_PREFIX=app.REWRITE_BASE+"api/v1",app.controller("CalendarController",["$scope","$rootScope","EventsService","localStorageService",function(e,t,n,r){function a(){var t=i();if(t&&null!=t)s(t);else{e.calendars[0].selected=!0;var n=[];n.push(e.calendars[0]),r.set("cal",JSON.stringify(angular.copy(n)))}l()}function o(t){for(var n=0;n<e.calendars.length;n++)e.calendars[n].id==t.id&&(e.calendars[n].selected&&"undefined"!=e.calendars[n].selected?e.calendars[n].selected=!e.calendars[n].selected:e.calendars[n].selected=!0)}function i(){return JSON.parse(r.get("cal"))}function s(e){for(var t=0;t<e.length;t++)c(e[t])}function c(t){for(var n=0;n<e.calendars.length;n++)if(t.id==e.calendars[n].id){e.calendars[n].selected=t.selected||!1;break}}function u(){for(var t=0;t<e.calendars.length;t++)e.calendars[t].selected=!1}function l(){e.calendarEvents=[],e.hasEvents=!1;for(var t=0;t<e.calendars.length;t++)1==e.calendars[t].selected&&n.events(e.calendars[t].id).then(function(t){e.calendarEvents.push(t)})}e.calendars=[],e.events=[],e.hasEvents=!1,e.calendarEvents=[],e.init=function(t){e.calendars=t,a()},e.savePreferences=function(t){for(var n=[],a=0;a<e.calendars.length;a++)1==e.calendars[a].selected&&n.push(e.calendars[a]);r.set("cal",JSON.stringify(angular.copy(n))),l(),t&&t()},e.cancel=function(e){u(),s(i()),e&&e()},e.select=function(e){o(e)},e.$on("cardbox.close",function(){u(),s(i())}),e.$watchCollection("calendarEvents",function(){e.events=[];for(var t=0;t<e.calendarEvents.length;t++)for(var n in e.calendarEvents[t])e.events.push(e.calendarEvents[t][n]);e.events.length>0&&(e.hasEvents=!0),e.events.sort(function(e,t){return e=new Date(e.date),t=new Date(t.date),e<t?-1:e>t?1:0})})}]),app.controller("CustomEventController",["$scope","$rootScope","$interval","localStorageService","CustomEventService",function(e,t,n,r,a){function o(e){return e.split(".")}function i(){e.loading=!0,a.getEvent().then(function(e){c(e),P()})}function s(e){var t=e.split(" "),n=t[0].split("-"),r=t[1].split(":");return new Date(n[0],n[1]-1,n[2],r[0],r[1],r[2])}function c(t){return"No event created yet"==t?void(e.event=null):new Date(t.time)<new Date?void(e.event=null):(e.event=t,e.event.time=s(e.event.time),e.options.selectedTime=parseInt(t.time_option),e.loading=!1,e.eventTimeToString=m(e.event.time),e.eventDateToString=h(e.event.time),void u(e.event.time,e.options.selectedTime))}function u(e,t){var n=e-new Date;switch(t){case 1:var r=l(n),a=d(r.rest),o=f(a.rest),i=g(o.rest),s=p(i.rest);v(r.weeks,a.days,o.hours,i.minutes,s.seconds,t);break;case 2:var a=d(n),o=f(a.rest);i=g(o.rest);var s=p(i.rest);v(null,a.days,o.hours,i.minutes,s.seconds,t);break;case 3:var a=d(n);v(null,a.days,null,null,null,t)}}function l(e){return{weeks:parseInt(new Date(e).getTime()/w),rest:new Date(e).getTime()%w}}function d(e){return{days:parseInt(new Date(e).getTime()/y),rest:new Date(e).getTime()%y}}function f(e){return{hours:parseInt(new Date(e).getTime()/E),rest:new Date(e).getTime()%E}}function g(e){return{minutes:parseInt(new Date(e).getTime()/S),rest:new Date(e).getTime()%S}}function p(e){return{seconds:parseInt(new Date(e).getTime()/I)}}function v(t,n,r,a,o,i){switch(i){case 1:var s=1==t?t+" week ":t+" weeks ",c=1==n?n+" day ":n+" days ",u=1==r?r+" hour ":r+" hours ",l=1==a?a+" minute ":a+" minutes ",d=1==o?o+" second ":o+" seconds ";e.timeLeftToString="In "+s+c+u+l+d;break;case 2:var c=1==n?n+" day ":n+" days ",u=1==r?r+" hour ":r+" hours ",l=1==a?a+" minute ":a+" minutes ",d=1==o?o+" second ":o+" seconds ";e.timeLeftToString="In "+c+u+l+d;break;case 3:var c=1==n?n+" day ":n+" days ";e.timeLeftToString="In "+c}}function m(e){var t=e.getFullYear(),n=e.getDate()<10?"0"+e.getDate():e.getDate(),r=e.getMonth()<11?"0"+(e.getMonth()+1):e.getMonth()+1,a=e.getHours()<10?"0"+e.getHours():e.getHours(),o=e.getMinutes()<10?"0"+e.getMinutes():e.getMinutes(),i=n+"."+r+"."+t+", "+a+":"+o;return i}function h(e){var t=e.getFullYear(),n=e.getDate()<10?"0"+e.getDate():e.getDate(),r=e.getMonth()<11?"0"+(e.getMonth()+1):e.getMonth()+1,a=n+"."+r+"."+t;return a}e.eventTitle="",e.options={selectedTime:1},t.eventError={},e.event={},e.timeNow=new Date,e.loading=!0;var w=6048e5,y=864e5,E=36e5,S=6e4,I=1e3;e.setSelectedValue=function(t){return e.options.selectedTime=parseInt(t)},e.createEvent=function(n,r){t.eventError={};var s=document.getElementById("datepicker-autoclose").value;if(3!=e.options.selectedTime)var c=document.getElementById("custom-event-hours").value,u=document.getElementById("custom-event-minutes").value,l=document.getElementById("custom-event-seconds").value;""!=s&&"undefined"!=s||(t.eventError.eventDate="Please set a event date!"),""!=r&&"undefined"!=r||(t.eventError.eventTitle="Please set a event title!"),3==e.options.selectedTime&&(c=23,u=59,l=59);var d=o(s),f=new Date(d[2]+"-"+d[1]+"-"+d[0]);if(c?f.setHours(parseInt(c)):f.setHours(0),u?f.setMinutes(parseInt(u)):f.setMinutes(0),l?f.setSeconds(parseInt(l)):f.setSeconds(0),f<new Date&&(t.eventError.invalidTime="Event time must be in the future"),!(Object.keys(t.eventError).length>0)){var g={date:s,minutes:u||null,hours:c||null,seconds:l||null,title:r,time_option:e.options.selectedTime};null!=e.event?(g.id=e.event.id,a.updateEvent(g).then(function(e){i(),n&&n()})):a.createEvent(g).then(function(e){i(),n&&n()})}},e.cancel=function(e){e&&e()};var P=function(){n(function(){return null==e.event?void n.cancel(P):new Date(e.event.time)<new Date?e.event=null:void u(e.event.time,e.options.selectedTime)},1e3)};e.$watch("options.selectedTime",function(){1!=e.loading&&u(e.event.time,e.options.selectedTime)}),i()}]),app.controller("GmailController",["$scope","GmailService","$sce","localStorageService",function(e,t,n,r){function a(){e.query="";var t=[];return angular.forEach(["from","to","subject"],function(n,r,a){var o=e.filter[n];o.length&&t.push(n+": ("+o+")")}),e.query=t.join(" ").trim(),e.query}function o(e){for(var t in e.labels)if("INBOX"==e.labels[t])return!0;return!1}e.searchMode=!0,e.message=null,e.loading=!1,e.nextPageToken=null;var i,s=function(){return{from:"",to:"",subject:"",includeSpamTrash:!1}};(i=r.get("g_fltr"))||(i=JSON.stringify(s()),r.set("g_fltr",i)),e.filter=JSON.parse(i),e.messages=[],e.query=a(),e.savePreferences=function(t){return e.messages=[],e.nextPageToken=null,e.fetchMessages(t)},e.next=e.fetchMessages=function(n){if(e.loading)return!1;e.loading=!0,r.set("g_fltr",i=JSON.stringify(e.filter));var s={includeSpamTrash:!!e.filter.includeSpamTrash,q:a(),nextPageToken:e.nextPageToken};return t.fetchMessages(s).then(function(t){n&&n(),angular.safeApply(e,function(e){for(var n in t.messages)o(t.messages[n])&&e.messages.push(t.messages[n]);e.nextPageToken=t.nextPage,e.loading=!1})})["catch"](function(){e.loading=!1})},e.fetchMessages(),e.isUnRead=function(e){return e.hasOwnProperty("labels")&&-1<e.labels.indexOf("UNREAD")},e.fullMessageUrl=function(e){return n.trustAsResourceUrl(app.API_PREFIX+"/gmail/messages/"+e+"/body")},e.toggleSearchMode=function(t,n){t||(e.filter=JSON.parse(i)),n&&n()},e.backToList=function(){e.message=null},e.readMessage=function(n){e.loading=!0,t.get(n).then(function(r){angular.safeApply(e,function(e){e.message=r,e.loading=!1;e.messages.filter(function(e){return e.id==n})[0];e.messages.map(function(r){if(r.id==n&&e.isUnRead(r)){var a=r.labels.indexOf("UNREAD");r.labels.splice(a,1),t.markAsRead(n)}return r})})})["catch"](function(){e.loading=!1})}}]),app.controller("QuoteController",["$scope","$http",function(e,t){e.quote={id:null,quote:"",author:""},e.loading=!1,e.fetchRandom=function(){return!e.loading&&(e.loading=!0,void t.get(app.API_PREFIX+"/quotes/random").then(function(t){e.quote=t.data,e.loading=!1}))}}]),app.controller("RssController",["$scope","$timeout","$rootScope","localStorageService","FeedService","$q",function(e,t,n,r,a,o){function i(e){return window.lang+"."+e}function s(){return c(_.pluck(e.allFeeds,"id"))}function c(e){return e.map(function(e){return parseInt(e)})}function u(){var t,n=r.keys().indexOf(i("feeds"))>-1;g=[],n?(t=r.get(i("feeds")),t.length&&(g=c(t.split(",")))):g=s(),e.savedFeeds=angular.copy(g),f()}function l(e){var t=e.split(" "),n=t[0].split("-"),r=t[1].split(":");return new Date(n[0],n[1]-1,n[2],r[0],r[1],r[2])}function d(){var t=o.defer();return e.loading||!g.length?t.resolve([]):(e.loading=!0,a.news(g).then(function(n){e.loading=!1,e.articles=n;for(var r in e.articles)e.articles[r].pubDate.date=l(e.articles[r].pubDate.date);t.resolve(n)})),t.promise}function f(){e.allChecked=g.length==e.allFeeds.length}e.loading=!1,e.allChecked=!1,e.allFeeds=[];var g=[];e.savedFeeds=[],e.articles=[],e.$watch("feeds",function(e,t){return e!==t&&void f()},!0),e.toggleAll=function(e){g=1==e.target.checked?s():[]},e.init=function(t){e.allFeeds=t,u(),d()},e.savePreferences=function(t){return e.savedFeeds=c(g),r.set(i("feeds"),e.savedFeeds.join(",")),d().then(function(){t&&t()})},e.cancel=function(e){u(),e&&e()},e.trackUntrack=function(t){t=parseInt(t),e.trackable(t)?g=_.without(g,t):g.push(t)},e.trackable=function(e){return e=parseInt(e),_.indexOf(g,e)!=-1},e.customFeedUrl="",n.rssValidLink=!0,e.addCustomRSSFeed=function(t,r){n.rssValidLink=!0,n.rssValidName=!0;var o={url:t,name:r};t&&"undefined"!=t||(n.rssValidLink=!1),r&&"undefined"!=r||(n.rssValidName=!1),0!=n.rssValidLink&&0!=n.rssValidName&&a.createCustomFeed(o).then(function(t){document.getElementById("rss_url").value="",document.getElementById("rss_name").value="",e.allFeeds.push({id:t.id,name:t.name})},function(e){n.rssValidLink=!1})}}]),app.controller("SizerController",["$scope","$window",function(e,t){function n(){return $.browser.msie?.68:.8}var r=function(){var t=n(),r=$(window).height(),a=Math.round(r*t);angular.isMobile?(e.size1=190,e.size2=230,e.size3=140):(e.size1=Math.round(.34*a),e.size2=Math.round(.44*a),e.size3=a-(e.size1+e.size2)),e.resized=!0};setTimeout(r,100),$(window).on("resize",r)}]),app.controller("WeatherController",["$scope","$timeout","WeatherService","GeoService","localStorageService","$http",function(e,t,n,r,a,o){function i(t){o.get(app.API_PREFIX+"/geo/places?name="+t).then(function(t){var n=_.uniq(t.data.predictions)||[];e.cities=n})}function s(e,t){return e.address!==t.address&&e.address.length>=3}function c(){p(),e.filter=angular.copy(h)}function u(e){e&&e()}function l(){a.set("w_fltr",JSON.stringify(_.omit(e.filter,"address"))),h=angular.copy(e.filter)}function d(){return JSON.parse(a.get("w_fltr"))}function f(){return[e.filter.location.lat,e.filter.location.lng].join(",")}function g(t,n){r.lookup(t||r.getLatitude(),n||r.getLongitude()).then(function(t){p(),e.filter.address=t.formatted_address,l(),e.$emit("location.changed")})}function p(){w=!0,t(function(){w=!1},100)}var v,m=!1,h={units:"si",location:{},address:""};e.cities=[],e.filter=angular.copy(h),e.weather={},e.loading=!1;var w=!1;e.$watch("filter",function(e,t){return!w&&e!==t&&(m=!0,s(e,t)&&i(e.address),void(w=!1))},!0),e.$on("location.changed",function(){n.fetch(f(),{units:e.filter.units}).then(function(t){e.weather=angular.extend(t,e.filter);var n=(new Date).getHours(),r=(new Date).getDate(),a=1;for(var o in e.weather.hourly.data){var i=new Date(e.weather.hourly.data[o].time),s=i.getHours(),c=i.getDate();r==c&&n==s&&(e.currentHourSummary=e.weather.hourly.data[o].summary,e.currentHourIcon=e.icon(e.weather.hourly.data[o].icon),e.currnetHourTemperature=e.weather.hourly.data[o].temperature,e.startIndex=a+24),a++}e.city=e.weather.address.split(",")[0]})}),(v=d())?(e.filter=angular.copy(v),h=angular.copy(e.filter),g(v.location.lat,v.location.lng)):r.geolocate().then(function(t){e.filter.location={lat:t.getLatitude(),lng:t.getLongitude()},g()}),e.cancel=function(e){c(),u(e)},e.savePreferences=function(t){return!!m&&(!e.loading&&(e.loading=!0,m&&e.filter.address.length?(m=!1,r.geocode(e.filter.address).then(function(n){n&&n.hasOwnProperty("geometry")&&(p(),e.filter=angular.extend(e.filter,{location:n.geometry.location}),l(),e.$emit("location.changed"),u(t)),e.loading=!1})):(e.$emit("location.changed"),u(t)),!1))},e.locationToCity=function(e){return e&&e.indexOf(",")?_.first(e.split(", ")):""},e.selectCity=function(t){p(),e.filter.address=t.description,e.cities=null},e.icon=function(e){return app.REWRITE_BASE+"images/icons/w/"+e+".png"},e.showThisHour=function(e){var t=(new Date).getHours(),n=(new Date).getDate(),r=new Date(e.time),a=r.getHours(),o=r.getDate();return n==o&&t<a||n<o},e.getTimeToDate=function(e){return new Date(e)}}]),app.directive("cardBox",["$timeout","$rootScope",function(e,t){return{restrict:"E",scope:{title:"@"},transclude:{actions:"?cardBoxActions",body:"cardBoxBody"},link:function(n,r){function a(){Object.keys(t.eventError).length>0&&(t.eventError.invalidTime&&(document.getElementById("custom-event-hours").value="",document.getElementById("custom-event-minutes").value="",document.getElementById("custom-event-seconds").value=""),t.eventError={}),t.rssValidLink=!0;var e=document.getElementsByClassName("datepicker");e.length>0||angular.safeApply(n,function(e){e.editable=!1})}n.editable=!1,e(function(){n.hasActions=!!r.find("card-box-actions").text().length}),n.switchEditableMode=function(e){n.editable=!n.editable,e&&e()},n.close=a,t.$on("cardbox.close",a)},templateUrl:app.REWRITE_BASE+"assets/templates/card-box.html"}}]),app.directive("eventIcon",[function(){return{restrict:"E",scope:null,link:function(e,t,n){var r=JSON.parse(n.event),a=null;r.birthday?a="ti-gift":r.allDay||(a="ti-alarm-clock"),e.icon=a},template:'<i ng-if="icon" class="{{ icon }}">&nbsp;</i>'}}]),function(e){"use strict";e.module("countdownTimer",[]).directive("countdown",function(t,n){return{restrict:"A",transclude:!0,link:function(n,r,a){function o(){a.units=e.isArray(a.units)?a.units:a.units.split("|");var n,r,o=a.units[a.units.length-1],i={weeks:6048e5,days:864e5,hours:36e5,minutes:6e4,seconds:1e3,milliseconds:1},c={},u="",l=new Date(a.endDate)-new Date;for(n in a.units)if(a.units.hasOwnProperty(n)){if(r=a.units[n].trim(),i[r.toLowerCase()]===!1)throw t.cancel(s),new Error("Cannot repeat unit: "+r);if(i.hasOwnProperty(r.toLowerCase())===!1)throw t.cancel(s),new Error("Unit: "+r+" is not supported. Please use following units: weeks, days, hours, minutes, seconds, milliseconds");c[r]=l/i[r.toLowerCase()],o===r?c[r]=Math.ceil(c[r]):c[r]=Math.floor(c[r]),l-=c[r]*i[r.toLowerCase()],i[r.toLowerCase()]=!1,u+=" "+c[r]+" "+r}return u}function i(){r.text(o())}var s;r.on("$destroy",function(){t.cancel(s)}),s=t(function(){i()},1)}}})}(angular),app.factory("CustomEventService",["$http","$httpParamSerializer",function(e,t){var n={};return n.createEvent=function(t){return e.post(app.API_PREFIX+"/custom-event",t).then(function(e){return e.data.data})},n.getEvent=function(){return e.get(app.API_PREFIX+"/custom-event").then(function(e){return e.data.data})},n.updateEvent=function(t){return e.post(app.API_PREFIX+"/custom-event/"+t.id,t).then(function(e){return e.data.data})},n}]),app.factory("EventsService",["$http","$httpParamSerializer",function(e,t){var n={};return n.events=function(n){var r=t({c:n,t:(new Date).getTime(),tz:0});return e.get(app.API_PREFIX+"/calendar/events?"+r).then(function(e){return e.data.data})},n}]),app.factory("FeedService",["$http","$httpParamSerializer",function(e,t){var n={};return n.news=function(n){var r=t({ids:n.join(",")});return e.get(app.API_PREFIX+"/feed/news?"+r).then(function(e){return e.data.data})},n.createCustomFeed=function(t){return e.post(app.API_PREFIX+"/feed",t).then(function(e){return e.data.data})},n}]),app.factory("GeoService",["$q","$http",function(e,t){function n(){return a.setLocation(40.7127837,-74.0059413),a}function r(e){t.get(app.API_PREFIX+"/geo/ip").then(function(t){var r=t.data;r.cityName.length&&"-"!=r.cityName?(a.setLocation(r.latitude,r.longitude),e.resolve(a)):e.resolve(n())})["catch"](function(){e.resolve(n())})}var a={lat:null,lng:null};return a.setLocation=function(e,t){return a.lat=parseFloat(e),a.lng=parseFloat(t),a},a.getLatitude=function(){return this.lat},a.getLongitude=function(){return this.lng},a.geolocate=function(){var t=e.defer();return navigator.geolocation?navigator.geolocation.getCurrentPosition(function(e){a.setLocation(e.coords.latitude,e.coords.longitude),t.resolve(a)},function(){return r(t)}):t.resolve(n()),t.promise},a.geocode=function(e){return t.get(app.API_PREFIX+"/geo/code?loc="+e).then(function(e){return e.data.results[0]})},a.lookup=function(e,n){return t.get(app.API_PREFIX+"/geo/lookup?latlng="+[e,n].join(",")).then(function(e){return e.data.results[0]})},a}]),app.factory("GmailService",["$http","$httpParamSerializer",function(e,t){var n={};return n.fetchMessages=function(n){return e.get(app.API_PREFIX+"/gmail/messages?"+t(n)).then(function(e){return e.data})},n.get=function(t){return e.get(app.API_PREFIX+"/gmail/messages/"+t+"?include=body").then(function(e){return e.data})},n.markAsRead=function(t){return e.get(app.API_PREFIX+"/gmail/messages/"+t+"/touch")},n}]),app.factory("WeatherService",["$http","$httpParamSerializer",function(e,t){var n={};return n.fetch=function(n,r){var a=angular.extend({coords:n,units:"si"},r||{}),o=app.API_PREFIX+"/weather/get?"+t(a);return e.get(o).then(function(e){return e.data})},n}]);
+/**
+ * @param {Scope} scope
+ * @param {Function} callback
+ */
+angular.safeApply = function (scope, callback) {
+    scope[(scope.$$phase || scope.$root.$$phase) ? '$eval' : '$apply'](callback || function() {});
+};
+
+angular.isMobile = (function(a)
+{
+    return /((iP([oa]+d|(hone)))|Android|WebOS|BlackBerry|windows (ce|phone))/i.test(a);
+})(navigator.userAgent||navigator.vendor||window.opera);
+
+angular.isOnline = function isOnline()
+{
+    var isOnline = (window.navigator && window.navigator.onLine);
+
+    return isOnline;
+};
+
+angular.storagePrefix = function (path) {
+    var namespace = [
+        'ymag', window['gid']
+    ];
+
+    if (path && path.length) {
+        namespace.push(path);
+    }
+
+    return namespace.join('.');
+};
+var app = angular.module('app', ['ngSanitize', 'LocalStorageModule', 'countdownTimer']);
+
+app.config(['localStorageServiceProvider', '$httpProvider', function (localStorageServiceProvider, $httpProvider) {
+    var namespace = angular.storagePrefix();
+    $httpProvider.defaults.headers.common.Authorization = 'Bearer ' + window['api_token'];
+    localStorageServiceProvider.setPrefix(namespace);
+    localStorageServiceProvider.setStorageCookie(1, '/');
+}]);
+
+app.run(['$rootScope', function ($rootScope) {
+    window.onclick = function (event) {
+        if (0 == $(event.target).closest('div.card-actions.dropdown.open').length
+            && 0 == $(event.target).closest('#cities-list').length) {
+            $rootScope.$broadcast('cardbox.close');
+        }
+    };
+}]);
+
+app.REWRITE_BASE = '/';
+if (location.host == 'dev-your-morning.rainbowriders.dk') {
+    app.REWRITE_BASE = '/public/';
+}
+
+app.API_PREFIX = app.REWRITE_BASE + 'api/v1';
+
+app.controller('CalendarController', [
+    '$scope', '$rootScope', 'EventsService', 'localStorageService',
+    function ($scope, $rootScope, EventsService, localStorageService) {
+
+        $scope.calendars = [];
+        $scope.events = [];
+        $scope.hasEvents = false;
+        $scope.calendarEvents = [];
+        
+        $scope.init = function init (calendars) {
+
+            $scope.calendars = calendars;
+            setDefaultCalendar();
+
+        };
+
+        $scope.savePreferences = function savePreferences (cb) {
+
+            var temp = [];
+
+            for(var i = 0; i < $scope.calendars.length; i++) {
+                if($scope.calendars[i].selected == true) {
+                    temp.push($scope.calendars[i]);
+                }
+            }
+
+            localStorageService.set(
+                'cal',
+                JSON.stringify(angular.copy(temp)));
+
+            fetchEvents();
+
+            if(cb) {
+                cb();
+            }
+        };
+
+        $scope.cancel = function cancel (callback) {
+            resetCalendarsStatus();
+            setDefaultCalendarsStatus(getSavedCalendars());
+            if(callback) {
+                callback();
+            }
+        };
+
+        $scope.select = function (calendar) {
+            checkUncheckCalendar(calendar);
+        };
+
+        $scope.$on('cardbox.close', function () {
+            resetCalendarsStatus();
+            setDefaultCalendarsStatus(getSavedCalendars());
+        });
+
+        $scope.$watchCollection('calendarEvents', function () {
+            $scope.events = [];
+            for( var i = 0; i < $scope.calendarEvents.length; i++) {
+
+                for (var a in $scope.calendarEvents[i]) {
+                    $scope.events.push($scope.calendarEvents[i][a]);
+                }
+            }
+            if($scope.events.length > 0) {
+                $scope.hasEvents = true;
+            }
+            $scope.events.sort(function (a, b) {
+                a = new Date(a.date);
+                b = new Date(b.date);
+                return a < b ? -1 : a > b ? 1 : 0;
+            });
+        });
+
+        function setDefaultCalendar() {
+            var saved = getSavedCalendars();
+
+            if(!saved || saved == null) {
+                $scope.calendars[0].selected = true;
+                var temp = [];
+                temp.push($scope.calendars[0]);
+                localStorageService.set(
+                    'cal',
+                    JSON.stringify(angular.copy(temp)));
+            } else {
+                setDefaultCalendarsStatus(saved);
+            }
+
+            fetchEvents();
+        }
+
+        function checkUncheckCalendar(calendar) {
+
+            for(var i =0; i < $scope.calendars.length; i++) {
+
+                if($scope.calendars[i].id == calendar.id) {
+
+                    // First time loaded
+                    if(!$scope.calendars[i].selected || $scope.calendars[i].selected == 'undefined') {
+                        $scope.calendars[i].selected = true;
+                    } else {  // if user make changed
+                        $scope.calendars[i].selected = !$scope.calendars[i].selected;
+                    }
+                }
+            }
+        }
+
+        function getSavedCalendars() {
+            return JSON.parse(localStorageService.get('cal'));
+        }
+
+        function setDefaultCalendarsStatus(calendars) {
+            for(var i =0; i < calendars.length; i++) {
+                setDefaultCalendarStatus(calendars[i]);
+            }
+        }
+
+        function setDefaultCalendarStatus(calendar) {
+            for( var i = 0; i < $scope.calendars.length; i++) {
+                if(calendar.id == $scope.calendars[i].id) {
+                    $scope.calendars[i].selected = calendar.selected || false;
+                    break;
+                }
+            }
+        }
+
+        function resetCalendarsStatus() {
+            for (var i = 0; i <$scope.calendars.length; i++) {
+                $scope.calendars[i].selected = false;
+            }
+        }
+
+        function fetchEvents () {
+            $scope.calendarEvents = [];
+            $scope.hasEvents = false;
+            for (var i = 0; i < $scope.calendars.length; i++) {
+                if($scope.calendars[i].selected == true) {
+                    EventsService.events($scope.calendars[i].id)
+                        .then(function (res) {
+                            $scope.calendarEvents.push(res);
+                        });
+                }
+            }
+        }
+    }]);
+app.controller('CustomEventController', ['$scope', '$rootScope', '$interval', 'localStorageService', 'CustomEventService',
+function ($scope, $rootScope, $interval, localStorageService, CustomEventService) {
+
+
+    $scope.eventTitle = '';
+
+    $scope.options = {
+        selectedTime: 1
+    };
+    $rootScope.eventError = {};
+    $scope.event = {};
+    $scope.timeNow = new Date();
+    $scope.loading = true;
+    var weekInMilSeconds = 1000 * 60 * 60 * 24 * 7;
+    var dayInMilSeconds = 1000 * 60 * 60 * 24;
+    var hourInMilSeconds = 1000 * 60 * 60;
+    var minuteInMilSeconds = 1000 * 60;
+    var secondsInMilSeconds = 1000;
+
+
+    $scope.setSelectedValue = function (val) {
+        return $scope.options.selectedTime = parseInt(val);
+    };
+
+    $scope.createEvent = function (callback, title) {
+
+        $rootScope.eventError = {};
+        var date = document.getElementById("datepicker-autoclose").value;
+        if($scope.options.selectedTime != 3) {
+            var hours = document.getElementById("custom-event-hours").value;
+            var minutes = document.getElementById("custom-event-minutes").value;
+            var seconds = document.getElementById("custom-event-seconds").value;
+        }
+
+        if(date == '' || date == 'undefined') {
+            $rootScope.eventError.eventDate = 'Please set a event date!';
+        }
+        if(title == '' || title == 'undefined') {
+            $rootScope.eventError.eventTitle = 'Please set a event title!';
+        }
+
+        if($scope.options.selectedTime == 3) {
+            hours = 23;
+            minutes = 59;
+            seconds = 59;
+        }
+
+        var dateToArr = transformDate(date);
+
+        var tempDate = new Date(dateToArr[2] + '-' + dateToArr[1] + '-' + dateToArr[0]);
+        if(hours) {
+            tempDate.setHours(parseInt(hours));
+        } else {
+            tempDate.setHours(0);
+        }
+        if(minutes) {
+            tempDate.setMinutes(parseInt(minutes));
+        } else {
+            tempDate.setMinutes(0);
+        }
+        if(seconds) {
+            tempDate.setSeconds(parseInt(seconds));
+        } else {
+            tempDate.setSeconds(0);
+        }
+
+        if(tempDate < new Date()) {
+            $rootScope.eventError.invalidTime = 'Event time must be in the future';
+        }
+
+        if(Object.keys($rootScope.eventError).length > 0) {
+            return;
+        }
+
+        var data = {
+            date: date,
+            minutes: minutes || null,
+            hours: hours || null,
+            seconds: seconds || null,
+            title: title,
+            time_option: $scope.options.selectedTime
+        };
+
+        if($scope.event != null) {
+
+            data.id = $scope.event.id;
+            CustomEventService.updateEvent(data)
+                .then(function (res) {
+                    fetchEvent();
+                    if(callback) {
+                        callback();
+                    }
+                });
+        } else {
+            CustomEventService.createEvent(data)
+                .then(function (res) {
+                    fetchEvent();
+                    if(callback) {
+                        callback();
+                    }
+                });
+        }
+    };
+
+    $scope.cancel = function (callback) {
+        if(callback) {
+            callback();
+        }
+    };
+
+    function transformDate(arg) {
+        return arg.split('.');
+    }
+
+    function fetchEvent() {
+        $scope.loading = true;
+        CustomEventService.getEvent()
+            .then(function (res) {
+                handleEvent(res);
+                watchClockInterval();
+            })
+    }
+    function parseDateTimeForIE(str) {
+
+        var dateAndTimeArr = str.split(' ');
+        var dateToArr = dateAndTimeArr[0].split('-');
+        var timeToArr = dateAndTimeArr[1].split(':');
+        
+        return new Date(dateToArr[0], dateToArr[1] - 1, dateToArr[2], timeToArr[0], timeToArr[1], timeToArr[2]);
+    }
+
+    function handleEvent(res) {
+        if(res == 'No event created yet') {
+            $scope.event = null;
+            return;
+        } else if(new Date(res.time) < new Date() ) {
+            $scope.event = null;
+            return;
+        }
+        $scope.event = res;
+        $scope.event.time = parseDateTimeForIE($scope.event.time);
+        $scope.options.selectedTime = parseInt(res.time_option);
+        $scope.loading = false;
+        $scope.eventTimeToString = eventTimeToString($scope.event.time);
+        $scope.eventDateToString = eventDateToString($scope.event.time);
+        calculateTime($scope.event.time, $scope.options.selectedTime);
+    }
+
+    var watchClockInterval = function () {
+        $interval(function () {
+            if($scope.event == null) {
+                $interval.cancel(watchClockInterval);
+                return;
+            }
+            if (new Date($scope.event.time) < new Date()) {
+                return $scope.event = null;
+            }
+            calculateTime($scope.event.time, $scope.options.selectedTime);
+        }, 1000);
+    };
+
+    function calculateTime(time, timeOption) {
+
+        var timeToEvent = time - new Date();
+        switch (timeOption) {
+            case 1:
+                var weeks = getWeeksAndRest(timeToEvent);
+                var days = getDaysAndRest(weeks.rest);
+                var hours = getHoursAndRest(days.rest);
+                var minutes = getMinutesAndRest(hours.rest);
+                var seconds = getSeconds(minutes.rest);
+                generateTimeStringOutput(weeks.weeks, days.days, hours.hours, minutes.minutes, seconds.seconds, timeOption);
+                break;
+            case 2:
+                var days = getDaysAndRest(timeToEvent);
+                var hours = getHoursAndRest(days.rest);
+                minutes = getMinutesAndRest(hours.rest);
+                var seconds = getSeconds(minutes.rest);
+                generateTimeStringOutput(null, days.days, hours.hours, minutes.minutes, seconds.seconds, timeOption);
+                break;
+            case  3:
+                var days = getDaysAndRest(timeToEvent);
+                generateTimeStringOutput(null, days.days, null, null, null, timeOption);
+                break;
+            default:
+                break;
+        }
+    }
+
+    $scope.$watch('options.selectedTime', function () {
+        if($scope.loading == true) {
+            return;
+        }
+        calculateTime($scope.event.time, $scope.options.selectedTime);
+    });
+
+    function getWeeksAndRest(time) {
+        return {
+            weeks: parseInt(new Date(time).getTime() / weekInMilSeconds),
+            rest: new Date(time).getTime() % weekInMilSeconds
+        }
+    }
+
+    function getDaysAndRest(time) {
+        return {
+            days: parseInt(new Date(time).getTime() / dayInMilSeconds),
+            rest: new Date(time).getTime() % dayInMilSeconds
+        }
+    }
+
+    function getHoursAndRest(time) {
+        return {
+            hours: parseInt(new Date(time).getTime() / hourInMilSeconds),
+            rest: new Date(time).getTime() % hourInMilSeconds
+        }
+    }
+
+    function getMinutesAndRest(time) {
+        return {
+            minutes: parseInt(new Date(time).getTime() / minuteInMilSeconds),
+            rest: new Date(time).getTime() % minuteInMilSeconds
+        }
+    }
+
+    function getSeconds(time) {
+        return {
+            seconds: parseInt(new Date(time).getTime() / secondsInMilSeconds)
+        }
+    }
+
+    function generateTimeStringOutput(weeks, days, hours, minutes, seconds, timeOption) {
+        switch (timeOption) {
+            case 1:
+                var weeksStr = weeks == 1 ? weeks + ' week ' : weeks + ' weeks ';
+                var daysStr = days == 1 ? days + ' day ' : days + ' days ';
+                var hoursStr = hours == 1 ? hours + ' hour ' : hours + ' hours ';
+                var minutesStr = minutes == 1 ? minutes + ' minute ' : minutes + ' minutes ';
+                var secondsStr = seconds == 1 ? seconds + ' second ' : seconds + ' seconds ';
+                $scope.timeLeftToString = 'In ' + weeksStr + daysStr + hoursStr + minutesStr + secondsStr;
+                break;
+            case 2:
+                var daysStr = days == 1 ? days + ' day ' : days + ' days ';
+                var hoursStr = hours == 1 ? hours + ' hour ' : hours + ' hours ';
+                var minutesStr = minutes == 1 ? minutes + ' minute ' : minutes + ' minutes ';
+                var secondsStr = seconds == 1 ? seconds + ' second ' : seconds + ' seconds ';
+                $scope.timeLeftToString = 'In ' + daysStr + hoursStr + minutesStr + secondsStr;
+                break;
+            case 3:
+                var daysStr = days == 1 ? days + ' day ' : days + ' days ';
+                $scope.timeLeftToString = 'In ' + daysStr;
+                break;
+            default:
+                break;
+        }
+    }
+    function eventTimeToString(time) {
+        var year = time.getFullYear();
+        var date = time.getDate() < 10 ? '0' + time.getDate() : time.getDate();
+        var month = time.getMonth() < 10 + 1? '0' + (time.getMonth() +1): time.getMonth() + 1;
+        var hour = time.getHours() < 10 ? '0' + time.getHours(): time.getHours();
+        var minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
+        var output = date + '.' + month + '.' + year + ', ' + hour + ':' + minutes;
+
+        return output;
+    }
+
+    function eventDateToString(time) {
+        var year = time.getFullYear();
+        var date = time.getDate() < 10 ? '0' + time.getDate() : time.getDate();
+        var month = time.getMonth() < 10 + 1? '0' + (time.getMonth() +1): time.getMonth() + 1;
+        var output = date + '.' + month + '.' + year;
+
+        return output;
+    }
+    fetchEvent();
+}]);
+app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStorageService',
+    function ($scope, GmailService, $sce, localStorageService) {
+        $scope.searchMode = true;
+
+        $scope.message = null;
+
+        $scope.loading = false;
+
+        $scope.nextPageToken = null;
+
+        var emptyFilter = function () {
+            return {
+                'from': '',
+                'to': '',
+                'subject': '',
+                'includeSpamTrash': false
+            };
+        };
+
+        var savedFilter;
+        if (!(savedFilter = localStorageService.get('g_fltr'))) {
+            savedFilter = JSON.stringify(emptyFilter());
+            localStorageService.set('g_fltr', savedFilter);
+        }
+
+        $scope.filter = JSON.parse(savedFilter);
+
+        $scope.messages = [];
+
+        $scope.query = buildQuery();
+
+        function buildQuery() {
+            $scope.query = '';
+
+            var q = [];
+            angular.forEach(['from', 'to', 'subject'], function (field, index, values) {
+                var value = $scope.filter[field];
+
+                if (value.length) {
+                    q.push(field + ': (' + value + ')');
+                }
+            });
+
+            $scope.query = q.join(" ").trim();
+
+            return $scope.query;
+        }
+
+        $scope.savePreferences = function (cb) {
+            $scope.messages = [];
+            $scope.nextPageToken = null;
+
+            return $scope.fetchMessages(cb);
+        };
+
+        $scope.next = $scope.fetchMessages = function (cb) {
+            if ($scope.loading) return false;
+
+            $scope.loading = true;
+
+            // save filter
+            localStorageService.set('g_fltr', savedFilter = JSON.stringify($scope.filter));
+
+            var args = {
+                'includeSpamTrash': !!$scope.filter.includeSpamTrash,
+                'q': buildQuery(),
+                'nextPageToken': $scope.nextPageToken
+            };
+
+            return GmailService.fetchMessages(args)
+                .then(function (messages) {
+                    if (cb) {
+                        cb();
+                    }
+                    // restore listing view
+                    angular.safeApply($scope, function ($scope) {
+                        for (var i in messages.messages) {
+                            if(isFromInbox(messages.messages[i])) {
+                                $scope.messages.push(messages.messages[i]);
+                            }
+                        }
+                        $scope.nextPageToken = messages.nextPage;
+
+                        $scope.loading = false;
+                    });
+                })
+                .catch(function () {
+                    $scope.loading = false;
+                });
+        };
+
+        // fetch messages on page ready
+        $scope.fetchMessages();
+
+        $scope.isUnRead = function (message) {
+            return message.hasOwnProperty('labels')
+                && (-1 < message.labels.indexOf('UNREAD'));
+        };
+
+        $scope.fullMessageUrl = function (messageId) {
+            return $sce.trustAsResourceUrl(app.API_PREFIX + '/gmail/messages/' + messageId + '/body');
+        };
+
+        $scope.toggleSearchMode = function (flag, callback) {
+            if (!flag) {
+                $scope.filter = JSON.parse(savedFilter);
+            }
+
+            // $scope.searchMode = !!flag;
+
+            if (callback) {
+                callback();
+            }
+        };
+
+        $scope.backToList = function () {
+            $scope.message = null;
+        };
+
+        $scope.readMessage = function (messageId) {
+            $scope.loading = true;
+
+            GmailService.get(messageId)
+                .then(function (message) {
+                    angular.safeApply($scope, function ($scope) {
+                        $scope.message = message;
+
+                        $scope.loading = false;
+
+                        var currentMessage = $scope.messages.filter(function (message) {
+                            return message.id == messageId;
+                        })[0];
+
+                        $scope.messages.map(function (message) {
+                            if (message.id == messageId && $scope.isUnRead(message)) {
+                                var index = message.labels.indexOf('UNREAD');
+
+                                message.labels.splice(index, 1);
+
+                                GmailService.markAsRead(messageId);
+                            }
+
+                            return message;
+                        });
+                    });
+                })
+                .catch(function () {
+                    $scope.loading = false;
+                });
+        };
+
+        function isFromInbox (msg) {
+            for (var i in msg.labels) {
+                if(msg.labels[i] == 'INBOX') {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+    }]);
+app.controller('QuoteController', ['$scope', '$http', function ($scope, $http) {
+    $scope.quote = {
+        id: null,
+        quote: '',
+        author: ''
+    };
+
+    $scope.loading = false;
+
+    /**
+     * Fetch random quote
+     */
+    $scope.fetchRandom = function () {
+        if ($scope.loading) return false;
+
+        $scope.loading = true;
+        $http.get(app.API_PREFIX + '/quotes/random').then(function (response) {
+            $scope.quote = response.data;
+            $scope.loading = false;
+        });
+    }
+}]);
+app.controller('RssController', [
+    '$scope', '$timeout', '$rootScope', 'localStorageService', 'FeedService', '$q',
+    function ($scope, $timeout, $rootScope, localStorageService, FeedService, $q) {
+        $scope.loading = false;
+
+
+        function key(path) {
+            return window['lang'] + '.' + path;
+        }
+
+        function fullList() {
+            return mapToInt(_.pluck($scope.allFeeds, 'id'));
+        }
+
+        function mapToInt(values) {
+            return values.map(function (value) {
+                return parseInt(value);
+            });
+        }
+
+        function restoreReadableFeeds() {
+            var savedFeeds;
+            var hasSavedFeeds = localStorageService.keys().indexOf(key('feeds')) > -1;
+
+            $feeds = [];
+
+            if (!hasSavedFeeds) {
+                $feeds = fullList();
+            } else {
+                savedFeeds = localStorageService.get(key('feeds'));
+                if (savedFeeds.length) {
+                    $feeds = mapToInt(savedFeeds.split(','));
+                }
+            }
+
+            $scope.savedFeeds = angular.copy($feeds);
+
+            allChecked();
+        }
+
+        function parseDateTimeForIE(str) {
+
+            var dateAndTimeArr = str.split(' ');
+            var dateToArr = dateAndTimeArr[0].split('-');
+            var timeToArr = dateAndTimeArr[1].split(':');
+
+            return new Date(dateToArr[0], dateToArr[1] - 1, dateToArr[2], timeToArr[0], timeToArr[1], timeToArr[2]);
+        }
+        
+        function fetchNews() {
+            var defer = $q.defer();
+
+            if ($scope.loading || !$feeds.length) {
+                defer.resolve([]);
+            } else {
+                $scope.loading = true;
+
+                FeedService.news($feeds).then(function (news) {
+                    $scope.loading = false;
+                    $scope.articles = news;
+
+                    for (var i in $scope.articles){
+                        $scope.articles[i].pubDate.date = parseDateTimeForIE($scope.articles[i].pubDate.date);
+                    }
+                    defer.resolve(news);
+                });
+            }
+            return defer.promise;
+        }
+
+        $scope.allChecked = false;
+
+        // all feeds
+        $scope.allFeeds = [];
+
+        // readable feeds
+        var $feeds = [];
+
+        $scope.savedFeeds = [];
+
+        $scope.articles = [];
+
+
+        function allChecked() {
+            $scope.allChecked = ($feeds.length == $scope.allFeeds.length);
+        }
+
+        $scope.$watch('feeds', function (v1, v2) {
+            if (v1 === v2) return false;
+
+            allChecked();
+        }, true);
+
+        $scope.toggleAll = function ($event) {
+            if ($event.target.checked == true) {
+                $feeds = fullList();
+            } else {
+                $feeds = [];
+            }
+        };
+
+        $scope.init = function (allFeeds) {
+            $scope.allFeeds = allFeeds;
+            restoreReadableFeeds();
+
+            fetchNews();
+        };
+
+        $scope.savePreferences = function (cb) {
+            $scope.savedFeeds = mapToInt($feeds);
+
+            localStorageService.set(key('feeds'), $scope.savedFeeds.join(','));
+
+            return fetchNews().then(function () {
+                if (cb) {
+                    cb();
+                }
+            });
+        };
+
+        $scope.cancel = function (cb) {
+            restoreReadableFeeds();
+
+            if (cb) {
+                cb();
+            }
+        };
+
+        $scope.trackUntrack = function (feed_id) {
+            feed_id = parseInt(feed_id);
+
+            if ($scope.trackable(feed_id)) {
+                $feeds = _.without($feeds, feed_id);
+            } else {
+                $feeds.push(feed_id);
+            }
+        };
+
+        $scope.trackable = function (feed_id) {
+            feed_id = parseInt(feed_id);
+
+            return _.indexOf($feeds, feed_id) != -1;
+        };
+
+        $scope.customFeedUrl = '';
+        $rootScope.rssValidLink = true;
+
+        $scope.addCustomRSSFeed = function (url, name) {
+            $rootScope.rssValidLink = true;
+            $rootScope.rssValidName = true;
+            var data = {
+                url: url,
+                name: name
+            };
+            if(!url || url == 'undefined') {
+                $rootScope.rssValidLink = false;
+            }
+            if(!name || name == 'undefined') {
+                $rootScope.rssValidName = false;
+            }
+            if($rootScope.rssValidLink == false || $rootScope.rssValidName == false) {
+                return;
+            }
+            FeedService.createCustomFeed(data)
+                .then(function (res) {
+                    document.getElementById('rss_url').value = '';
+                    document.getElementById('rss_name').value = '';
+                    $scope.allFeeds.push({id: res.id, name: res.name});
+                }, function (err) {
+                    $rootScope.rssValidLink = false;
+                })
+        };
+
+    }]);
+app.controller('SizerController', ['$scope', '$window', function ($scope, $window) {
+    function getMultiplier() {
+        if ($.browser.msie) {
+            return 0.68;
+        }
+
+        return 0.8;
+    }
+
+    var resize = function() {
+        var k = getMultiplier();
+
+        var viewport = $(window).height();
+        var height = Math.round(viewport * k);
+
+        if (! angular.isMobile) {
+            $scope.size1 = Math.round(height * 0.34);
+            $scope.size2 = Math.round(height * 0.44);
+            $scope.size3 = height - ($scope.size1 + $scope.size2);
+        } else {
+            $scope.size1 = 190;
+            $scope.size2 = 230;
+            $scope.size3 = 140;
+        }
+
+        $scope.resized = true;
+    };
+    setTimeout(resize, 100);
+
+    $(window).on('resize', resize);
+}]);
+app.controller('WeatherController', [
+    '$scope', '$timeout', 'WeatherService', 'GeoService', 'localStorageService', '$http',
+    function ($scope, $timeout, WeatherService, GeoService, localStorageService, $http) {
+        var filterChanged = false, savedFilter;
+
+        var defaultFilter = {
+            units: 'si',
+            location: {},
+            address: ""
+        };
+
+        $scope.cities = [];
+
+        $scope.filter = angular.copy(defaultFilter);
+
+        $scope.weather = {};
+
+        $scope.loading = false;
+
+        function searchForCity(name) {
+            $http.get(app.API_PREFIX + '/geo/places?name=' + name)
+                .then(function (response) {
+                    var cities = _.uniq(response.data.predictions) || [];
+
+                    $scope.cities = cities;
+                });
+        }
+
+        // skipTracking used when city is predicted by Places API and directly inserted into filter.location
+        // so to prevent double checking, temporary skip this step
+        var skipTracking = false;
+
+        function addressModified(n1, n2) {
+            return n1.address !== n2.address && n1.address.length >= 3;
+        }
+
+        $scope.$watch('filter', function (n1, n2) {
+            if (skipTracking || n1 === n2) return false;
+            filterChanged = true;
+
+            if (addressModified(n1, n2)) {
+                searchForCity(n1.address);
+            }
+
+            // restore tracking:
+            skipTracking = false;
+        }, true);
+
+        function restoreSavedFilter() {
+            delayFilterTracking();
+
+            $scope.filter = angular.copy(defaultFilter);
+        }
+
+        function finish(cb) {
+            if (cb) {
+                cb();
+            }
+        }
+
+        function cacheFilter() {
+            localStorageService.set('w_fltr', JSON.stringify(_.omit($scope.filter, 'address')));
+
+            defaultFilter = angular.copy($scope.filter);
+        }
+
+        function loadCachedFilter() {
+            return JSON.parse(localStorageService.get('w_fltr'));
+        }
+
+        function currentLocation() {
+            return [
+                $scope.filter.location.lat,
+                $scope.filter.location.lng
+            ].join(",")
+        }
+
+        // when location or units did change => fetch new weather and set to cache
+        $scope.$on('location.changed', function () {
+            WeatherService.fetch(currentLocation(), {units: $scope.filter.units}).then(function (results) {
+                $scope.weather = angular.extend(results, $scope.filter);
+
+                var currnetHour = new Date().getHours();
+                var currentDate = new Date().getDate();
+                var counter = 1;
+                for (var i in $scope.weather.hourly.data) {
+
+                    var time = new Date($scope.weather.hourly.data[i].time);
+                    var hour = time.getHours();
+                    var date = time.getDate();
+                    if(currentDate == date && currnetHour == hour) {
+                        $scope.currentHourSummary = $scope.weather.hourly.data[i].summary;
+                        $scope.currentHourIcon = $scope.icon($scope.weather.hourly.data[i].icon);
+                        $scope.currnetHourTemperature = $scope.weather.hourly.data[i].temperature;
+                        $scope.startIndex = counter + 24;
+                    }
+
+
+                    counter++;
+                }
+                $scope.city = $scope.weather.address.split(',')[0];
+            });
+        });
+
+        if (!(savedFilter = loadCachedFilter())) {
+            GeoService.geolocate().then(function (GeoService) {
+                $scope.filter.location = {
+                    lat: GeoService.getLatitude(),
+                    lng: GeoService.getLongitude()
+                };
+
+                lookup();
+            });
+        } else {
+            $scope.filter = angular.copy(savedFilter);
+            defaultFilter = angular.copy($scope.filter);
+
+            lookup(savedFilter.location.lat, savedFilter.location.lng);
+        }
+
+        function lookup(lat, lng) {
+            GeoService.lookup(lat || GeoService.getLatitude(), lng || GeoService.getLongitude()).then(function (result) {
+                delayFilterTracking();
+                $scope.filter.address = result.formatted_address;
+
+                cacheFilter();
+
+                $scope.$emit('location.changed');
+            });
+        }
+
+        $scope.cancel = function (callback) {
+            restoreSavedFilter();
+
+            finish(callback);
+        };
+
+        /**
+         * Save module preferences
+         * @returns {boolean}
+         */
+        $scope.savePreferences = function (callback) {
+            if (!filterChanged)
+                return false;
+
+            if ($scope.loading)
+                return false;
+
+            $scope.loading = true;
+
+            if (filterChanged && $scope.filter.address.length) {
+                filterChanged = false;
+                GeoService.geocode($scope.filter.address).then(function (result) {
+                    if (result && result.hasOwnProperty('geometry')) {
+                        delayFilterTracking();
+
+                        $scope.filter = angular.extend($scope.filter, {
+                            // address: result.formatted_address,
+                            location: result.geometry.location
+                        });
+
+                        cacheFilter();
+
+                        $scope.$emit('location.changed');
+
+                        finish(callback);
+                    }
+
+                    $scope.loading = false;
+                });
+            } else {
+                $scope.$emit('location.changed');
+
+                finish(callback);
+            }
+
+            return false;
+        };
+
+        $scope.locationToCity = function (address) {
+            if (!address || !address.indexOf(',')) return '';
+
+            return _.first(
+                address.split(', ')
+            );
+        };
+
+        function delayFilterTracking() {
+            skipTracking = true;
+
+            $timeout(function () {
+                skipTracking = false;
+            }, 100);
+        }
+
+        $scope.selectCity = function (city) {
+            delayFilterTracking();
+
+            $scope.filter.address = city.description;
+
+            $scope.cities = null;
+        };
+
+        $scope.icon = function (icon) {
+            return app.REWRITE_BASE + 'images/icons/w/' + icon + '.png';
+        }
+
+        $scope.showThisHour = function (currentHourData) {
+            var currnetHour = new Date().getHours();
+            var currentDate = new Date().getDate();
+            var time = new Date(currentHourData.time);
+            var hour = time.getHours();
+            var date = time.getDate();
+            if(currentDate == date && currnetHour < hour) {
+                return true;
+            } else if(currentDate < date) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        $scope.getTimeToDate = function (time) {
+            return new Date(time);
+        }
+    }]);
+app.directive('cardBox', ['$timeout', '$rootScope', function ($timeout, $rootScope) {
+    return {
+        'restrict': "E",
+        'scope': {
+            'title': "@"
+        },
+        'transclude': {
+            'actions': '?cardBoxActions',
+            'body': 'cardBoxBody'
+        },
+        'link': function (scope, element) {
+            scope.editable = false;
+
+            /**
+             * toggle the actions button if no actions content provided
+             * @type {boolean}
+             */
+            $timeout(function () {
+                scope.hasActions = !!element.find('card-box-actions').text().length;
+            });
+
+            /**
+             * Toggle box's preferences
+             */
+            scope.switchEditableMode = function (callback) {
+
+                scope.editable = !scope.editable;
+
+
+                if (callback) {
+                    callback();
+                }
+            };
+
+            function close() {
+
+                if(Object.keys($rootScope.eventError).length > 0) {
+                    if($rootScope.eventError.invalidTime) {
+                        document.getElementById("custom-event-hours").value = '';
+                        document.getElementById("custom-event-minutes").value = '';
+                        document.getElementById("custom-event-seconds").value = '';
+                    }
+                    $rootScope.eventError = {};
+                }
+
+                $rootScope.rssValidLink = true;
+                var datePickerOpen = document.getElementsByClassName("datepicker");
+                if(datePickerOpen.length > 0) {
+                    return;
+                }
+                angular.safeApply(scope, function (scope) {
+                    scope.editable = false;
+                });
+            }
+
+            scope.close = close;
+
+            $rootScope.$on('cardbox.close', close);
+        },
+        'templateUrl': app.REWRITE_BASE + 'assets/templates/card-box.html'
+    };
+}]);
+app.directive('eventIcon', [function () {
+    return {
+        restrict: "E",
+        scope: null,
+        link: function (scope, element, attribs) {
+            var event = JSON.parse(attribs.event);
+            var icon = null;
+
+            if (event.birthday) {
+                icon = 'ti-gift';
+            } else if (! event.allDay) {
+                icon = 'ti-alarm-clock';
+            }
+
+            scope.icon = icon;
+        },
+        template: '<i ng-if="icon" class="{{ icon }}">&nbsp;</i>'
+    };
+}]);
+/*global angular */
+(function (angular) {
+    'use strict';
+    angular.module('countdownTimer', [])
+        .directive('countdown', function ($interval, dateFilter) {
+            return {
+                restrict: 'A',
+                transclude: true,
+                link: function (scope, element, attrs) {
+                    var countDownInterval;
+
+                    function displayString() {
+                        
+                        attrs.units = angular.isArray(attrs.units) ?  attrs.units : attrs.units.split('|');
+                        var lastUnit = attrs.units[attrs.units.length - 1],
+                            unitConstantForMillisecs = {
+                                weeks: (1000 * 60 * 60 * 24 * 7),
+                                days: (1000 * 60 * 60 * 24),
+                                hours: (1000 * 60 * 60),
+                                minutes: (1000 * 60),
+                                seconds: 1000,
+                                milliseconds: 1
+                            },
+                            unitsLeft = {},
+                            returnString = '',
+                            totalMillisecsLeft = new Date(attrs.endDate) - new Date(),
+                            i,
+                            unit;
+                        for (i in attrs.units) {
+                            if (attrs.units.hasOwnProperty(i)) {
+                                //validation
+                                unit = attrs.units[i].trim();
+                                if (unitConstantForMillisecs[unit.toLowerCase()] === false) {
+                                    $interval.cancel(countDownInterval);
+                                    throw new Error('Cannot repeat unit: ' + unit);
+
+                                }
+                                if (unitConstantForMillisecs.hasOwnProperty(unit.toLowerCase()) === false) {
+                                    $interval.cancel(countDownInterval);
+                                    throw new Error('Unit: ' + unit + ' is not supported. Please use following units: weeks, days, hours, minutes, seconds, milliseconds');
+                                }
+
+                                //saving unit left into object
+                                unitsLeft[unit] = totalMillisecsLeft / unitConstantForMillisecs[unit.toLowerCase()];
+
+                                //precise rounding
+                                if (lastUnit === unit) {
+                                    unitsLeft[unit] = Math.ceil(unitsLeft[unit]);
+                                } else {
+                                    unitsLeft[unit] = Math.floor(unitsLeft[unit]);
+                                }
+                                //updating total time left
+                                totalMillisecsLeft -= unitsLeft[unit] * unitConstantForMillisecs[unit.toLowerCase()];
+                                //setting this value to false for validation of repeated units
+                                unitConstantForMillisecs[unit.toLowerCase()] = false;
+                                //adding verbage
+
+                                returnString += ' ' + unitsLeft[unit] + ' ' + unit;
+                                
+                            }
+                        }
+                        return returnString;
+                    }
+                    function updateCountDown() {
+                        element.text(displayString());
+                    }
+
+                    element.on('$destroy', function () {
+                        $interval.cancel(countDownInterval);
+                    });
+
+                    countDownInterval = $interval(function () {
+                        updateCountDown();
+                    }, 1);
+                }
+            };
+        });
+}(angular));
+app.factory('CustomEventService', ['$http', '$httpParamSerializer', function ($http, $httpParamSerializer) {
+    var factory = {};
+
+    factory.createEvent = function (data) {
+
+        return $http.post(app.API_PREFIX + '/custom-event', data)
+            .then(function (response) {
+                return response.data.data;
+            });
+    };
+
+    factory.getEvent = function () {
+        return $http.get(app.API_PREFIX + '/custom-event')
+            .then(function (response) {
+                return response.data.data;
+            })
+    };
+
+    factory.updateEvent = function (data) {
+        return $http.post(app.API_PREFIX + '/custom-event/' + data.id, data)
+            .then(function (response) {
+                return response.data.data;
+            });
+    };
+
+    return factory;
+}]);
+app.factory('EventsService', ['$http', '$httpParamSerializer', function ($http, $httpParamSerializer) {
+    var factory = {};
+
+    factory.events = function (calendar) {
+        var args = $httpParamSerializer({
+            'c': calendar,
+            't': (new Date).getTime(),
+            'tz' : 0//(new Date).getTimezoneOffset()
+        });
+        return $http.get(app.API_PREFIX + '/calendar/events?' + args)
+            .then(function (response) {
+                return response.data.data;
+            });
+    };
+
+    return factory;
+}]);
+app.factory('FeedService', ['$http', '$httpParamSerializer', function ($http, $httpParamSerializer) {
+    var factory = {};
+
+    factory.news = function (feeds) {
+        var args = $httpParamSerializer({
+            ids: feeds.join(',')
+        });
+        return $http.get(app.API_PREFIX + '/feed/news?' + args)
+            .then(function (response) {
+                return response.data.data;
+            });
+    };
+
+    factory.createCustomFeed = function (data) {
+        return $http.post(app.API_PREFIX + '/feed', data)
+            .then(function (res) {
+               return res.data.data;
+            })
+    };
+
+    return factory;
+}]);
+app.factory('GeoService', ['$q', '$http', function ($q, $http) {
+    var factory = {
+        lat: null,
+        lng: null
+    };
+
+    factory.setLocation = function (lat, lng) {
+        factory.lat = parseFloat(lat);
+        factory.lng = parseFloat(lng);
+
+        return factory;
+    };
+
+    factory.getLatitude = function () {
+        return this.lat;
+    };
+
+    factory.getLongitude = function () {
+        return this.lng;
+    };
+
+    function setDefaultLocation() {
+        factory.setLocation(
+            40.7127837,
+            -74.0059413
+        );
+
+        return factory;
+    }
+
+    function fetchLocationUsingIP(defer) {
+        $http.get(app.API_PREFIX + '/geo/ip').then(function (response) {
+            var data = response.data;
+            if (data.cityName.length && '-' != data.cityName) {
+                factory.setLocation(
+                    data.latitude,
+                    data.longitude
+                );
+                defer.resolve(factory);
+            } else {
+                defer.resolve(
+                    setDefaultLocation()
+                );
+            }
+        }).catch(function () {
+            defer.resolve(
+                setDefaultLocation()
+            );
+        });
+    }
+
+    /**
+     * Locate the client by asking Navigator.GeoLocation.
+     */
+    factory.geolocate = function () {
+        var defer = $q.defer();
+
+        // setTimeout(function () {
+        //     return fetchLocationUsingIP(defer);
+        // }, 5000);
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                factory.setLocation(
+                    position.coords.latitude,
+                    position.coords.longitude
+                );
+
+                defer.resolve(factory);
+            }, function () {
+                return fetchLocationUsingIP(defer);
+            });
+        } else {
+            // set default location to new york
+            defer.resolve(
+                setDefaultLocation()
+            );
+        }
+
+        return defer.promise;
+    };
+
+    factory.geocode = function (location) {
+        return $http.get(app.API_PREFIX + '/geo/code?loc=' + location)
+            .then(function (response) {
+                return response.data.results[0];
+            });
+    };
+
+    factory.lookup = function (lat, lng) {
+        return $http.get(app.API_PREFIX + '/geo/lookup?latlng=' + [lat, lng].join(','))
+            .then(function (response) {
+                return response.data.results[0];
+            });
+    };
+
+    return factory;
+}]);
+app.factory('GmailService', ['$http', '$httpParamSerializer', function ($http, $httpParamSerializer) {
+    var factory = {};
+
+    /**
+     * Fetch the messages list that match criteria.
+     *
+     * @param args
+     * @returns {*}
+     */
+    factory.fetchMessages = function (args) {
+        return $http.get(app.API_PREFIX + '/gmail/messages?' + $httpParamSerializer(args))
+            .then(function (response) {
+                return response.data;
+            });
+    };
+
+    /**
+     * Fetch the message.
+     *
+     * @param messageId
+     * @returns {*}
+     */
+    factory.get = function (messageId) {
+        return $http.get(app.API_PREFIX + '/gmail/messages/' + messageId + '?include=body')
+            .then(function (response) {
+                return response.data;
+            });
+    };
+
+    /**
+     * Mark message as Read.
+     *
+     * @param messageId
+     * @returns {*}
+     */
+    factory.markAsRead = function (messageId) {
+        return $http.get(app.API_PREFIX + '/gmail/messages/' + messageId + '/touch');
+    };
+
+    return factory;
+}]);
+app.factory("WeatherService", ['$http', '$httpParamSerializer', function ($http, $httpParamSerializer) {
+    var factory = {};
+
+    factory.fetch = function (coords, params) {
+        var $args = angular.extend({
+            coords: coords,
+            units: 'si'
+        }, params || {});
+
+        var $url = app.API_PREFIX + '/weather/get?' + $httpParamSerializer($args);
+        return $http
+            .get($url)
+            .then(function (response) {
+                return response.data;
+            });
+    };
+
+    return factory;
+}]);
+//# sourceMappingURL=app.js.map

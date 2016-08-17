@@ -11,7 +11,7 @@
                         &nbsp;&nbsp;</span>
                         <br>
                         <span class="quote-author">- @{{ quote.author }}</span>
-                        <button class="btn btn-link pull-right" ng-click="fetchRandom()">
+                        <button class="btn btn-link quote-btn" ng-click="fetchRandom()">
                             {{ trans('buttons.more') }}
                             <i class="zmdi zmdi-long-arrow-right"></i>
                         </button>

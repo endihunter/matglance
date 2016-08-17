@@ -31,7 +31,6 @@ class GmailController extends Controller
             $me->email,
             $request
         );
-
         return [
             'messages' => array_map(function ($item) {
                 return (new GmailMessageTransformer)->transform($item);

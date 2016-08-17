@@ -69,9 +69,9 @@
                     <div class="clearfix"></div>
                 </div>
 
-                <div ng-if="! message" style="overflow: hidden">
+                <div ng-if="! message" style="overflow: hidden" ng-if="messages.length >= 10">
                     <ul class="list-group">
-                        <li ng-click="readMessage(message.id)" class="g-message-list-item list-group-item" ng-repeat="message in messages">
+                        <li ng-click="readMessage(message.id)" class="g-message-list-item list-group-item" ng-repeat="message in messages" >
                             {{--<small class="label label-default pull-right">@{{ message.date }}</small>--}}
                             <strong class="msg-from pull-left">
                                 @{{ message.from[1] || message.from[0] }}

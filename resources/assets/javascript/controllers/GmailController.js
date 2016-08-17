@@ -80,8 +80,8 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                             }
                         }
                         $scope.nextPageToken = messages.nextPage;
-
                         $scope.loading = false;
+                        console.log($scope.messages);
                     });
                 })
                 .catch(function () {
@@ -157,5 +157,11 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
             }
             return false;
         }
+
+        $scope.$watchCollection('messages', function () {
+            if($scope.messages.length < 10) {
+                $scope.next();
+            }
+        })
 
     }]);

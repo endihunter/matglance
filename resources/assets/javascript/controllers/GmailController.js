@@ -4,6 +4,8 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
 
         $scope.message = null;
 
+        $scope.messagesLowThanTen = false;
+
         $scope.loading = false;
 
         $scope.nextPageToken = null;
@@ -72,6 +74,10 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                     if (cb) {
                         cb();
                     }
+                    // stop to push duplicated messages
+                    if(messages.messages.length < 10) {
+                        $scope.messagesLowThanTen = true;
+                    }
                     // restore listing view
                     angular.safeApply($scope, function ($scope) {
                         for (var i in messages.messages) {
@@ -81,7 +87,6 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                         }
                         $scope.nextPageToken = messages.nextPage;
                         $scope.loading = false;
-                        console.log($scope.messages);
                     });
                 })
                 .catch(function () {
@@ -159,7 +164,7 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
         }
 
         $scope.$watchCollection('messages', function () {
-            if($scope.messages.length < 10) {
+            if($scope.messages.length < 10 && $scope.messagesLowThanTen == false) {
                 $scope.next();
             }
         })

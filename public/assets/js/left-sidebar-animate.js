@@ -6,8 +6,8 @@ $(document).ready(function () {
             $('#sidebar-menu').animate({'margin-left': '0px'});
             menuHidden = !menuHidden;
         } else {
-            $('.user-box').animate({'margin-left': '-400px'});
-            $('#sidebar-menu').animate({'margin-left': '-400px'});
+            $('.user-box').animate({'margin-left': '-800px'});
+            $('#sidebar-menu').animate({'margin-left': '-800px'});
             menuHidden = !menuHidden;
         }
     })

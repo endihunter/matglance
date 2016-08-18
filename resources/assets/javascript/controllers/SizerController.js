@@ -12,16 +12,28 @@ app.controller('SizerController', ['$scope', '$window', function ($scope, $windo
 
         var viewport = $(window).height();
         var height = Math.round(viewport * k);
-
+        
         if (! angular.isMobile) {
-            $scope.size1 = Math.round(height * 0.34);
-            $scope.size2 = Math.round(height * 0.44);
-            $scope.size3 = height - ($scope.size1 + $scope.size2);
+            if(viewport > 800) {
+                $scope.size1 = Math.round(height * 0.35);
+                $scope.size2 = Math.round(height * 0.45);
+                $scope.size3 = height - ($scope.size1 + $scope.size2);
+            } else if (viewport > 660) {
+                $scope.size1 = Math.round(height * 0.35);
+                $scope.size2 = Math.round(height * 0.42);
+                $scope.size3 = height - ($scope.size1 + $scope.size2 + 20);
+            } else {
+                $scope.size1 = Math.round(height * 0.33);
+                $scope.size2 = Math.round(height * 0.38);
+                $scope.size3 = height - ($scope.size1 + $scope.size2 + 70);
+            }
+
         } else {
             $scope.size1 = 190;
             $scope.size2 = 230;
             $scope.size3 = 140;
         }
+
 
         $scope.resized = true;
     };

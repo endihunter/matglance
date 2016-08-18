@@ -55,7 +55,7 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div style="overflow-y: auto;" ng-style="{'height': size3 + 'px'}">
+            <div style="overflow-y: auto;" ng-style="{'height': size3 + 'px'}" style="overflow-y: auto">
                 <div ng-if="event != null">
                     <h4 class="text-dark text-center"><strong>@{{ event.title }}</strong></h4>
                     <p class="text-center">@{{ eventTimeToString }}</p>

@@ -2,8 +2,6 @@ app.controller('CustomEventController', ['$scope', '$rootScope', '$interval', 'l
 function ($scope, $rootScope, $interval, localStorageService, CustomEventService) {
 
 
-    $scope.eventTitle = '';
-
     $scope.options = {
         selectedTime: 1
     };
@@ -22,10 +20,11 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
         return $scope.options.selectedTime = parseInt(val);
     };
 
-    $scope.createEvent = function (callback, title) {
+    $scope.createEvent = function (callback) {
 
         $rootScope.eventError = {};
         var date = document.getElementById("datepicker-autoclose").value;
+        var title = document.getElementById("event-title").value;
         if($scope.options.selectedTime != 3) {
             var hours = document.getElementById("custom-event-hours").value;
             var minutes = document.getElementById("custom-event-minutes").value;
@@ -35,15 +34,17 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
         if(date == '' || date == 'undefined') {
             $rootScope.eventError.eventDate = 'Please set an event date!';
         }
-        if($scope.eventTitle == '' || $scope.eventTitle == 'undefined') {
+
+        if(title == '' || title == 'undefined') {
             $rootScope.eventError.eventTitle = 'Please set an event title!';
         }
+
+
         if($scope.options.selectedTime == 3) {
             hours = 23;
             minutes = 59;
             seconds = 59;
         }
-        console.log(title);
         var dateToArr = transformDate(date);
 
         var tempDate = new Date(dateToArr[2] + '-' + dateToArr[1] + '-' + dateToArr[0]);

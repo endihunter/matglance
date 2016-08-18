@@ -18,6 +18,7 @@ class GoogleApiServiceProvider extends ServiceProvider
         $client->setScopes(config('services.google.scopes'));
         $client->setApplicationName(config('app.url'));
         $client->setAuthConfigFile(resource_path('client_secret.json'));
+        $client->setApprovalPrompt('force');    
 
         $client->setAccessType('offline');
 

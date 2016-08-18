@@ -152,3 +152,8 @@ i.ti-menu:hover {
   bottom: 25px;
   right: 25px;
 }
+@media (max-width: 1400px) {
+  #new-event-container .pull-right>.dropdown-menu {
+    margin-top: -300px;
+  }
+}

@@ -36,9 +36,9 @@ class GoogleApiServiceProvider extends ServiceProvider
 
             // @todo: Remove this statement on production
             //$client->setApprovalPrompt('force');
-            if (env('FORCE_ACCOUNT_CHOOSER', true)) {
-                $client->setPrompt('select_account');
-            }
+//            if (env('FORCE_ACCOUNT_CHOOSER', true)) {
+//                $client->setPrompt('select_account');
+//            }
 
             /**
              * @var Guard $auth;

@@ -6,6 +6,8 @@ use App\Repositories\CalendarRepository;
 use App\Repositories\FeedsRepository;
 use App\Repositories\QuotesRepository;
 
+
+
 use App\Http\Requests;
 
 class DashboardController extends Controller
@@ -28,6 +30,7 @@ class DashboardController extends Controller
         $this->quotes = $quotes;
         $this->feeds = $feeds;
         $this->calendar = $calendar;
+
     }
 
     public function index()

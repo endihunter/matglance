@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
-use Google_Client;
 
 class Authenticate
 {
@@ -24,24 +23,6 @@ class Authenticate
             } else {
                 return redirect()->guest('login');
             }
-        }
-
-        $me = auth()->user();
-
-        if(!$me) {
-            $me = Auth::guard('api')->user();
-        }
-        $token = $me->token;
-
-        $client = new Google_Client;
-        $client->setAccessToken(json_encode($token));
-        // Refresh the token if it's expired.
-        if ($client->isAccessTokenExpired()) {
-            $client->refreshToken(
-                $refreshToken = $client->getRefreshToken()
-            );
-
-            $me->refreshToken($refreshToken);
         }
 
         return $next($request);

@@ -33,12 +33,11 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
         }
 
         if(date == '' || date == 'undefined') {
-            $rootScope.eventError.eventDate = 'Please set a event date!';
+            $rootScope.eventError.eventDate = 'Please set an event date!';
         }
-        if(title == '' || title == 'undefined') {
-            $rootScope.eventError.eventTitle = 'Please set a event title!';
+        if($scope.eventTitle == '' || $scope.eventTitle == 'undefined') {
+            $rootScope.eventError.eventTitle = 'Please set an event title!';
         }
-
         if($scope.options.selectedTime == 3) {
             hours = 23;
             minutes = 59;

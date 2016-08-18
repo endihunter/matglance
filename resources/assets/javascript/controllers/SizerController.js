@@ -3,7 +3,6 @@ app.controller('SizerController', ['$scope', '$window', function ($scope, $windo
         if ($.browser.msie) {
             return 0.68;
         }
-
         return 0.8;
     }
 
@@ -12,7 +11,6 @@ app.controller('SizerController', ['$scope', '$window', function ($scope, $windo
 
         var viewport = $(window).height();
         var height = Math.round(viewport * k);
-        
         if (! angular.isMobile) {
             if(viewport > 800) {
                 $scope.size1 = Math.round(height * 0.35);

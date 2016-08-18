@@ -4,9 +4,9 @@
             <div class="form-group">
                 <h5>{{ trans('customEvent.settings') }}</h5>
             </div>
-            <form ng-submit="createEvent($parent.switchEditableMode, event.title, hours, minutes, seconds)">
+            <form ng-submit="createEvent($parent.switchEditableMode, eventTitle, hours, minutes, seconds)">
                 <div class="input-group events-full-width-inputs" ng-class="eventError.eventTitle ? 'has-error has-feedback' : ''">
-                    <input type="text" class="form-control" placeholder=" {{ trans('customEvent.name') }} " ng-model="event.title" ng-change="eventError.eventTitle = ''">
+                    <input type="text" class="form-control" placeholder=" {{ trans('customEvent.name') }} " ng-model="eventTitle" ng-change="eventError.eventTitle = ''">
                     <div ng-if="eventError.eventTitle"><span>
                             <small class="text-danger">@{{ eventError.eventTitle }}</small>
                         </span>

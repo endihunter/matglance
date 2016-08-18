@@ -43,7 +43,7 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
             minutes = 59;
             seconds = 59;
         }
-
+        console.log(title);
         var dateToArr = transformDate(date);
 
         var tempDate = new Date(dateToArr[2] + '-' + dateToArr[1] + '-' + dateToArr[0]);

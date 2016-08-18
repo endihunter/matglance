@@ -16,7 +16,6 @@ class CalendarController extends Controller
     public function calendars()
     {
         $me = Auth::guard('api')->user();
-
         return \Restable::listing(
             Calendar::of($me->email)->listCalendars(),
             new CalendarTransformer

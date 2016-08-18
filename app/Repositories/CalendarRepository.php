@@ -37,7 +37,7 @@ class CalendarRepository
         array_push($result, $readerCalendars);
 
         $result = array_collapse($result);
-
+//        dd($result);
         return array_map(
             [$this, 'calendar'],
             $result
@@ -50,6 +50,6 @@ class CalendarRepository
     }
 
     protected function sortByName($a, $b) {
-        return ($a['summary'] > $b['summary']) ? 1 : -1;
+        return (strtolower($a['summary']) > strtolower($b['summary'])) ? 1 : -1;
     }
 }

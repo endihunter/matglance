@@ -5,8 +5,8 @@
                 <h5>{{ trans('calendar.title') }}</h5>
             </div>
             <form ng-submit="savePreferences($parent.switchEditableMode)" novalidate name="form">
-                <div class="btn-group">
-                    <ul class="list-unstyled">
+                <div class="btn-group" style="display: block">
+                    <ul class="list-unstyled"   style="max-height: 400px; overflow-y: auto; width: 100%;">
                         <li ng-repeat="cal in calendars">
                             <label>
                                 <input type="checkbox" name="calendar" ng-checked="cal.selected" ng-click="select(cal)">&nbsp;

@@ -38,7 +38,7 @@
                     <div class="row weather-data-container">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             <div class="col-md-12 col-lg-12 text-center">
-                                <img  ng-src="@{{ currentHourIcon }}" alt="" width="50" height="50">
+                                <img  ng-src="@{{ currentHourIcon }}" alt="" class="current-weather-icon">
                                 <h4 class="text-primary">@{{ currentHourSummary }}</h4>
                             </div>
                         </div>

@@ -39,11 +39,12 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div style="overflow-y: auto;" ng-style="{'height': size2 + 'px'}" ng-class="{'mail-empty' : isEmailsEmpty()}">
+            <div style="overflow-y: auto;" ng-style="{'height': size2 + 'px'}" ng-class="{'mail-empty' : showBackground}">
                 <div ng-if="message">
                     <a ng-click="backToList()" class="btn btn-default">
                         <i class="zmdi zmdi-long-arrow-return"></i>
                         {{ trans('buttons.back') }}
+
                     </a>
                     <a ng-href="https://mail.google.com/mail/u/0/#inbox/@{{ message.id }}" target="_blank" class="btn btn-link">
                         <i class="class zmdi zmdi-swap"></i>

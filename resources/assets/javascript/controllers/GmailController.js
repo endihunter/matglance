@@ -78,6 +78,11 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                     if(messages.messages.length < 10) {
                         $scope.messagesLowThanTen = true;
                     }
+                    // image background helper
+                    if(messages.messages.length == 0) {
+                        $scope.loading = false;
+                        $scope.showBackground = $scope.isEmailsEmpty();
+                    }
                     // restore listing view
                     angular.safeApply($scope, function ($scope) {
                         for (var i in messages.messages) {
@@ -167,18 +172,17 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                 $scope.next();
             } else {
                 $scope.loading = false;
-                $scope.isEmailsEmpty();
-
+                $scope.showBackground = $scope.isEmailsEmpty();
             }
         });
 
         $scope.isEmailsEmpty = function isEmailsEmpty() {
 
             if($scope.loading == false && !$scope.messages.length) {
-                return $scope.showBackground = true;
+                return true;
             }
 
-            return $scope.showBackground = true;
+            return false;
         }
 
     }]);

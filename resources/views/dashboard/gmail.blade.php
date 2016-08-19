@@ -39,7 +39,7 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div style="overflow-y: auto;" ng-style="{'height': size2 + 'px'}">
+            <div style="overflow-y: auto;" ng-style="{'height': size2 + 'px'}" ng-class="{'mail-empty' : !messages.length}">
                 <div ng-if="message">
                     <a ng-click="backToList()" class="btn btn-default">
                         <i class="zmdi zmdi-long-arrow-return"></i>
@@ -69,7 +69,7 @@
                     <div class="clearfix"></div>
                 </div>
 
-                <div ng-if="! message" style="overflow: hidden" ng-if="messages.length >= 10">
+                <div style="overflow: hidden">
                     <ul class="list-group">
                         <li ng-click="readMessage(message.id)" class="g-message-list-item list-group-item" ng-repeat="message in messages" >
                             {{--<small class="label label-default pull-right">@{{ message.date }}</small>--}}
@@ -84,9 +84,12 @@
                             <small class="msg-snippet text-muted" ng-bind-html="message.snippet"></small>--}}
                             <br class="clearfix"/>
                         </li>
+                        {{--<li class="g-message-list-item list-group-item" ng-if="messages.length <= 0" id="empty">--}}
+                            {{--<img src="images/mail-empty.jpg" alt="" style="width: 100%; height: auto">--}}
+                        {{--</li>--}}
                     </ul>
                     <div>
-                        <button ng-if="messages.length && nextPageToken" ng-click="next()" class="btn btn-default btn-block">
+                        <button ng-if="messages.length >= 10 && nextPageToken" ng-click="next()" class="btn btn-default btn-block">
                             {{ trans('buttons.more') }}
                         </button>
                     </div>

@@ -35,32 +35,36 @@
         <card-box-body>
             <div ng-style="{'height': size1 + 'px'}" style="overflow-y: auto; overflow-x: hidden">
                 <div class="row p-l-r-10" ng-show="weather && weather.timezone">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                        <div class="col-md-12 col-lg-12 text-center">
-                            <img  ng-src="@{{ currentHourIcon }}" alt="" width="50" height="50">
-                            <h4 class="text-primary">@{{ currentHourSummary }}</h4>
+                    <div class="row weather-data-container">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="col-md-12 col-lg-12 text-center">
+                                <img  ng-src="@{{ currentHourIcon }}" alt="" width="50" height="50">
+                                <h4 class="text-primary">@{{ currentHourSummary }}</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-center">
+                            {{--<img ng-if="weather.currently.icon" ng-src="@{{ icon() }}" width="100" height="100" alt="">--}}
+
+                            <h1 class="text-primary" style="margin-bottom: 5px">@{{ currnetHourTemperature | number:0 }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</h1>
+                            <h4 class="text-primary" style="margin-top: 0">@{{ city }}</h4>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-center">
-                        {{--<img ng-if="weather.currently.icon" ng-src="@{{ icon() }}" width="100" height="100" alt="">--}}
-
-                        <h1 class="text-primary" style="margin-bottom: 5px">@{{ currnetHourTemperature | number:0 }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</h1>
-                        <h4 class="text-primary" style="margin-top: 0">@{{ city }}</h4>
-                    </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <span class="col-md-2 col-lg-1 col-sm-3 col-xs-4" ng-repeat="w in weather.hourly.data | limitTo: startIndex" ng-if="showThisHour(w)">
-                            <div class="hourly-temp-boxes text-center">
-                                <div>
-                                    <span style="color: black">@{{ getTimeToDate(w.time) | date:'HH:mm' }}</span>
+                    <div class="row" style="margin: 0 !important; white-space: nowrap; overflow-x: auto; padding: 10px">
+                        <div class="">
+                            <span  ng-repeat="w in weather.hourly.data | limitTo: startIndex" ng-if="showThisHour(w)">
+                                <div class="hourly-temp-boxes text-center" style="display: inline-block;">
+                                    <div>
+                                        <span style="color: black">@{{ getTimeToDate(w.time) | date:'HH:mm' }}</span>
+                                    </div>
+                                    <div>
+                                        <img ng-src=" @{{ icon(w.icon) }} " alt="" width="30" height="30">
+                                    </div>
+                                    <div>
+                                        <span class="text-primary">@{{ w.temperature | number:0 }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</span>
+                                    </div>
                                 </div>
-                                <div>
-                                    <img ng-src=" @{{ icon(w.icon) }} " alt="" width="30" height="30">
-                                </div>
-                                <div>
-                                    <span class="text-primary">@{{ w.temperature | number:0 }} @{{ (filter.units == 'us' ? '&deg;F' : "&deg;C") }}</span>
-                                </div>
-                            </div>
-                        </span>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>

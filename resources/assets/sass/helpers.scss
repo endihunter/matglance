@@ -195,10 +195,11 @@ i.ti-menu:hover {
   padding-top: 2%;
 }
 .mail-empty {
-  background-image: url("../../images/mail-empty.jpg");
+  background-image: url("../../images/mail-empty.png");
   background-repeat: no-repeat;
-  background-size: cover;
-  -moz-background-size: cover;
+  background-position: center;
+  background-size: auto;
+  -moz-background-size: auto;
 }
 .current-weather-icon {
   width: 50px;

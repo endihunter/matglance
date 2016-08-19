@@ -39,7 +39,7 @@
             </form>
         </card-box-actions>
         <card-box-body>
-            <div style="overflow-y: auto;" ng-style="{'height': size2 + 'px'}" ng-class="{'mail-empty' : !messages.length}">
+            <div style="overflow-y: auto;" ng-style="{'height': size2 + 'px'}" ng-class="{'mail-empty' : isEmailsEmpty()}">
                 <div ng-if="message">
                     <a ng-click="backToList()" class="btn btn-default">
                         <i class="zmdi zmdi-long-arrow-return"></i>

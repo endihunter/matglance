@@ -86,7 +86,6 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                             }
                         }
                         $scope.nextPageToken = messages.nextPage;
-                        $scope.loading = false;
                     });
                 })
                 .catch(function () {
@@ -166,7 +165,20 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
         $scope.$watchCollection('messages', function () {
             if($scope.messages.length < 10 && $scope.messagesLowThanTen == false) {
                 $scope.next();
+            } else {
+                $scope.loading = false;
+                $scope.isEmailsEmpty();
+
             }
-        })
+        });
+
+        $scope.isEmailsEmpty = function isEmailsEmpty() {
+
+            if($scope.loading == false && !$scope.messages.length) {
+                return $scope.showBackground = true;
+            }
+
+            return $scope.showBackground = true;
+        }
 
     }]);

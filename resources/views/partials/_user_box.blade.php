@@ -6,5 +6,5 @@
         {{--<div class="user-status online"><i class="zmdi zmdi-dot-circle"></i></div>--}}
     </div>
 
-    <h5><a target="_blank" href="{{ $userUrl }}">{{ auth()->user()->name }}</a></h5>
+    <h5 id="sidebar_user_name"><a target="_blank" href="{{ $userUrl }}">{{ auth()->user()->name }}</a></h5>
 </div>

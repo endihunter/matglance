@@ -106,6 +106,7 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
         if(callback) {
             callback();
         }
+        $rootScope.eventError = {};
     };
 
     function transformDate(arg) {

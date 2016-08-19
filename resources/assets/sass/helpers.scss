@@ -154,9 +154,6 @@ i.ti-menu:hover {
   right: 25px;
 }
 @media (max-width: 1400px) {
-  #new-event-container .pull-right>.dropdown-menu {
-    margin-top: -300px;
-  }
   .weather-data-container {
     padding-top: 1.5%;
   }
@@ -168,6 +165,9 @@ i.ti-menu:hover {
   .hourly-temp-boxes {
     margin-bottom: 0px;
     padding: 0px 10px;
+  }
+  #new-event-container .pull-right>.dropdown-menu {
+    margin-top: -300px;
   }
 }
 @media (max-width: 1400px) {

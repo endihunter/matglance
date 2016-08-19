@@ -103,10 +103,7 @@ ul.weather-info-panel {
   padding: 10px;
 }
 
-#sidebar-menu,
-.user-box {
-  margin-left: -800px;
-}
+
 .topbar .topbar-left {
   text-align: left;
   padding-left: 10px;
@@ -206,4 +203,16 @@ i.ti-menu:hover {
 .current-weather-icon {
   width: 50px;
   height: 50px;
+}
+
+@media (min-width: 1005px) {
+  .topbar .topbar-left {
+    margin-left: -210px;
+  }
+  .side-menu {
+    margin-left: -210px;
+  }
+  .content-page {
+    margin-left: 40px;
+  }
 }

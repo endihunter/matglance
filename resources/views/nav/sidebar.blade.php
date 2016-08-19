@@ -24,20 +24,20 @@
             {{--</ul>--}}
         {{--</li>--}}
 
-        <li class="has_sub">
-            <a href="javascript:void(0);" class="n-waves-effect">
-                <i class="zmdi zmdi-layers"></i>
-                <span> {{ trans('general.theme') }} </span>
-                <span class="menu-arrow"></span>
-            </a>
-            <ul class="list-unstyled">
-                @foreach(config('app.themes') as $layout)
-                    <li class="{{ ($layout == auth()->user()->theme() ? 'active' : '') }}">
-                        <a href="{{ route('user.prefs.layout', ['layout' => $layout]) }}">{{ trans('layout.' . $layout) }}</a>
-                    </li>
-                @endforeach
-            </ul>
-        </li>
+        {{--<li class="has_sub">--}}
+            {{--<a href="javascript:void(0);" class="n-waves-effect">--}}
+                {{--<i class="zmdi zmdi-layers"></i>--}}
+                {{--<span> {{ trans('general.theme') }} </span>--}}
+                {{--<span class="menu-arrow"></span>--}}
+            {{--</a>--}}
+            {{--<ul class="list-unstyled">--}}
+                {{--@foreach(config('app.themes') as $layout)--}}
+                    {{--<li class="{{ ($layout == auth()->user()->theme() ? 'active' : '') }}">--}}
+                        {{--<a href="{{ route('user.prefs.layout', ['layout' => $layout]) }}">{{ trans('layout.' . $layout) }}</a>--}}
+                    {{--</li>--}}
+                {{--@endforeach--}}
+            {{--</ul>--}}
+        {{--</li>--}}
 
         <li>
             <a href="{{ url('logout') }}">

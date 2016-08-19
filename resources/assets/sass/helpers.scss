@@ -219,3 +219,24 @@ i.ti-menu:hover {
     margin-left: -100px;
   }
 }
+
+#calendars-list {
+  max-height: 300px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+@media (min-width: 1700px) {
+  #calendars-list {
+    max-height: 400px;
+    overflow-y: auto;
+    width: 100%;
+  }
+}
+@media (max-width: 1600px) {
+  #calendars-list {
+    max-height: 240px;
+    overflow-y: auto;
+    width: 100%;
+  }
+}

@@ -6,7 +6,7 @@
             </div>
             <form ng-submit="savePreferences($parent.switchEditableMode)" novalidate name="form">
                 <div class="btn-group" style="display: block">
-                    <ul class="list-unstyled"   style="max-height: 400px; overflow-y: auto; width: 100%;">
+                    <ul class="list-unstyled" id="calendars-list">
                         <li ng-repeat="cal in calendars">
                             <label>
                                 <input type="checkbox" name="calendar" ng-checked="cal.selected" ng-click="select(cal)">&nbsp;

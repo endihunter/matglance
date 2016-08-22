@@ -51,7 +51,7 @@ class GMailRepository
 
         return $gMail
             ->match($request->get('q', null))
-//            ->withSpamTrash('false' == $request->get('includeSpamTrash'))
+            ->withSpamTrash('false' == $request->get('includeSpamTrash'))
             ->take((int) $request->get('maxResults', 10))
             ->forPage($request->get('nextPageToken', null))
             ->messages();

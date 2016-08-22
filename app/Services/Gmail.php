@@ -160,7 +160,6 @@ class Gmail
                 return false === stripos($label->getId(), 'CATEGORY_');
             });
         }
-
         return $labels;
     }
 
@@ -174,7 +173,8 @@ class Gmail
         $args = array_filter([
             'includeSpamTrash' => $this->includeSpamTrash,
             'maxResults' => (int) $this->take,
-            'labelIds' => implode(" ", $this->labelIds),
+//            'labelIds' => implode(" ", $this->labelIds),
+            'labelIds' => 'INBOX',
             'q' => $this->query,
             'pageToken' => $this->pageToken,
         ], function ($item) {

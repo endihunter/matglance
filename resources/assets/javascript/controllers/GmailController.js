@@ -74,10 +74,11 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                     if (cb) {
                         cb();
                     }
+                    $scope.loading = false;
                     // stop to push duplicated messages
-                    if(messages.messages.length < 10) {
-                        $scope.messagesLowThanTen = true;
-                    }
+                    // if(messages.messages.length < 10) {
+                    //     $scope.messagesLowThanTen = true;
+                    // }
                     // image background helper
                     if(messages.messages.length == 0) {
                         $scope.loading = false;
@@ -86,9 +87,9 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                     // restore listing view
                     angular.safeApply($scope, function ($scope) {
                         for (var i in messages.messages) {
-                            if(isFromInbox(messages.messages[i])) {
+                            // if(isFromInbox(messages.messages[i])) {
                                 $scope.messages.push(messages.messages[i]);
-                            }
+                            // }
                         }
                         $scope.nextPageToken = messages.nextPage;
                     });
@@ -167,14 +168,14 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
             return false;
         }
 
-        $scope.$watchCollection('messages', function () {
-            if($scope.messages.length < 10 && $scope.messagesLowThanTen == false) {
-                $scope.next();
-            } else {
-                $scope.loading = false;
-                $scope.showBackground = $scope.isEmailsEmpty();
-            }
-        });
+        // $scope.$watchCollection('messages', function () {
+        //     if($scope.messages.length < 10 && $scope.messagesLowThanTen == false) {
+        //         $scope.next();
+        //     } else {
+        //         $scope.loading = false;
+        //         $scope.showBackground = $scope.isEmailsEmpty();
+        //     }
+        // });
 
         $scope.isEmailsEmpty = function isEmailsEmpty() {
 

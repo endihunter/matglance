@@ -244,3 +244,30 @@ i.ti-menu:hover {
 #sidebar_user_name {
   color: #98a6ad;
 }
+#hourly-boxes {
+  margin: 0 !important;
+  white-space: nowrap;
+  overflow-x: auto;
+  padding: 10px;
+  width: 95%;
+  position: absolute;
+  bottom: 10px;
+}
+
+[class^="ti-"],
+[class*=" ti-"] {
+  font-size: 0.7em;
+}
+.side-menu {
+  top: 50px;
+}
+.topbar .topbar-left {
+  height: 50px;
+}
+.topbar .topbar-left .logo {
+  line-height: 40px;
+}
+i.ti-menu {
+  top: 12px;
+  right: 10px;
+}

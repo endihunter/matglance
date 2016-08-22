@@ -49,7 +49,7 @@
                             <h4 class="text-primary" style="margin-top: 0">@{{ city }}</h4>
                         </div>
                     </div>
-                    <div class="row" style="margin: 0 !important; white-space: nowrap; overflow-x: auto; padding: 10px">
+                    <div class="row" id="hourly-boxes">
                         <div class="">
                             <span  ng-repeat="w in weather.hourly.data | limitTo: startIndex" ng-if="showThisHour(w)">
                                 <div class="hourly-temp-boxes text-center" style="display: inline-block;">

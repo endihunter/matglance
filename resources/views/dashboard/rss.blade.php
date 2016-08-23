@@ -5,8 +5,8 @@
                 <h5>{{ trans('rss.settings') }}</h5>
             </div>
             <form ng-submit="savePreferences($parent.switchEditableMode)" novalidate name="form">
-                <div class="btn-group">
-                    <ul class="list-unstyled" role="menu">
+                <div class="btn-group" style="display: block">
+                    <ul class="list-unstyled" role="menu" id="news-list">
                         <li>
                             <label>
                                 <input type="checkbox" ng-click="toggleAll($event)" ng-checked="allChecked">

@@ -58,7 +58,6 @@ app.controller('RssController', [
                 FeedService.news($feeds).then(function (news) {
                     $scope.loading = false;
                     $scope.articles = news;
-
                     for (var i in $scope.articles){
                         $scope.articles[i].pubDate.date = parseDateTimeForIE($scope.articles[i].pubDate.date);
                     }

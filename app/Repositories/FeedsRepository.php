@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Guzzle\Http\Message\Request;
 use Illuminate\Support\Collection;
 use Zend\Feed\Reader\Reader;
+use Log;
 
 class FeedsRepository
 {
@@ -22,7 +23,6 @@ class FeedsRepository
         $collection = NewsFeed::whereIn('id', $feeds)->get(['url']);
 
         $news = Collection::make([]);
-
         foreach ($collection as $feed) {
             $news = $news->merge($this->parse($feed));
         }
@@ -44,9 +44,7 @@ class FeedsRepository
             $reader = Reader::importString(
                 file_get_contents($feed->url)
             );
-
             $data = [];
-
             foreach ($reader as $key => $item) {
                 array_push($data, [
                     'title' => $item->getTitle(),

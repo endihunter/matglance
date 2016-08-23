@@ -35,7 +35,7 @@
                             @{{ object.date }}
                         </td>
                         <td>
-                            <ul class="list-unstyled">
+                            <ul class="list-unstyled news-list">
                                 <li ng-repeat="event in object.events">
                                     <event-icon event="@{{ event }}"></event-icon>
                                     <span ng-if="event.allDay">{{ trans('calendar.all_day') }}</span>

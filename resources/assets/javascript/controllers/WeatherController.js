@@ -94,8 +94,6 @@ app.controller('WeatherController', [
                         $scope.currnetHourTemperature = $scope.weather.hourly.data[i].temperature;
                         $scope.startIndex = counter + 24;
                     }
-
-
                     counter++;
                 }
                 $scope.city = $scope.weather.address.split(',')[0];

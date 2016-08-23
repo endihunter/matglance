@@ -1,5 +1,5 @@
 <div ng-controller="WeatherController">
-    <card-box title="{{ trans('weather.title') }}">
+    <card-box>
         <card-box-actions>
             <div class="form-group">
                 <h5 >{{ trans('weather.settings') }}</h5>
@@ -56,7 +56,7 @@
                                     <div>
                                         <span style="color: black">@{{ getTimeToDate(w.time) | date:'HH:mm' }}</span>
                                     </div>
-                                    <div>
+                                    <div title="@{{ w.summary }}">
                                         <img ng-src=" @{{ icon(w.icon) }} " alt="" width="30" height="30">
                                     </div>
                                     <div>

@@ -10,7 +10,6 @@ app.controller('SizerController', ['$scope', '$window', function ($scope, $windo
         var k = getMultiplier();
 
         var viewport = $(window).height();
-        console.log(viewport);
         var height = Math.round(viewport * k);
         if (! angular.isMobile) {
             if(viewport > 800) {

@@ -164,6 +164,10 @@ Route::group([
         'as' => 'api.feed',
         'uses' => 'Api\FeedController@postFeed',
     ]);
+    Route::delete('feed/{id}', [
+        'as' => 'api.feed.delete',
+        'uses' => 'Api\FeedController@deleteFeed',
+    ]);
     
     Route::group(['prefix' => 'calendar'], function () {
         Route::get('list', [

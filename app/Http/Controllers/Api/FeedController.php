@@ -23,6 +23,11 @@ class FeedController extends Controller
         $this->news = $news;
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+
     public function news(Request $request)
     {
         $me = Auth::guard('api')->user();
@@ -53,6 +58,10 @@ class FeedController extends Controller
         return $feedList;
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function postFeed(Request $request) {
         $reader = Reader::importString(
             file_get_contents($request->get('url'))
@@ -68,5 +77,31 @@ class FeedController extends Controller
         return response()->json([
             'data' => $feed,
         ]);
+    }
+
+    /**
+     * @param $id
+     */
+    public function deleteFeed($id) {
+        $me = Auth::guard('api')->user();
+        $feed = NewsFeed::find($id);
+
+        if(!$feed) {
+            return response()->json([
+                'error' => 'Invalid feed!'
+            ], 500);
+        }
+
+        if($me->id != $feed->user_id) {
+            return response()->json([
+                'error' => 'Unauthorized!'
+            ], 400);
+        }
+
+        $feed->delete();
+        $feeds = NewsFeed::where('user_id', $me->id)->orderBy('name')->get(['id', 'name']);
+        return response()->json([
+            'feeds' => $feeds,
+        ], 200);
     }
 }

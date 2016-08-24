@@ -7,25 +7,35 @@
             <form ng-submit="savePreferences($parent.switchEditableMode)" novalidate name="form">
                 <div class="btn-group" style="display: block">
                     <ul class="list-unstyled" role="menu" id="news-list">
-                        <li>
-                            <label>
-                                <input type="checkbox" ng-click="toggleAll($event)" ng-checked="allChecked">
-                                {{ trans('rss.toggle') }}
-                            </label>
-                        </li>
+                        {{--<li>--}}
+                            {{--<label>--}}
+                                {{--<input type="checkbox" ng-click="toggleAll($event)" ng-checked="allChecked">--}}
+                                {{--{{ trans('rss.toggle') }}--}}
+                            {{--</label>--}}
+                        {{--</li>--}}
                         <li ng-repeat="feed in allFeeds">
-                            <label>
-                                <input type="checkbox" ng-click="trackUntrack(feed.id)" ng-checked="trackable(feed.id)">&nbsp;
+                            <label style="display: block; padding-right: 10px;">
+                                {{--<input type="checkbox" ng-click="trackUntrack(feed.id)" ng-checked="trackable(feed.id)">&nbsp;--}}
                                 @{{ feed.name }}
+                                <span class="pull-right text-danger">
+                                    <strong>
+                                        <i class="zmdi zmdi-close"
+                                            data-toggle="modal"
+                                            data-target=".bs-example-modal-sm"
+                                            ng-click="confirmDeleteFeed(feed)"
+                                            >
+                                        </i>
+                                    </strong>
+                                </span>
                             </label>
                         </li>
                     </ul>
                 </div>
                 <div class="divider"></div>
-                <div class="form-group">
-                    <button class="btn btn-primary" type="submit">{{ trans('buttons.save') }}</button>
-                    <button class="btn btn-default" type="button" ng-click="cancel($parent.switchEditableMode)">{{ trans('buttons.cancel') }}</button>
-                </div>
+                {{--<div class="form-group">--}}
+                    {{--<button class="btn btn-primary" type="submit">{{ trans('buttons.save') }}</button>--}}
+                    {{--<button class="btn btn-default" type="button" ng-click="cancel($parent.switchEditableMode)">{{ trans('buttons.cancel') }}</button>--}}
+                {{--</div>--}}
             </form>
             <form ng-submit="addCustomRSSFeed(customFeedUrl, rssName)">
                 <div class="form-group" ng-class="(rssValidLink == false) ? 'has-error has-feedback' : ''">
@@ -70,4 +80,25 @@
             </div>
         </card-box-body>
     </card-box>
+
+    <div class="modal fade bs-example-modal-sm in" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none; padding-right: 15px;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="mySmallModalLabel">Are you sure you wish to remove this feed?</h4>
+                </div>
+                <div class="modal-body">
+                    <p><strong>@{{ junkFeed.name }}</strong> feed will be deleted from your news list </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary waves-effect waves-light" data-dismiss="modal" ng-click="deleteFeed()">Delete this feed
+                    </button>
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" ng-click="cancelDeleteFeed()">Close
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
 </div>
+

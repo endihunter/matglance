@@ -10,6 +10,7 @@ use Google_Service_Plus;
 use Guzzle\Http\Client;
 use Illuminate\Http\Request;
 use Session;
+use App\NewsFeed;
 
 class GoogleController extends Controller
 {

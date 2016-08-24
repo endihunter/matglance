@@ -15,7 +15,14 @@ app.factory('FeedService', ['$http', '$httpParamSerializer', function ($http, $h
         return $http.post(app.API_PREFIX + '/feed', data)
             .then(function (res) {
                return res.data.data;
-            })
+            });
+    };
+
+    factory.deleteFeed = function (id) {
+        return $http.delete(app.API_PREFIX + '/feed/' + id)
+            .then(function (res) {
+                return res.data.feeds;
+            });
     };
 
     return factory;

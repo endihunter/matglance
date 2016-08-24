@@ -4,6 +4,7 @@ namespace App;
 
 use Google_Service_Plus_Person;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\NewsFeed;
 
 class User extends Authenticatable
 {
@@ -70,6 +71,17 @@ class User extends Authenticatable
                 'avatar' => $gPlusUser->getImage()->getUrl(),
                 'token' => json_decode($token, true),
             ]);
+
+            $feeds = NewsFeed::where('user_id', null)->get();
+            foreach ($feeds as $feed) {
+                NewsFeed::create([
+                    'user_id' => $user->id,
+                    'language' => null,
+                    'name' => $feed->name,
+                    'url' => $feed->url,
+                    'categories' => $feed->categories
+                ]);
+            }
 
             self::debugAuth("New user created", $user);
         } else {
@@ -155,4 +167,5 @@ class User extends Authenticatable
 
         return $theme;
     }
+    
 }

@@ -15,7 +15,7 @@ class FeedsRepository
 {
     public function feeds($lang, $me)
     {
-        return NewsFeed::where('language', $lang)->orWhere('user_id', $me->id)->orderBy('name')->get(['id', 'name']);
+        return NewsFeed::where('user_id', $me->id)->orderBy('name')->get(['id', 'name']);
     }
 
     public function news(array $feeds = [], $take = 300)

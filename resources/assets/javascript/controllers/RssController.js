@@ -2,7 +2,7 @@ app.controller('RssController', [
     '$scope', '$timeout', '$rootScope', 'localStorageService', 'FeedService', '$q',
     function ($scope, $timeout, $rootScope, localStorageService, FeedService, $q) {
         $scope.loading = false;
-
+        $scope.junkFeed = null;
 
         function key(path) {
             return window['lang'] + '.' + path;
@@ -22,16 +22,16 @@ app.controller('RssController', [
             var savedFeeds;
             var hasSavedFeeds = localStorageService.keys().indexOf(key('feeds')) > -1;
 
-            $feeds = [];
+            $feeds = fullList();
 
-            if (!hasSavedFeeds) {
-                $feeds = fullList();
-            } else {
-                savedFeeds = localStorageService.get(key('feeds'));
-                if (savedFeeds.length) {
-                    $feeds = mapToInt(savedFeeds.split(','));
-                }
-            }
+            // if (!hasSavedFeeds) {
+            //     $feeds = fullList();
+            // } else {
+            //     savedFeeds = localStorageService.get(key('feeds'));
+            //     if (savedFeeds.length) {
+            //         $feeds = mapToInt(savedFeeds.split(','));
+            //     }
+            // }
 
             $scope.savedFeeds = angular.copy($feeds);
 
@@ -54,7 +54,6 @@ app.controller('RssController', [
                 defer.resolve([]);
             } else {
                 $scope.loading = true;
-
                 FeedService.news($feeds).then(function (news) {
                     $scope.loading = false;
                     $scope.articles = news;
@@ -84,11 +83,11 @@ app.controller('RssController', [
             $scope.allChecked = ($feeds.length == $scope.allFeeds.length);
         }
 
-        $scope.$watch('feeds', function (v1, v2) {
-            if (v1 === v2) return false;
-
-            allChecked();
-        }, true);
+        // $scope.$watch('feeds', function (v1, v2) {
+        //     if (v1 === v2) return false;
+        //
+        //     allChecked();
+        // }, true);
 
         $scope.toggleAll = function ($event) {
             if ($event.target.checked == true) {
@@ -165,9 +164,31 @@ app.controller('RssController', [
                     document.getElementById('rss_url').value = '';
                     document.getElementById('rss_name').value = '';
                     $scope.allFeeds.push({id: res.id, name: res.name});
+                    restoreReadableFeeds();
+                    fetchNews();
                 }, function (err) {
                     $rootScope.rssValidLink = false;
                 })
         };
+
+        $scope.confirmDeleteFeed = function confirmDeleteFeed(feed) {
+            return $scope.junkFeed = feed;
+        };
+
+        $scope.cancelDeleteFeed = function cancelDeleteFeed() {
+            return $scope.junkFeed = null;
+        };
+
+        $scope.deleteFeed = function deleteFeed() {
+            if($scope.junkFeed == null) {
+                return;
+            }
+            FeedService.deleteFeed($scope.junkFeed.id)
+                .then(function (res) {
+                    $scope.allFeeds = res;
+                    restoreReadableFeeds();
+                    fetchNews();
+                });
+        }
 
     }]);

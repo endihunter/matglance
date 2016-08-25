@@ -47,15 +47,18 @@ class FeedsRepository
             );
             $data = [];
             foreach ($reader as $key => $item) {
-                array_push($data, [
-                    'title' => $item->getTitle(),
-                    'link' => $item->getLink(),
-                    'content' => strip_tags(html_entity_decode($item->getContent())),
-                    'enclosure' => $item->getEnclosure(),
+                if($item->getTitle()) {
+                    array_push($data, [
+                        'title' => $item->getTitle(),
+                        'link' => $item->getLink(),
+                        'content' => strip_tags(html_entity_decode($item->getContent())),
+                        'enclosure' => $item->getEnclosure(),
 //                    'pubDate' => $item->getDateModified() ? Carbon::parse(strtotime($item->getDateModified())->format('Y-m-d H:i:s')) : Carbon::today(),
-                    'pubDate' => $item->getDateModified(),
-                    'media' => get_rss_media($item, $key + 1),
-                ]);
+                        'pubDate' => $item->getDateModified(),
+                        'media' => get_rss_media($item, $key + 1),
+                    ]);
+                }
+
             }
 
             return $data;

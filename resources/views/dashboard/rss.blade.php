@@ -59,7 +59,7 @@
         <card-box-body>
             <div style="overflow-y: auto;" ng-style="{'height': size1 + 'px'}">
                 <div class="widget-user" ng-if="savedFeeds.length">
-                    <a ng-href="@{{ article.link }}" target="_blank" ng-repeat="article in articles" style="display: block; cursor: pointer">
+                    <a ng-href="@{{ article.link }}" target="_blank" ng-repeat="article in articles | orderBy: '-pubDate.date'" style="display: block; cursor: pointer">
                         <div class="m-b-15">
                             {{--<img ng-if="article.media == null && article.enclosure == null"src="images/noimage.png" style="width: 75px; height: auto; border: 1px solid #BFBFBF; margin-right: 15px;" alt="user">--}}
                             <img ng-if="article.media" ng-src="@{{ article.media.url }}" style="width: 75px; height: auto;" alt="user">

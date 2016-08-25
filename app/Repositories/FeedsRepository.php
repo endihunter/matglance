@@ -19,7 +19,7 @@ class FeedsRepository
         return NewsFeed::where('user_id', $me->id)->orderBy('name')->get(['id', 'name']);
     }
 
-    public function news(array $feeds = [], $take = 300)
+    public function news(array $feeds = [], $take = 1000)
     {
         $collection = NewsFeed::whereIn('id', $feeds)->get(['url']);
 
@@ -37,11 +37,11 @@ class FeedsRepository
 
     protected function parse(NewsFeed $feed)
     {
-        $cacheKey = md5($feed->url);
+//        $cacheKey = md5($feed->url);
 
 //        Cache::forget($cacheKey);
 
-        return Cache::remember($cacheKey, 20, function () use ($feed) {
+//        return Cache::remember($cacheKey, 20, function () use ($feed) {
             $reader = Reader::importString(
                 file_get_contents($feed->url)
             );
@@ -59,6 +59,6 @@ class FeedsRepository
             }
 
             return $data;
-        });
+//        });
     }
 }

@@ -6,7 +6,7 @@
             </div>
             <form ng-submit="savePreferences($parent.switchEditableMode);" novalidate name="form">
                 <div class="form-group text-left">
-                    <p class="text-muted font-13 m-b-15 m-t-20">{{ trans('weather.units') }}</p>
+                    {{--<p class="text-muted font-13 m-b-15 m-t-20">{{ trans('weather.units') }}</p>--}}
                     <div class="radio radio-info radio-inline">
                         <input type="radio" required id="celsius" value="si" ng-model="filter.units">
                         <label for="celsius">{{ trans('weather.celsius') }}</label>

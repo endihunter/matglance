@@ -13,7 +13,10 @@ app.run(['$rootScope', function ($rootScope) {
             && 0 == $(event.target).closest('#cities-list').length) {
             $rootScope.$broadcast('cardbox.close');
         }
-    };
+        if (0 == $(event.target).closest('div.card-actions.dropdown.open').length) {
+            $rootScope.$broadcast('cardboxrss.close');
+        }
+    }
 }]);
 
 app.REWRITE_BASE = '/';

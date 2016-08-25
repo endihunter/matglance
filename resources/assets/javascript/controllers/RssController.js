@@ -3,6 +3,7 @@ app.controller('RssController', [
     function ($scope, $timeout, $rootScope, localStorageService, FeedService, $q) {
         $scope.loading = false;
         $scope.junkFeed = null;
+        $rootScope.closeRssSettings = true;
 
         function key(path) {
             return window['lang'] + '.' + path;
@@ -172,14 +173,17 @@ app.controller('RssController', [
         };
 
         $scope.confirmDeleteFeed = function confirmDeleteFeed(feed) {
+            $rootScope.closeRssSettings = false;
             return $scope.junkFeed = feed;
         };
 
         $scope.cancelDeleteFeed = function cancelDeleteFeed() {
+            $rootScope.closeRssSettings = false;
             return $scope.junkFeed = null;
         };
 
         $scope.deleteFeed = function deleteFeed() {
+            $rootScope.closeRssSettings = false;
             if($scope.junkFeed == null) {
                 return;
             }

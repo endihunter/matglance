@@ -1,6 +1,6 @@
 <div ng-controller="RssController" ng-init="init({{ json_encode($feeds) }})">
-    <card-box title="{{ trans('rss.title') }}">
-        <card-box-actions>
+    <card-box-rss title="{{ trans('rss.title') }}">
+        <card-box-rss-actions>
             <div class="form-group">
                 <h5>{{ trans('rss.settings') }}</h5>
             </div>
@@ -55,8 +55,8 @@
                     <button type="submit" class="btn btn-custom">{{ trans('rss.add') }}</button>
                 </div>
             </form>
-        </card-box-actions>
-        <card-box-body>
+        </card-box-rss-actions>
+        <card-box-rss-body>
             <div style="overflow-y: auto;" ng-style="{'height': size1 + 'px'}">
                 <div class="widget-user" ng-if="savedFeeds.length">
                     <a ng-href="@{{ article.link }}" target="_blank" ng-repeat="article in articles | orderBy: '-pubDate.date'" style="display: block; cursor: pointer">
@@ -78,8 +78,8 @@
                     {{ trans('rss.no_feeds') }}
                 </div>
             </div>
-        </card-box-body>
-    </card-box>
+        </card-box-rss-body>
+    </card-box-rss>
 
     <div class="modal fade bs-example-modal-sm in" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none; padding-right: 15px;">
         <div class="modal-dialog modal-sm">

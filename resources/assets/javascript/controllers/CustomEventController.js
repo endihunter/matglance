@@ -126,7 +126,7 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
         var dateAndTimeArr = str.split(' ');
         var dateToArr = dateAndTimeArr[0].split('-');
         var timeToArr = dateAndTimeArr[1].split(':');
-        
+
         return new Date(dateToArr[0], dateToArr[1] - 1, dateToArr[2], timeToArr[0], timeToArr[1], timeToArr[2]);
     }
 
@@ -260,7 +260,11 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
         var month = time.getMonth() < 10 + 1? '0' + (time.getMonth() +1): time.getMonth() + 1;
         var hour = time.getHours() < 10 ? '0' + time.getHours(): time.getHours();
         var minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
-        var output = date + '.' + month + '.' + year + ', ' + hour + ':' + minutes;
+        if(hour == '00' && minutes == '00') {
+            var output = date + '.' + month + '.' + year;
+        } else {
+            var output = date + '.' + month + '.' + year + ', ' + hour + ':' + minutes;
+        }
 
         return output;
     }

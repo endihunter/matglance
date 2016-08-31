@@ -10,6 +10,8 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
 
         $scope.nextPageToken = null;
 
+        $scope.firstLoad = true;
+
         var emptyFilter = function () {
             return {
                 'from': '',
@@ -58,6 +60,8 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
 
         $scope.next = $scope.fetchMessages = function (cb) {
             if ($scope.loading) return false;
+
+            $scope.firstLoad = false;
 
             $scope.loading = true;
 
@@ -175,7 +179,7 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
 
         $scope.isEmailsEmpty = function isEmailsEmpty() {
 
-            if(!$scope.messages.length) {
+            if(!$scope.messages.length && $scope.firstLoad == false) {
                 return true;
             }
 

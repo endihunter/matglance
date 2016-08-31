@@ -50,6 +50,7 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
 
         $scope.savePreferences = function (cb) {
             $scope.messages = [];
+            $scope.showBackground = false;
             $scope.nextPageToken = null;
 
             return $scope.fetchMessages(cb);
@@ -80,10 +81,10 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                     //     $scope.messagesLowThanTen = true;
                     // }
                     // image background helper
-                    if(messages.messages.length == 0) {
-                        $scope.loading = false;
-                        $scope.showBackground = $scope.isEmailsEmpty();
-                    }
+                    // if(messages.messages.length == 0) {
+                    //     $scope.loading = false;
+                    //     $scope.showBackground = $scope.isEmailsEmpty();
+                    // }
                     // restore listing view
                     angular.safeApply($scope, function ($scope) {
                         for (var i in messages.messages) {
@@ -168,18 +169,13 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
             return false;
         }
 
-        // $scope.$watchCollection('messages', function () {
-        //     if($scope.messages.length < 10 && $scope.messagesLowThanTen == false) {
-        //         $scope.next();
-        //     } else {
-        //         $scope.loading = false;
-        //         $scope.showBackground = $scope.isEmailsEmpty();
-        //     }
-        // });
+        $scope.$watchCollection('messages', function () {
+            $scope.showBackground = $scope.isEmailsEmpty();
+        });
 
         $scope.isEmailsEmpty = function isEmailsEmpty() {
 
-            if($scope.loading == false && !$scope.messages.length) {
+            if(!$scope.messages.length) {
                 return true;
             }
 

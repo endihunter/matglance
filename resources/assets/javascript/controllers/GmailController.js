@@ -10,7 +10,7 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
 
         $scope.nextPageToken = null;
 
-        $scope.firstLoad = true;
+        $scope.messages = null;
 
         var emptyFilter = function () {
             return {
@@ -28,8 +28,6 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
         }
 
         $scope.filter = JSON.parse(savedFilter);
-
-        $scope.messages = [];
 
         $scope.query = buildQuery();
 
@@ -61,8 +59,6 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
         $scope.next = $scope.fetchMessages = function (cb) {
             if ($scope.loading) return false;
 
-            $scope.firstLoad = false;
-
             $scope.loading = true;
 
             // save filter
@@ -80,6 +76,9 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
                         cb();
                     }
                     $scope.loading = false;
+                    if($scope.messages == null) {
+                        $scope.messages = [];
+                    }
                     // stop to push duplicated messages
                     // if(messages.messages.length < 10) {
                     //     $scope.messagesLowThanTen = true;
@@ -179,7 +178,7 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
 
         $scope.isEmailsEmpty = function isEmailsEmpty() {
 
-            if(!$scope.messages.length && $scope.firstLoad == false) {
+            if($scope.messages != null && !$scope.messages.length) {
                 return true;
             }
 

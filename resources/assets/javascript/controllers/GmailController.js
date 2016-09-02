@@ -178,7 +178,7 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
 
         $scope.isEmailsEmpty = function isEmailsEmpty() {
 
-            if($scope.messages != null && !$scope.messages.length) {
+            if($scope.messages != null && !$scope.messages.length && $scope.message != null) {
                 return true;
             }
 

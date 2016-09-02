@@ -1,5 +1,5 @@
 <div ng-controller="WeatherController">
-    <card-box>
+    <card-box title="{{ trans('weather.title') }}">
         <card-box-actions>
             <div class="form-group">
                 <h5 >{{ trans('weather.settings') }}</h5>

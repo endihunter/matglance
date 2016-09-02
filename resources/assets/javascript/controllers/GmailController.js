@@ -49,7 +49,7 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
         }
 
         $scope.savePreferences = function (cb) {
-            $scope.messages = [];
+            $scope.messages = null;
             $scope.showBackground = false;
             $scope.nextPageToken = null;
 
@@ -133,7 +133,6 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
 
         $scope.readMessage = function (messageId) {
             $scope.loading = true;
-
             GmailService.get(messageId)
                 .then(function (message) {
                     angular.safeApply($scope, function ($scope) {
@@ -178,7 +177,7 @@ app.controller('GmailController', ['$scope', 'GmailService', '$sce', 'localStora
 
         $scope.isEmailsEmpty = function isEmailsEmpty() {
 
-            if($scope.messages != null && !$scope.messages.length && $scope.message != null) {
+            if(($scope.messages != null && !$scope.messages.length && $scope.message == null)) {
                 return true;
             }
 

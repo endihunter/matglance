@@ -262,6 +262,8 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
         var minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
         if(hour == '00' && minutes == '00') {
             var output = date + '.' + month + '.' + year;
+        } else if($scope.options.selectedTime == 3){
+            var output = date + '.' + month + '.' + year;
         } else {
             var output = date + '.' + month + '.' + year + ', ' + hour + ':' + minutes;
         }

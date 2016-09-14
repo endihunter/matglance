@@ -30,13 +30,13 @@
                             {{ trans('calendar.no_events') }}
                         </td>
                     </tr>
-                    <tr ng-repeat="(time, object) in events">
+                    <tr ng-repeat="item in calendarEvents | orderBy: 'date'">
                         <td class="text-primary calendar-date">
-                            @{{ object.date }}
+                            @{{ item.date | date:'MMM dd, yyyy'}}
                         </td>
                         <td>
                             <ul class="list-unstyled news-list">
-                                <li ng-repeat="event in object.events">
+                                <li ng-repeat="event in item.events | orderBy: '-allDay'">
                                     <event-icon event="@{{ event }}"></event-icon>
                                     <span ng-if="event.allDay">{{ trans('calendar.all_day') }}</span>
                                     <span ng-if="! event.allDay">

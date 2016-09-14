@@ -57,15 +57,7 @@ class CustomEventController extends Controller
         $eventDate->hour = $this->setEventTime($request->get('hours'));
         $eventDate->minute = $this->setEventTime($request->get('minutes'));
         $eventDate->second = $this->setEventTime($request->get('seconds'));
-
-//        if(CustomEvent::whereDate('time', '>=', Carbon::today()->toDateString())
-//                        ->where('user_id', $me->id)->first()) {
-//            return response()->json([
-//                'data' => [
-//                    'error' => 'You can set only one active event',
-//                ]
-//            ]);
-//        }
+        
 
         $event = CustomEvent::create([
             'title'       => $title,

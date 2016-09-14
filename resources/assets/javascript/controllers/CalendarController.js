@@ -6,7 +6,7 @@ app.controller('CalendarController', [
         $scope.events = [];
         $scope.hasEvents = false;
         $scope.calendarEvents = [];
-        
+        $scope.multiDayEvents = [];
         $scope.init = function init (calendars) {
 
             $scope.calendars = calendars;
@@ -53,21 +53,52 @@ app.controller('CalendarController', [
         });
 
         $scope.$watchCollection('calendarEvents', function () {
-            $scope.events = [];
-            for( var i = 0; i < $scope.calendarEvents.length; i++) {
-
-                for (var a in $scope.calendarEvents[i]) {
-                    $scope.events.push($scope.calendarEvents[i][a]);
+            // $scope.events = [];
+            // for( var i = 0; i < $scope.calendarEvents.length; i++) {
+            //
+            //     for (var a in $scope.calendarEvents[i]) {
+            //         $scope.events.push($scope.calendarEvents[i][a]);
+            //     }
+            // }
+            // if($scope.events.length > 0) {
+            //     $scope.hasEvents = true;
+            // }
+            // $scope.events.sort(function (a, b) {
+            //     a = new Date(a.date);
+            //     b = new Date(b.date);
+            //     return a < b ? -1 : a > b ? 1 : 0;
+            // });
+            var tempEvents = [];
+            for(var i in $scope.calendarEvents) {
+                var exist = false;
+                for(var a in tempEvents) {
+                    if(tempEvents[a].date.toString() == $scope.calendarEvents[i].date.toString()) {
+                        exist = true;
+                        for(var k in $scope.calendarEvents[i].events) {
+                            var evtExist = false;
+                            for(var z in tempEvents[a].events) {
+                                if(tempEvents[a].events[z].id == $scope.calendarEvents[i].events[k].id) {
+                                    evtExist = true;
+                                    break;
+                                }
+                            }
+                            if(evtExist == false) {
+                                tempEvents[a].events.push($scope.calendarEvents[i].events[k]);
+                            }
+                        }
+                        break;
+                    }
+                }
+                if(exist == false) {
+                    tempEvents.push($scope.calendarEvents[i]);
                 }
             }
-            if($scope.events.length > 0) {
+            // console.log(tempEvents);
+            if($scope.calendarEvents.length) {
                 $scope.hasEvents = true;
             }
-            $scope.events.sort(function (a, b) {
-                a = new Date(a.date);
-                b = new Date(b.date);
-                return a < b ? -1 : a > b ? 1 : 0;
-            });
+
+            $scope.calendarEvents = tempEvents;
         });
 
         function setDefaultCalendar() {
@@ -131,13 +162,88 @@ app.controller('CalendarController', [
         function fetchEvents () {
             $scope.calendarEvents = [];
             $scope.hasEvents = false;
+
             for (var i = 0; i < $scope.calendars.length; i++) {
                 if($scope.calendars[i].selected == true) {
                     EventsService.events($scope.calendars[i].id)
                         .then(function (res) {
-                            $scope.calendarEvents.push(res);
+                            $scope.multiDayEvents = [];
+                            for(var c in res) {
+                                var evt = transformDates(res[c]);
+                                checkMultiDayEvent(evt);
+                                $scope.calendarEvents.push(evt);
+                            }
+                            addMultiDayEvents();
                         });
                 }
             }
         }
+        function checkMultiDayEvent(evt) {
+            for(var i in evt.events) {
+                if(evt.events[i].allDay === true) {
+                    var startDate = new Date(evt.events[i].start.date);
+                    var endDate = new Date(new Date(evt.events[i].end.date));
+                    if(startDate < endDate) {
+                        $scope.multiDayEvents.push(evt.events[i]);
+                    }
+
+                }
+            }
+        }
+
+        function transformDates(evt) {
+            evt.date = new Date(evt.date);
+            for(var i in evt.events) {
+                var startDate = new Date(evt.events[i].start.date);
+                var endDate = new Date(evt.events[i].end.date);
+                endDate.setDate(endDate.getDate() - 1);
+                evt.events[i].start.date = startDate;
+                evt.events[i].end.date = endDate;
+
+            }
+            return evt;
+        }
+
+        function addMultiDayEvents() {
+            var length = $scope.calendarEvents.length - 1;
+            for (var i in $scope.multiDayEvents) {
+                var endDate = $scope.multiDayEvents[i].end.date;
+                var lastDay = $scope.calendarEvents[length].date;
+                addNewEventDay(endDate, lastDay);
+                pushEvent($scope.multiDayEvents[i]);
+            }
+        }
+
+        function addNewEventDay(endDate, lastDay) {
+            var date = new Date(lastDay);
+            while(endDate > date) {
+                var day = {
+                    date: new Date(date.setDate(date.getDate() + 1)),
+                    events: []
+                };
+                $scope.calendarEvents.push(day);
+            }
+        }
+
+        function pushEvent(evt) {
+            for(var i in $scope.calendarEvents) {
+                var exist = false;
+                for(var a in $scope.calendarEvents[i].events) {
+                    if($scope.calendarEvents[i].events[a].id ==  evt.id) {
+                        exist = true;
+                        break;
+                    }
+                }
+                var evtStartDate =  new Date(evt.start.date);
+                var evtEndDate = new Date(evt.end.date);
+                var calDate = new Date($scope.calendarEvents[i].date);
+
+                if(exist == false) {
+                    if(calDate >= evtStartDate && calDate <= evtEndDate) {
+                        $scope.calendarEvents[i].events.push(evt);
+                    }
+                }
+            }
+        }
+
     }]);

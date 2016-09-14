@@ -39,12 +39,6 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
             $rootScope.eventError.eventTitle = 'Please set an event title!';
         }
 
-
-        if($scope.options.selectedTime == 3) {
-            hours = 23;
-            minutes = 59;
-            seconds = 59;
-        }
         var dateToArr = transformDate(date);
 
         var tempDate = new Date(dateToArr[2] + '-' + dateToArr[1] + '-' + dateToArr[0]);
@@ -62,6 +56,12 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
             tempDate.setSeconds(parseInt(seconds));
         } else {
             tempDate.setSeconds(0);
+        }
+        
+        if($scope.options.selectedTime == 3) {
+            hours = 23;
+            minutes = 59;
+            seconds = 59;
         }
 
         if(tempDate < new Date()) {

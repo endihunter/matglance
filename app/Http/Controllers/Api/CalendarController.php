@@ -28,6 +28,7 @@ class CalendarController extends Controller
 
         $events = $this->fetchEvents($me->email, $request->get('c'), $request->get('t'), $request->get('tz'));
 
+
         $events = array_map([new EventTransformer, 'transform'], $events->getItems());
 
         $events = $this->datify($events);

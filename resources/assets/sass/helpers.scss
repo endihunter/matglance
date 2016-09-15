@@ -287,6 +287,9 @@ i.zmdi.zmdi-close:hover {
 }
 @media screen and (max-width: 400px) {
   #new-event-container .pull-right > .dropdown-menu .box-actions {
-    max-width: 300px;
+    max-width: 290px;
+  }
+  #new-event-container .pull-right > .dropdown-menu {
+    right: 0px;
   }
 }

@@ -36,7 +36,7 @@
                         </td>
                         <td>
                             <ul class="list-unstyled news-list">
-                                <li ng-repeat="event in item.events | orderBy: '-allDay'">
+                                <li ng-repeat="event in item.events | orderBy: '-allDay'" ng-if="!event.allDay">
                                     <event-icon event="@{{ event }}"></event-icon>
                                     <span ng-if="event.allDay">{{ trans('calendar.all_day') }}</span>
                                     <span ng-if="! event.allDay">

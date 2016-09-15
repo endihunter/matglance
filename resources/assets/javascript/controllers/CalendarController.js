@@ -170,14 +170,31 @@ app.controller('CalendarController', [
                             $scope.multiDayEvents = [];
                             for(var c in res) {
                                 var evt = transformDates(res[c]);
-                                checkMultiDayEvent(evt);
-                                $scope.calendarEvents.push(evt);
+                                // checkMultiDayEvent(evt);
+                                evt.events = onlyHourlyEvents(evt);
+                                if(evt.events.length > 0) {
+                                    $scope.calendarEvents.push(evt);
+                                }
                             }
-                            addMultiDayEvents();
+                            // addMultiDayEvents();
                         });
                 }
             }
         }
+
+        function onlyHourlyEvents(evt) {
+            var result = [];
+            for (var i in evt.events){
+                if(evt.events[i].allDay) {
+                    continue;
+                } else {
+                    result.push(evt.events[i]);
+                }
+            }
+
+            return result;
+        }
+
         function checkMultiDayEvent(evt) {
             for(var i in evt.events) {
                 if(evt.events[i].allDay === true) {

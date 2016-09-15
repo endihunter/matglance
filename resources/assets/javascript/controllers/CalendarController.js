@@ -9,7 +9,6 @@ app.controller('CalendarController', [
         $scope.multiDayEvents = [];
         var d = new Date();
         $scope.yesterday = new Date(d.setDate(d.getDate() - 1));
-        console.log($scope.yesterday);
         $scope.init = function init (calendars) {
 
             $scope.calendars = calendars;
@@ -243,6 +242,7 @@ app.controller('CalendarController', [
                     date: new Date(firstDay.setDate(firstDay.getDate() + 1)),
                     events: []
                 };
+                $scope.calendarEvents.push(day);
             }
         }
 

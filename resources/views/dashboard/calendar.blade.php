@@ -43,7 +43,7 @@
                                         @{{ event.start.time }} - @{{ event.end.time }}
                                     </span>
                                     &nbsp;
-                                    <a ng-href="@{{ event.link }}" target="_blank">@{{ event.summary }}</a>
+                                    <a ng-href="@{{ event.link }}" target="_blank">@{{ event.summary || 'No Title' }}</a>
                                 </li>
                             </ul>
                         </td>

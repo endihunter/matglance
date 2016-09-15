@@ -30,7 +30,7 @@
                             {{ trans('calendar.no_events') }}
                         </td>
                     </tr>
-                    <tr ng-repeat="item in calendarEvents | orderBy: 'date'">
+                    <tr ng-repeat="item in calendarEvents | orderBy: 'date'" ng-if="item.date > yesterday">
                         <td class="text-primary calendar-date">
                             @{{ item.date | date:'MMM dd, yyyy'}}
                         </td>

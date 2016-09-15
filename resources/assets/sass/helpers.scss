@@ -253,6 +253,11 @@ i.ti-menu:hover {
   position: absolute;
   bottom: 10px;
 }
+@media (max-width: 500px) {
+  #hourly-boxes {
+    width: 90%;
+  }
+}
 
 [class^="ti-"],
 [class*=" ti-"] {
@@ -279,4 +284,9 @@ i.zmdi.zmdi-close {
 }
 i.zmdi.zmdi-close:hover {
   cursor: pointer;
+}
+@media screen and (max-width: 400px) {
+  #new-event-container .pull-right > .dropdown-menu .box-actions {
+    max-width: 300px;
+  }
 }

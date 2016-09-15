@@ -127,37 +127,37 @@ app.controller('CalendarController', [
             //     b = new Date(b.date);
             //     return a < b ? -1 : a > b ? 1 : 0;
             // });
-            var tempEvents = [];
-            for(var i in $scope.calendarEvents) {
-                var exist = false;
-                for(var a in tempEvents) {
-                    if(tempEvents[a].date.toString() == $scope.calendarEvents[i].date.toString()) {
-                        exist = true;
-                        for(var k in $scope.calendarEvents[i].events) {
-                            var evtExist = false;
-                            for(var z in tempEvents[a].events) {
-                                if(tempEvents[a].events[z].id == $scope.calendarEvents[i].events[k].id) {
-                                    evtExist = true;
-                                    break;
-                                }
-                            }
-                            if(evtExist == false) {
-                                tempEvents[a].events.push($scope.calendarEvents[i].events[k]);
-                            }
-                        }
-                        break;
-                    }
-                }
-                if(exist == false) {
-                    tempEvents.push($scope.calendarEvents[i]);
-                }
-            }
+            // var tempEvents = [];
+            // for(var i in $scope.calendarEvents) {
+            //     var exist = false;
+            //     for(var a in tempEvents) {
+            //         if(tempEvents[a].date.toString() == $scope.calendarEvents[i].date.toString()) {
+            //             exist = true;
+            //             for(var k in $scope.calendarEvents[i].events) {
+            //                 var evtExist = false;
+            //                 for(var z in tempEvents[a].events) {
+            //                     if(tempEvents[a].events[z].id == $scope.calendarEvents[i].events[k].id) {
+            //                         evtExist = true;
+            //                         break;
+            //                     }
+            //                 }
+            //                 if(evtExist == false) {
+            //                     tempEvents[a].events.push($scope.calendarEvents[i].events[k]);
+            //                 }
+            //             }
+            //             break;
+            //         }
+            //     }
+            //     if(exist == false) {
+            //         tempEvents.push($scope.calendarEvents[i]);
+            //     }
+            // }
             // // console.log(tempEvents);
-            if($scope.calendarEvents.length) {
-                $scope.hasEvents = true;
-            }
+            // if($scope.calendarEvents.length) {
+            //     $scope.hasEvents = true;
+            // }
             //
-            $scope.calendarEvents = tempEvents;
+            // $scope.calendarEvents = tempEvents;
         });
 
         function setDefaultCalendar() {
@@ -221,18 +221,30 @@ app.controller('CalendarController', [
         function fetchEvents () {
             $scope.calendarEvents = [];
             $scope.hasEvents = false;
-
+            $scope.multiDayEvents = [];
+            var selected = 0;
+            for (var i = 0; i < $scope.calendars.length; i++) {
+                if($scope.calendars[i].selected == true) {
+                    selected++;
+                }
+            }
+            var added = 0;
             for (var i = 0; i < $scope.calendars.length; i++) {
                 if($scope.calendars[i].selected == true) {
                     EventsService.events($scope.calendars[i].id)
                         .then(function (res) {
-                            $scope.multiDayEvents = [];
+                            console.log(res);
                             for(var c in res) {
                                 var evt = transformDates(res[c]);
                                 checkMultiDayEvent(evt);
                                 $scope.calendarEvents.push(evt);
                             }
-                            addMultiDayEvents();
+                            added++;
+                            if(added == selected){
+                                addMultiDayEvents();
+                            }
+
+
                         });
                 }
             }
@@ -264,21 +276,20 @@ app.controller('CalendarController', [
         }
 
         function addMultiDayEvents() {
+            var length = $scope.calendarEvents.length - 1;
             for (var i in $scope.multiDayEvents) {
                 var endDate = $scope.multiDayEvents[i].end.date;
-                var startDate = $scope.multiDayEvents[i].start.date;
-                addNewEventDay(startDate, endDate);
-
+                var lastDay = $scope.calendarEvents[length].date;
+                addNewEventDay(endDate, lastDay);
                 pushEvent($scope.multiDayEvents[i]);
             }
         }
 
-
-        function addNewEventDay(startDate, endDate) {
-            var firstDay= new Date(startDate);
-            while(endDate > firstDay) {
+        function addNewEventDay(endDate, lastDay) {
+            var date = new Date(lastDay);
+            while(endDate > date) {
                 var day = {
-                    date: new Date(firstDay.setDate(firstDay.getDate() + 1)),
+                    date: new Date(date.setDate(date.getDate() + 1)),
                     events: []
                 };
                 $scope.calendarEvents.push(day);
@@ -505,7 +516,7 @@ function ($scope, $rootScope, $interval, localStorageService, CustomEventService
         }
     }
 
-    $scope.$watch('options.selectedTime', function (newVal, oldVal ) {
+    $scope.$watch('options.selectedTime', function () {
         if($scope.loading == true) {
             return;
         }

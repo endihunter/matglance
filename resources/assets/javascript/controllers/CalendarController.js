@@ -93,11 +93,11 @@ app.controller('CalendarController', [
                     tempEvents.push($scope.calendarEvents[i]);
                 }
             }
-            // console.log(tempEvents);
+            // // console.log(tempEvents);
             if($scope.calendarEvents.length) {
                 $scope.hasEvents = true;
             }
-
+            //
             $scope.calendarEvents = tempEvents;
         });
 
@@ -205,20 +205,21 @@ app.controller('CalendarController', [
         }
 
         function addMultiDayEvents() {
-            var length = $scope.calendarEvents.length - 1;
             for (var i in $scope.multiDayEvents) {
                 var endDate = $scope.multiDayEvents[i].end.date;
-                var lastDay = $scope.calendarEvents[length].date;
-                addNewEventDay(endDate, lastDay);
+                var startDate = $scope.multiDayEvents[i].start.date;
+                addNewEventDay(startDate, endDate);
+
                 pushEvent($scope.multiDayEvents[i]);
             }
         }
 
-        function addNewEventDay(endDate, lastDay) {
-            var date = new Date(lastDay);
-            while(endDate > date) {
+
+        function addNewEventDay(startDate, endDate) {
+            var firstDay= new Date(startDate);
+            while(endDate > firstDay) {
                 var day = {
-                    date: new Date(date.setDate(date.getDate() + 1)),
+                    date: new Date(firstDay.setDate(firstDay.getDate() + 1)),
                     events: []
                 };
                 $scope.calendarEvents.push(day);

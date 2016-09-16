@@ -33,26 +33,36 @@ class CalendarController extends Controller
 
         $events = $this->datify($events);
 
-        $deleteEvent = false;
-
-        foreach ($events as $key => $value) {
-
-            foreach ($value['events'] as $ev) {
-                foreach ($ev['attendees'] as $at) {
-                    if(($at['email'] == $me->email) && ($at['responseStatus'] == 'declined')) {
-                        $deleteEvent = true;
-                    }
-                }
-            }
-            if($deleteEvent == true) {
-                unset($events[$key]);
-            }
-            $deleteEvent = false;
-        }
+//        $deleteEvent = false;
+//
+//        foreach ($events as $key => $value) {
+//
+//            foreach ($value['events'] as $k => $v) {
+//                if($k == 'attendees') {
+//                    foreach ($v['attendees'] as $at) {
+//                        if(($at['email'] == $me->email) && ($at['responseStatus'] == 'declined')) {
+//                            $deleteEvent = true;
+//                        }
+//                    }
+//                }
+//
+//                if($deleteEvent == true) {
+//                    return response()->json([
+//                        'data' => $value['events'][$k],
+//                    ]);
+//                    array_splice($value['events'][$k], 0, 1);
+//                }
+//                $deleteEvent = false;
+//            }
+//        }
 
         return response()->json([
-            'data' => $events,
+            'data' => array('events' => $events, 'me' => $me->email),
         ]);
+    }
+
+    function spliceEvents(){
+
     }
 
     private function fetchEvents($email, $calendar, $time, $timeZoneOffset)

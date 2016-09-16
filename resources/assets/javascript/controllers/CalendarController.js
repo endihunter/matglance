@@ -169,9 +169,11 @@ app.controller('CalendarController', [
                 if($scope.calendars[i].selected == true) {
                     EventsService.events($scope.calendars[i].id)
                         .then(function (res) {
+                            $scope.me = res.me;
                             $scope.multiDayEvents = [];
-                            for(var c in res) {
-                                var evt = transformDates(res[c]);
+                            for(var c in res.events) {
+                                var evt = transformDates(res.events[c]);
+                                evt = removeDeclinedEvents(evt);
                                 checkMultiDayEvent(evt);
                                 // evt.events = onlyHourlyEvents(evt);
                                 // if(evt.events.length > 0) {
@@ -183,6 +185,24 @@ app.controller('CalendarController', [
                         });
                 }
             }
+        }
+
+        function removeDeclinedEvents(evt) {
+            for(var i in evt.events){
+                if(removeEvent(evt.events[i].attendees)) {
+                    evt.events.splice(i, 1);
+                }
+            }
+            return evt;
+        }
+
+        function removeEvent(att) {
+            for(var i in att) {
+                if(att[i].email == $scope.me && att[i].responseStatus == 'declined') {
+                    return true
+                }
+            }
+            return false;
         }
 
         function onlyHourlyEvents(evt) {

@@ -62,8 +62,8 @@
                     <a ng-href="@{{ article.link }}" target="_blank" ng-repeat="article in articles | orderBy: '-pubDate.date'" style="display: block; cursor: pointer">
                         <div class="m-b-15">
                             {{--<img ng-if="article.media == null && article.enclosure == null"src="images/noimage.png" style="width: 75px; height: auto; border: 1px solid #BFBFBF; margin-right: 15px;" alt="user">--}}
-                            <img ng-if="article.media" ng-src="@{{ article.media.url }}" style="width: 75px; height: auto;" alt="user">
-                            <img ng-if="article.media == null && article.enclosure.url" ng-src="@{{ article.enclosure.url }}" style="width: 75px; height: auto;" alt="user">
+                            <img ng-if="article.media" ng-src="@{{ article.media.url }}" style="width: 75px; height: auto;" alt="user" class="rss-image">
+                            <img ng-if="article.media == null && article.enclosure.url" ng-src="@{{ article.enclosure.url }}" style="width: 75px; height: auto;" alt="user" class="rss-image">
                             <div ng-class="{'wid-u-info': article.media}">
                                 <strong class="m-t-0 m-b-5 font-600">@{{ article.title }}</strong>
                                 <small class="text-default m-r-10 pull-right">@{{ article.pubDate.date | date: 'dd.MM.yyyy , HH:mm'}}</small>

@@ -134,7 +134,7 @@ class User extends Authenticatable
 
     public function theme()
     {
-        return $this->theme;
+        return isset($this->theme) ? $this->theme : null;
     }
 
     public function savePreference($key, $value)

@@ -29,7 +29,7 @@ class UserPreferences
 
     protected function setLanguage($me)
     {
-        if (($lang = $me->lang()) !== config('app.locale')) {
+        if (($lang = $me->lang()) && $lang !== config('app.locale')) {
             Config::set('app.locale', $lang);
             Carbon::setLocale($lang);
         }
@@ -40,10 +40,11 @@ class UserPreferences
      */
     protected function setTheme($me)
     {
-        if (($theme = $me->theme()) !== config('app.theme')) {
+        if (($theme = $me->theme()) && $theme !== config('app.theme')) {
             if (! in_array($theme, $themes = config('app.themes'))) {
                 $theme = array_first($themes);
             }
+
             Config::set('app.theme', $theme);
         }
     }
